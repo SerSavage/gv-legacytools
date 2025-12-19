@@ -630,7 +630,90 @@
                 } else {
                     console.log('✓ All 378 tile positions have been drawn!');
                 }
+                
+                // Draw capital markers on Main map
+                if (activeArea === 'Main') {
+                    drawCapitalMarkers();
+                }
             }
+        }
+        
+        function drawCapitalMarkers() {
+            if (activeArea !== 'Main' || !ctx) return;
+            
+            var bounds = layerBounds['Main'];
+            if (!bounds || bounds.minX === null) return;
+            
+            // Capital locations in tile coordinates (X, Y)
+            // Coordinate system: x0y0 = bottom-left, x20y17 = top-right
+            var capitals = [
+                { name: 'Ismir', x: 3, y: 15, color: '#4a90e2' },      // Northwest
+                { name: 'Midland', x: 18, y: 15, color: '#e24a4a' },   // Northeast
+                { name: 'Sangmar', x: 10, y: 2, color: '#e2d44a' }     // Far south islands
+            ];
+            
+            capitals.forEach(function(capital) {
+                // Convert tile coordinates to pixel coordinates
+                var layerMinX = bounds.minX;
+                var layerMaxY = bounds.maxY;
+                var px = (capital.x - layerMinX) * TILE_SIZE;
+                var py = (layerMaxY - capital.y) * TILE_SIZE;
+                
+                // Draw crown icon (simplified)
+                var iconSize = 40;
+                var iconX = px + TILE_SIZE / 2 - iconSize / 2;
+                var iconY = py + TILE_SIZE / 2 - iconSize / 2;
+                
+                // Save context
+                ctx.save();
+                
+                // Draw shadow
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                ctx.beginPath();
+                ctx.arc(iconX + iconSize / 2 + 2, iconY + iconSize / 2 + 2, iconSize / 2 + 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw crown base circle
+                ctx.fillStyle = capital.color;
+                ctx.beginPath();
+                ctx.arc(iconX + iconSize / 2, iconY + iconSize / 2, iconSize / 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw crown outline
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Draw crown shape (simplified)
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                // Crown top points
+                var crownX = iconX + iconSize / 2;
+                var crownY = iconY + iconSize / 2 - 8;
+                ctx.moveTo(crownX - 8, crownY);
+                ctx.lineTo(crownX - 4, crownY - 8);
+                ctx.lineTo(crownX, crownY);
+                ctx.lineTo(crownX + 4, crownY - 8);
+                ctx.lineTo(crownX + 8, crownY);
+                ctx.lineTo(crownX + 6, crownY + 8);
+                ctx.lineTo(crownX - 6, crownY + 8);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Draw label background
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                ctx.fillRect(iconX - 20, iconY + iconSize + 5, iconSize + 40, 20);
+                
+                // Draw label text
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillText(capital.name, iconX + iconSize / 2, iconY + iconSize + 8);
+                
+                // Restore context
+                ctx.restore();
+            });
         }
         
         function updateCanvasPosition() {
@@ -1089,6 +1172,11 @@
             
             console.log('Switched to ' + activeArea + ' layer: ' + redrawnCount + ' tiles drawn');
             console.log('New canvas size: ' + mapWidthPx + 'x' + mapHeightPx);
+            
+            // Draw capital markers if switching to Main map
+            if (activeArea === 'Main') {
+                drawCapitalMarkers();
+            }
         }
         
         initializeMap();
