@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gloria Victis Interactive Map</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #000; color: #fff; overflow: hidden; }
+        .topmenu { background: #333; padding: 10px; text-align: center; z-index: 1000; position: relative; }
+        .topmenu a { color: #fff; text-decoration: none; margin: 0 15px; }
+        .topmenu a:hover { color: #ffff00; }
+        #map-container { 
+        width: 100%;
+            height: calc(100vh - 50px); 
+            background: #1a1a1a; 
+            overflow: hidden;
+    position: relative;
+        }
+        .layer-controls { 
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            z-index: 1000;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        .layer-controls h3 {
+            color: #ffff00;
+            margin-bottom: 10px;
+            font-size: 16px;
+    text-align: center;
+  }
+        .layer-controls label { 
+      display: block;
+    color: #fff;
+            margin: 8px 0; 
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .layer-controls label:hover {
+            background: rgba(255, 255, 0, 0.1);
+        }
+        .layer-controls input[type="radio"] { 
+            margin-right: 8px;
+    cursor: pointer;
+  }
+        .layer-controls input[type="radio"]:checked + span {
+            color: #ffff00;
+            font-weight: bold;
+        }
+        .drawing-controls {
+            position: fixed;
+            top: 60px;
+            right: 240px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            z-index: 1000;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        .drawing-controls h3 {
+            color: #ffff00;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .drawing-controls .control-group {
+            margin: 10px 0;
+        }
+        .drawing-controls label {
+            display: block;
+            color: #fff;
+            margin: 5px 0;
+            font-size: 12px;
+        }
+        .drawing-controls input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .drawing-controls input[type="range"] {
+            width: 100%;
+            margin: 5px 0;
+        }
+        .drawing-controls button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            background: #444;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .drawing-controls button:hover {
+            background: #555;
+        }
+        .drawing-controls button.active {
+            background: #ffff00;
+            color: #000;
+            font-weight: bold;
+        }
+        #map-canvas {
+            display: block;
+            background: #1a1a1a;
+            position: absolute;
+        }
+        #zones-canvas {
+            display: block;
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+        }
+        #draw-canvas {
+            display: block;
+            position: absolute;
+            pointer-events: none;
+            z-index: 100;
+        }
+        #draw-canvas.drawing {
+            pointer-events: auto;
+        }
+        .loading {
+      position: absolute;
+    top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+    color: #fff;
+            font-size: 18px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="topmenu">
+        <a href="/">Home</a>
+        <a href="/map/">Interactive Map</a>
+        <a href="#">Item Database</a>
+        <a href="#">Workshop</a>
+        <a href="/">Character Builder</a>
+    </div>
+    <div id="map-container">
+        <div class="loading" id="loading">Loading map...</div>
+        <canvas id="map-canvas"></canvas>
+        <canvas id="zones-canvas" style="display: none;"></canvas>
+        <canvas id="draw-canvas"></canvas>
+        <div class="layer-controls">
+            <h3>Map Layers</h3>
+            <label><input type="radio" name="layer" value="Main" checked><span>Main Map</span></label>
+            <div id="main-map-options" style="margin-left: 20px; margin-top: 5px; margin-bottom: 5px;">
+                <label style="cursor: pointer; font-size: 12px;"><input type="checkbox" id="zones-toggle"><span>🗺️ Show Zone Map</span></label>
+            </div>
+            <label><input type="radio" name="layer" value="GC1"><span>Guild Castle</span></label>
+            <label><input type="radio" name="layer" value="ArenaTournament"><span>Arena/Tournament</span></label>
+        </div>
+        <div class="drawing-controls">
+            <h3>Drawing Tools</h3>
+            <div class="control-group">
+                <button id="draw-toggle-btn">🎨 Enable Drawing</button>
+            </div>
+            <div class="control-group" id="draw-tools" style="display: none;">
+                <button id="pen-btn" class="active">✏️ Pen</button>
+                <button id="eraser-btn">🧹 Eraser</button>
+            </div>
+            <div class="control-group">
+                <label>Color:</label>
+                <input type="color" id="draw-color" value="#ffff00">
+            </div>
+            <div class="control-group">
+                <label>Size: <span id="size-value">5</span>px</label>
+                <input type="range" id="draw-size" min="1" max="20" value="5">
+            </div>
+            <div class="control-group">
+                <button id="clear-btn">🗑️ Clear All</button>
+                <button id="save-btn">💾 Save Image</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        console.log('=== Gloria Victis Interactive Map ===');
+        
+        var TILE_SIZE = 512;  // Each tile is 512x512 pixels
+        var availableAreas = ['Main', 'GC1', 'ArenaTournament'];
+        var activeArea = 'Main';  // Currently displayed layer
+        var loadingDiv = document.getElementById('loading');
+        
+        // Global search range for tiles
+        var searchMinX = 0, searchMaxX = 20;
+        var searchMinY = 0, searchMaxY = 17;
+        
+        // Layer-specific bounds (detected as tiles load)
+        var layerBounds = {};
+        availableAreas.forEach(function(area) {
+            layerBounds[area] = { minX: null, maxX: null, minY: null, maxY: null };
+        });
+        
+        // Current active layer bounds
+        var minX = 0, maxX = 20;
+        var minY = 0, maxY = 17;
+        
+        var canvas, ctx;
+        var zonesCanvas, zonesCtx;
+        var drawCanvas, drawCtx;
+        var mapWidthPx, mapHeightPx;
+        var zonesImage = null;
+        var showZones = false;
+        var loadedTiles = {};
+        var isDrawing = false;
+        var isEraser = false;
+        var drawColor = '#ffff00';
+        var drawSize = 5;
+        var lastX = 0;
+        var lastY = 0;
+        var drawingModeEnabled = false;
+        var loadingCount = 0;
+        var totalToLoad = 0;
+        var loadedCount = 0;
+        var failedCount = 0;
+        var drawnTiles = {}; // Track which tiles have been drawn
+        var positionUsage = {}; // Track which tiles are drawn at each pixel position
+        var currentScale = 1; // Track current zoom scale
+        var canvasOffsetX = 0; // Canvas pan offset X
+        var canvasOffsetY = 0; // Canvas pan offset Y
+        var zonesScale = 1; // Zones canvas zoom scale
+        var zonesOffsetX = 0; // Zones canvas pan offset X
+        var zonesOffsetY = 0; // Zones canvas pan offset Y
+        
+        function resizeCanvasForLayer(area) {
+            var bounds = layerBounds[area];
+            
+            // Wait for bounds to be detected
+            if (bounds.minX === null) {
+                // Use default bounds until tiles load
+                minX = searchMinX;
+                maxX = searchMaxX;
+                minY = searchMinY;
+                maxY = searchMaxY;
+            } else {
+                minX = bounds.minX;
+                maxX = bounds.maxX;
+                minY = bounds.minY;
+                maxY = bounds.maxY;
+            }
+            
+            var mapWidthTiles = maxX - minX + 1;
+            var mapHeightTiles = maxY - minY + 1;
+            mapWidthPx = mapWidthTiles * TILE_SIZE;
+            mapHeightPx = mapHeightTiles * TILE_SIZE;
+            
+            console.log('=== Resizing Canvas for ' + area + ' ===');
+            console.log('Tile range: X[' + minX + ' to ' + maxX + '], Y[' + minY + ' to ' + maxY + ']');
+            console.log('Map size: ' + mapWidthTiles + 'x' + mapHeightTiles + ' tiles');
+            console.log('Canvas size: ' + mapWidthPx + 'x' + mapHeightPx + ' pixels');
+            
+            // Resize canvas
+            canvas.width = mapWidthPx;
+            canvas.height = mapHeightPx;
+            
+            // Resize drawing canvas to match
+            if (drawCanvas) {
+                drawCanvas.width = mapWidthPx;
+                drawCanvas.height = mapHeightPx;
+            }
+            
+            // Center canvas in container
+            var container = document.getElementById('map-container');
+            var canvasLeft = (container.clientWidth - mapWidthPx) / 2;
+            var canvasTop = (container.clientHeight - mapHeightPx) / 2;
+            canvas.style.left = canvasLeft + 'px';
+            canvas.style.top = canvasTop + 'px';
+            
+            if (drawCanvas) {
+                drawCanvas.style.left = canvasLeft + 'px';
+                drawCanvas.style.top = canvasTop + 'px';
+                drawCanvas.style.transform = canvas.style.transform || 'scale(1)';
+                drawCanvas.style.transformOrigin = 'top left';
+            }
+            
+            // Redraw zones if enabled (but only if Main map is active)
+            if (showZones && activeArea === 'Main') {
+                drawZonesView();
+            }
+            
+            // Fill background
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillRect(0, 0, mapWidthPx, mapHeightPx);
+        }
+        
+        function initializeMap() {
+            canvas = document.getElementById('map-canvas');
+            ctx = canvas.getContext('2d');
+            
+            // Initialize zones canvas
+            zonesCanvas = document.getElementById('zones-canvas');
+            zonesCtx = zonesCanvas.getContext('2d');
+            
+            // Initialize drawing canvas
+            drawCanvas = document.getElementById('draw-canvas');
+            drawCtx = drawCanvas.getContext('2d');
+            
+            // Load zones image
+            loadZonesImage();
+            
+            // Initialize with default bounds (will be updated as tiles load)
+            resizeCanvasForLayer(activeArea);
+            
+            // Start loading tiles for all areas (preload)
+            loadAllTiles();
+            
+            setupControls();
+            setupLayerControls();
+            setupDrawingControls();
+            setupZonesToggle();
+            
+            // Canvas is already centered via CSS positioning
+        }
+        
+        function loadZonesImage() {
+            zonesImage = new Image();
+            zonesImage.onload = function() {
+                console.log('Zones image loaded:', zonesImage.width + 'x' + zonesImage.height);
+                if (showZones) {
+                    drawZonesView();
+                }
+            };
+            zonesImage.onerror = function() {
+                console.warn('Failed to load zones image');
+            };
+            zonesImage.src = 'MapZones.png';
+        }
+        
+        function drawZonesView() {
+            if (!zonesCanvas || !zonesCtx) {
+                console.error('Zones canvas not initialized');
+                return;
+            }
+            
+            if (!zonesImage) {
+                console.warn('Zones image not loaded yet');
+                return;
+            }
+            
+            // Check if image has dimensions (loaded)
+            if (zonesImage.width === 0 || zonesImage.height === 0) {
+                console.warn('Zones image has no dimensions, waiting for load...');
+                // Try again after a short delay
+                setTimeout(function() {
+                    if (zonesImage.width > 0 && zonesImage.height > 0) {
+                        drawZonesView();
+                    }
+                }, 100);
+                return;
+            }
+            
+            // Get zones image dimensions - use original size
+            var imgWidth = zonesImage.width;
+            var imgHeight = zonesImage.height;
+            
+            // Set zones canvas to match original image size (no scaling)
+            zonesCanvas.width = imgWidth;
+            zonesCanvas.height = imgHeight;
+            
+            // Clear and draw zones image at original size
+            zonesCtx.clearRect(0, 0, zonesCanvas.width, zonesCanvas.height);
+            zonesCtx.drawImage(zonesImage, 0, 0);
+            
+            // Reset zoom and pan when first showing zones
+            if (zonesScale === 1 && zonesOffsetX === 0 && zonesOffsetY === 0) {
+                zonesScale = 1;
+                zonesOffsetX = 0;
+                zonesOffsetY = 0;
+            }
+            
+            // Update zones canvas position with current zoom/pan
+            updateZonesPosition();
+            
+            console.log('Zones view drawn at original size:', {
+                imageSize: imgWidth + 'x' + imgHeight,
+                canvasSize: zonesCanvas.width + 'x' + zonesCanvas.height,
+                scale: zonesScale.toFixed(2)
+            });
+        }
+        
+        function setupZonesToggle() {
+            var zonesToggle = document.getElementById('zones-toggle');
+            if (!zonesToggle) return;
+            zonesToggle.addEventListener('change', function() {
+                // Only allow zones on Main map
+                if (activeArea !== 'Main') {
+                    this.checked = false;
+                    return;
+                }
+                showZones = this.checked;
+                var drawingControls = document.querySelector('.drawing-controls');
+                
+                if (showZones) {
+                    // Show zones canvas, hide map canvas
+                    if (zonesCanvas) {
+                        // Wait for image to load if not already loaded
+                        if (zonesImage && zonesImage.complete) {
+                            drawZonesView();
+                            zonesCanvas.style.display = 'block';
+                        } else if (zonesImage) {
+                            // Image is still loading, wait for it
+                            zonesImage.onload = function() {
+                                drawZonesView();
+                                zonesCanvas.style.display = 'block';
+                            };
+                            // If already loaded but complete wasn't true, try drawing anyway
+                            if (zonesImage.width > 0 && zonesImage.height > 0) {
+                                drawZonesView();
+                                zonesCanvas.style.display = 'block';
+                            }
+                        } else {
+                            // Image not loaded yet, show canvas anyway (will be empty until loaded)
+                            zonesCanvas.style.display = 'block';
+                        }
+                    }
+                    if (canvas) {
+                        canvas.style.display = 'none';
+                    }
+                    if (drawCanvas) {
+                        drawCanvas.style.display = 'none'; // Hide drawing on zones view
+                    }
+                    
+                    // Disable drawing mode and hide drawing controls
+                    drawingModeEnabled = false;
+                    if (drawingControls) {
+                        drawingControls.style.display = 'none';
+                    }
+                    var drawToggleBtn = document.getElementById('draw-toggle-btn');
+                    if (drawToggleBtn) {
+                        drawToggleBtn.classList.remove('active');
+                        drawToggleBtn.textContent = '🎨 Enable Drawing';
+                    }
+                    var drawTools = document.getElementById('draw-tools');
+                    if (drawTools) {
+                        drawTools.style.display = 'none';
+                    }
+                    isDrawing = false; // Stop any active drawing
+                } else {
+                    // Show map canvas, hide zones canvas
+                    if (zonesCanvas) {
+                        zonesCanvas.style.display = 'none';
+                    }
+                    if (canvas) {
+                        canvas.style.display = 'block';
+                    }
+                    if (drawCanvas) {
+                        drawCanvas.style.display = 'block';
+                    }
+                    
+                    // Reset zones zoom/pan when hiding
+                    zonesScale = 1;
+                    zonesOffsetX = 0;
+                    zonesOffsetY = 0;
+                    
+                    // Show drawing controls again
+                    if (drawingControls) {
+                        drawingControls.style.display = 'block';
+                    }
+                }
+            });
+        }
+        
+        function loadAllTiles() {
+            var tilesToLoad = [];
+            
+            // Load tiles for all areas (preload all layers) - use search range
+            for (var y = searchMinY; y <= searchMaxY; y++) {
+                for (var x = searchMinX; x <= searchMaxX; x++) {
+                    availableAreas.forEach(function(area) {
+                        tilesToLoad.push({x: x, y: y, area: area});
+                    });
+                }
+            }
+            
+            totalToLoad = tilesToLoad.length;
+            console.log('Total tiles to load: ' + totalToLoad);
+            console.log('First tile: x' + tilesToLoad[0].x + 'y' + tilesToLoad[0].y);
+            console.log('Last tile: x' + tilesToLoad[tilesToLoad.length - 1].x + 'y' + tilesToLoad[tilesToLoad.length - 1].y);
+            
+            // Load all tiles - ensure proper order
+            tilesToLoad.forEach(function(tile, index) {
+                setTimeout(function() {
+                    loadTile(tile.x, tile.y, tile.area, false);
+                }, index * 2);
+            });
+        }
+        
+        function loadTile(x, y, area, debug) {
+            var key = x + ',' + y + ',' + area;
+            
+            if (loadedTiles[key] !== undefined) return;
+            
+            loadingCount++;
+            var img = new Image();
+            var tilePath = 'GVmaptiles/x' + x + 'y' + y + '_' + area + '.png';
+            
+            img.onload = function() {
+                loadedTiles[key] = img;
+                loadingCount--;
+                loadedCount++;
+                
+                // Update layer bounds for this area
+                var bounds = layerBounds[area];
+                if (bounds.minX === null || x < bounds.minX) bounds.minX = x;
+                if (bounds.maxX === null || x > bounds.maxX) bounds.maxX = x;
+                if (bounds.minY === null || y < bounds.minY) bounds.minY = y;
+                if (bounds.maxY === null || y > bounds.maxY) bounds.maxY = y;
+                
+                // Only draw if this is the active layer and bounds are set
+                if (area === activeArea && bounds.minX !== null) {
+                    // Use layer-specific bounds for coordinate calculation
+                    var layerMinX = bounds.minX;
+                    var layerMaxX = bounds.maxX;
+                    var layerMaxY = bounds.maxY;
+                    
+                    // Coordinate system: X standard (0=left, 20=right), Y inverted (0=bottom, 17=top)
+                    // x0y0 = bottom-left, x20y17 = top-right
+                    var px = (x - layerMinX) * TILE_SIZE;  // X: relative to layer's minX
+                    var py = (layerMaxY - y) * TILE_SIZE;  // Y: 0 at bottom, increases upward
+                    
+                    // Ensure we don't draw outside canvas
+                    if (px >= 0 && px < mapWidthPx && py >= 0 && py < mapHeightPx) {
+                        // Check for duplicate positions
+                        var posKey = px + ',' + py;
+                        if (positionUsage[posKey]) {
+                            console.warn('DUPLICATE POSITION! x' + x + 'y' + y + ' at [' + px + ', ' + py + '] - already used by: ' + positionUsage[posKey]);
+                        } else {
+                            positionUsage[posKey] = 'x' + x + 'y' + y;
+                        }
+                        
+                        // Draw tile directly
+                        try {
+                            ctx.drawImage(img, px, py);
+                            drawnTiles[key] = true;
+                        } catch (e) {
+                            console.error('Error drawing tile x' + x + 'y' + y + ':', e);
+                        }
+                    } else {
+                        console.error('Tile x' + x + 'y' + y + ' OUT OF BOUNDS at [' + px + ', ' + py + '] (canvas: ' + mapWidthPx + 'x' + mapHeightPx + ')');
+                    }
+                }
+                
+                updateProgress();
+            };
+            
+            img.onerror = function() {
+                loadedTiles[key] = null;
+                loadingCount--;
+                failedCount++;
+                
+                if (debug) {
+                    console.warn('Failed to load: ' + tilePath);
+                }
+                
+                updateProgress();
+            };
+            
+            img.src = tilePath;
+        }
+        
+        function updateProgress() {
+            var total = loadedCount + failedCount;
+            var percent = Math.round((total / totalToLoad) * 100);
+            
+            loadingDiv.textContent = 'Loading: ' + percent + '% (' + loadedCount + ' loaded, ' + failedCount + ' missing)';
+            
+            if (total >= totalToLoad && loadingCount === 0) {
+                loadingDiv.style.display = 'none';
+                console.log('=== Loading Complete ===');
+                console.log('Successfully loaded: ' + loadedCount + ' tiles');
+                console.log('Failed to load: ' + failedCount + ' tiles');
+                console.log('Tiles drawn: ' + Object.keys(drawnTiles).length);
+                console.log('Canvas size: ' + canvas.width + 'x' + canvas.height);
+                
+                // Check for missing tiles
+                var expectedTiles = (maxX - minX + 1) * (maxY - minY + 1);
+                console.log('Expected tiles: ' + expectedTiles);
+                
+                if (loadedCount < expectedTiles) {
+                    console.warn('MISSING TILES: Expected ' + expectedTiles + ' but only loaded ' + loadedCount);
+                }
+                
+                // Check if all positions have tiles for active area (use layer bounds if available)
+                var bounds = layerBounds[activeArea];
+                var checkMinX = bounds.minX !== null ? bounds.minX : minX;
+                var checkMaxX = bounds.maxX !== null ? bounds.maxX : maxX;
+                var checkMinY = bounds.minY !== null ? bounds.minY : minY;
+                var checkMaxY = bounds.maxY !== null ? bounds.maxY : maxY;
+                
+                var missingPositions = [];
+                for (var y = checkMinY; y <= checkMaxY; y++) {
+                    for (var x = checkMinX; x <= checkMaxX; x++) {
+                        var key = x + ',' + y + ',' + activeArea;
+                        if (!drawnTiles[key] && loadedTiles[key] !== null) {
+                            missingPositions.push('x' + x + 'y' + y);
+                        }
+                    }
+                }
+                if (missingPositions.length > 0) {
+                    console.error('MISSING ' + missingPositions.length + ' tile positions!');
+                    console.error('Missing: ' + missingPositions.slice(0, 50).join(', ') + (missingPositions.length > 50 ? '... (showing first 50)' : ''));
+                    
+                    // Group by row to see pattern
+                    var byRow = {};
+                    missingPositions.forEach(function(pos) {
+                        var match = pos.match(/x(\d+)y(\d+)/);
+                        if (match) {
+                            var row = match[2];
+                            if (!byRow[row]) byRow[row] = [];
+                            byRow[row].push(pos);
+                        }
+                    });
+                    console.error('Missing tiles by row:', byRow);
+                } else {
+                    console.log('✓ All 378 tile positions have been drawn!');
+                }
+            }
+        }
+        
+        function updateCanvasPosition() {
+            var container = document.getElementById('map-container');
+            var canvasLeft = ((container.clientWidth - mapWidthPx * currentScale) / 2 + canvasOffsetX);
+            var canvasTop = ((container.clientHeight - mapHeightPx * currentScale) / 2 + canvasOffsetY);
+            canvas.style.left = canvasLeft + 'px';
+            canvas.style.top = canvasTop + 'px';
+            
+            // Update drawing canvas position to match
+            if (drawCanvas) {
+                drawCanvas.style.left = canvasLeft + 'px';
+                drawCanvas.style.top = canvasTop + 'px';
+                drawCanvas.style.transform = canvas.style.transform || 'scale(' + currentScale + ')';
+            }
+            
+            // Zones view is independent, don't update its position here
+        }
+        
+        function updateZonesPosition() {
+            if (!zonesCanvas || !showZones) return;
+            var container = document.getElementById('map-container');
+            var containerWidth = container.clientWidth;
+            var containerHeight = container.clientHeight;
+            var canvasLeft = ((containerWidth - zonesCanvas.width * zonesScale) / 2 + zonesOffsetX);
+            var canvasTop = ((containerHeight - zonesCanvas.height * zonesScale) / 2 + zonesOffsetY);
+            zonesCanvas.style.left = canvasLeft + 'px';
+            zonesCanvas.style.top = canvasTop + 'px';
+            zonesCanvas.style.transform = 'scale(' + zonesScale + ')';
+            zonesCanvas.style.transformOrigin = 'top left';
+        }
+        
+        function setupControls() {
+            var container = document.getElementById('map-container');
+            
+            container.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                
+                // Handle zones view zoom/pan
+                if (showZones && zonesCanvas) {
+                    // Get mouse position relative to container
+                    var rect = container.getBoundingClientRect();
+                    var mouseX = e.clientX - rect.left;
+                    var mouseY = e.clientY - rect.top;
+                    
+                    // Get current zones canvas position
+                    var canvasLeft = parseFloat(zonesCanvas.style.left) || (container.clientWidth - zonesCanvas.width * zonesScale) / 2;
+                    var canvasTop = parseFloat(zonesCanvas.style.top) || (container.clientHeight - zonesCanvas.height * zonesScale) / 2;
+                    
+                    // Calculate the point on the zones canvas (before zoom) that's under the mouse
+                    var canvasX = (mouseX - canvasLeft) / zonesScale;
+                    var canvasY = (mouseY - canvasTop) / zonesScale;
+                    
+                    // Apply zoom
+                    var delta = e.deltaY > 0 ? 0.9 : 1.1;
+                    zonesScale = Math.max(0.1, Math.min(5, zonesScale * delta)); // Allow more zoom out for zones
+                    
+                    // Adjust zones canvas position to keep the same point under the mouse cursor
+                    var newCanvasX = mouseX - canvasX * zonesScale;
+                    var newCanvasY = mouseY - canvasY * zonesScale;
+                    zonesOffsetX = newCanvasX - (container.clientWidth - zonesCanvas.width * zonesScale) / 2;
+                    zonesOffsetY = newCanvasY - (container.clientHeight - zonesCanvas.height * zonesScale) / 2;
+                    
+                    updateZonesPosition();
+                    return;
+                }
+                
+                // Handle main map zoom/pan
+                // Get mouse position relative to container
+                var rect = container.getBoundingClientRect();
+                var mouseX = e.clientX - rect.left;
+                var mouseY = e.clientY - rect.top;
+                
+                // Get current canvas position
+                var canvasLeft = parseFloat(canvas.style.left) || (container.clientWidth - mapWidthPx * currentScale) / 2;
+                var canvasTop = parseFloat(canvas.style.top) || (container.clientHeight - mapHeightPx * currentScale) / 2;
+                
+                // Calculate the point on the canvas (before zoom) that's under the mouse
+                var canvasX = (mouseX - canvasLeft) / currentScale;
+                var canvasY = (mouseY - canvasTop) / currentScale;
+                
+                // Apply zoom
+                var delta = e.deltaY > 0 ? 0.9 : 1.1;
+                var oldScale = currentScale;
+                currentScale = Math.max(0.5, Math.min(3, currentScale * delta));
+                
+                // Update canvas scale
+                canvas.style.transform = 'scale(' + currentScale + ')';
+                canvas.style.transformOrigin = 'top left';
+                if (drawCanvas) {
+                    drawCanvas.style.transform = 'scale(' + currentScale + ')';
+                    drawCanvas.style.transformOrigin = 'top left';
+                }
+                
+                // Adjust canvas position to keep the same point under the mouse cursor
+                var newCanvasX = mouseX - canvasX * currentScale;
+                var newCanvasY = mouseY - canvasY * currentScale;
+                canvasOffsetX = newCanvasX - (container.clientWidth - mapWidthPx * currentScale) / 2;
+                canvasOffsetY = newCanvasY - (container.clientHeight - mapHeightPx * currentScale) / 2;
+                
+                updateCanvasPosition();
+            });
+            
+            var isDragging = false;
+            var startX, startY, startOffsetX, startOffsetY;
+            
+            container.addEventListener('mousedown', function(e) {
+                // Don't start dragging if drawing mode is enabled (let drawing canvas handle it)
+                if (drawingModeEnabled) return;
+                
+                // Handle zones view dragging
+                if (showZones && zonesCanvas) {
+                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    startOffsetX = zonesOffsetX;
+                    startOffsetY = zonesOffsetY;
+                    return;
+                }
+                
+                // Handle main map dragging
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startOffsetX = canvasOffsetX;
+                startOffsetY = canvasOffsetY;
+            });
+            
+            container.addEventListener('mouseleave', function() {
+                if (!drawingModeEnabled) {
+                    isDragging = false;
+                }
+            });
+            
+            container.addEventListener('mouseup', function(e) {
+                // Only stop dragging if not in drawing mode, or if drawing is not active
+                if (!drawingModeEnabled || !isDrawing) {
+                    isDragging = false;
+                }
+            });
+            
+            container.addEventListener('mousemove', function(e) {
+                // Don't pan if drawing mode is enabled and user is drawing
+                if (drawingModeEnabled && isDrawing) return;
+                if (!isDragging) return;
+                e.preventDefault();
+                
+                var deltaX = e.clientX - startX;
+                var deltaY = e.clientY - startY;
+                
+                // Handle zones view panning
+                if (showZones && zonesCanvas) {
+                    zonesOffsetX = startOffsetX + deltaX;
+                    zonesOffsetY = startOffsetY + deltaY;
+                    updateZonesPosition();
+                    return;
+                }
+                
+                // Handle main map panning
+                canvasOffsetX = startOffsetX + deltaX;
+                canvasOffsetY = startOffsetY + deltaY;
+                updateCanvasPosition();
+            });
+        }
+        
+        function setupLayerControls() {
+            var radios = document.querySelectorAll('input[name="layer"]');
+            var mainMapOptions = document.getElementById('main-map-options');
+            
+            radios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        switchLayer(this.value);
+                        
+                        // Show zones toggle only for Main map
+                        if (this.value === 'Main') {
+                            mainMapOptions.style.display = 'block';
+                        } else {
+                            mainMapOptions.style.display = 'none';
+                            // Hide zones when switching away from Main
+                            if (showZones) {
+                                var zonesToggle = document.getElementById('zones-toggle');
+                                if (zonesToggle) {
+                                    zonesToggle.checked = false;
+                                    showZones = false;
+                                    if (zonesCanvas) {
+                                        zonesCanvas.style.display = 'none';
+                                    }
+                                    // Show map canvas again
+                                    if (canvas) {
+                                        canvas.style.display = 'block';
+                                    }
+                                    if (drawCanvas) {
+                                        drawCanvas.style.display = 'block';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+            
+            // Initially show options for Main (default)
+            if (activeArea === 'Main') {
+                mainMapOptions.style.display = 'block';
+            } else {
+                mainMapOptions.style.display = 'none';
+            }
+        }
+        
+        function setupDrawingControls() {
+            var drawToggleBtn = document.getElementById('draw-toggle-btn');
+            var drawTools = document.getElementById('draw-tools');
+            var penBtn = document.getElementById('pen-btn');
+            var eraserBtn = document.getElementById('eraser-btn');
+            var colorInput = document.getElementById('draw-color');
+            var sizeInput = document.getElementById('draw-size');
+            var sizeValue = document.getElementById('size-value');
+            var clearBtn = document.getElementById('clear-btn');
+            var saveBtn = document.getElementById('save-btn');
+            
+            // Toggle drawing mode on/off
+            drawToggleBtn.addEventListener('click', function() {
+                drawingModeEnabled = !drawingModeEnabled;
+                if (drawingModeEnabled) {
+                    drawTools.style.display = 'block';
+                    drawCanvas.classList.add('drawing');
+                    drawToggleBtn.textContent = '🚫 Disable Drawing';
+                    drawToggleBtn.classList.add('active');
+                } else {
+                    drawTools.style.display = 'none';
+                    drawCanvas.classList.remove('drawing');
+                    drawToggleBtn.textContent = '🎨 Enable Drawing';
+                    drawToggleBtn.classList.remove('active');
+                    isDrawing = false; // Stop any active drawing
+                }
+            });
+            
+            // Pen/Eraser toggle
+            penBtn.addEventListener('click', function() {
+                if (!drawingModeEnabled) return;
+                isEraser = false;
+                penBtn.classList.add('active');
+                eraserBtn.classList.remove('active');
+            });
+            
+            eraserBtn.addEventListener('click', function() {
+                if (!drawingModeEnabled) return;
+                isEraser = true;
+                eraserBtn.classList.add('active');
+                penBtn.classList.remove('active');
+            });
+            
+            // Color picker
+            colorInput.addEventListener('change', function() {
+                drawColor = this.value;
+            });
+            
+            // Size slider
+            sizeInput.addEventListener('input', function() {
+                drawSize = parseInt(this.value);
+                sizeValue.textContent = drawSize;
+            });
+            
+            // Clear button
+            clearBtn.addEventListener('click', function() {
+                if (confirm('Clear all drawings?')) {
+                    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+                }
+            });
+            
+            // Save button
+            saveBtn.addEventListener('click', function() {
+                saveMapWithDrawings();
+            });
+            
+            // Drawing events
+            drawCanvas.addEventListener('mousedown', startDrawing);
+            drawCanvas.addEventListener('mousemove', draw);
+            drawCanvas.addEventListener('mouseup', stopDrawing);
+            drawCanvas.addEventListener('mouseout', stopDrawing);
+            
+            // Touch events for mobile
+            drawCanvas.addEventListener('touchstart', function(e) {
+                if (!drawingModeEnabled) return;
+                e.preventDefault();
+                e.stopPropagation(); // Prevent map panning
+                var touch = e.touches[0];
+                var rect = drawCanvas.getBoundingClientRect();
+                var scale = currentScale;
+                lastX = (touch.clientX - rect.left) / scale;
+                lastY = (touch.clientY - rect.top) / scale;
+                isDrawing = true;
+            });
+            
+            drawCanvas.addEventListener('touchmove', function(e) {
+                if (!isDrawing || !drawingModeEnabled) return;
+                e.preventDefault();
+                e.stopPropagation(); // Prevent map panning
+                var touch = e.touches[0];
+                var rect = drawCanvas.getBoundingClientRect();
+                var scale = currentScale;
+                var x = (touch.clientX - rect.left) / scale;
+                var y = (touch.clientY - rect.top) / scale;
+                drawLine(lastX, lastY, x, y);
+                lastX = x;
+                lastY = y;
+            });
+            
+            drawCanvas.addEventListener('touchend', function(e) {
+                stopDrawing(e);
+            });
+        }
+        
+        function startDrawing(e) {
+            if (!drawingModeEnabled || showZones) return; // Don't draw when zones is active
+            isDrawing = true;
+            e.preventDefault();
+            e.stopPropagation(); // Prevent map panning
+            var rect = drawCanvas.getBoundingClientRect();
+            var scale = currentScale;
+            lastX = (e.clientX - rect.left) / scale;
+            lastY = (e.clientY - rect.top) / scale;
+        }
+        
+        function draw(e) {
+            if (!isDrawing || !drawingModeEnabled || showZones) return; // Don't draw when zones is active
+            e.preventDefault();
+            e.stopPropagation(); // Prevent map panning
+            var rect = drawCanvas.getBoundingClientRect();
+            var scale = currentScale;
+            var x = (e.clientX - rect.left) / scale;
+            var y = (e.clientY - rect.top) / scale;
+            drawLine(lastX, lastY, x, y);
+            lastX = x;
+            lastY = y;
+        }
+        
+        function drawLine(x1, y1, x2, y2) {
+            drawCtx.lineWidth = drawSize;
+            drawCtx.lineCap = 'round';
+            drawCtx.lineJoin = 'round';
+            
+            if (isEraser) {
+                drawCtx.globalCompositeOperation = 'destination-out';
+            } else {
+                drawCtx.globalCompositeOperation = 'source-over';
+                drawCtx.strokeStyle = drawColor;
+            }
+            
+            drawCtx.beginPath();
+            drawCtx.moveTo(x1, y1);
+            drawCtx.lineTo(x2, y2);
+            drawCtx.stroke();
+        }
+        
+        function stopDrawing(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent map panning
+            }
+            isDrawing = false;
+        }
+        
+        function saveMapWithDrawings() {
+            // Create a temporary canvas to combine map and drawings
+            var combinedCanvas = document.createElement('canvas');
+            combinedCanvas.width = mapWidthPx;
+            combinedCanvas.height = mapHeightPx;
+            var combinedCtx = combinedCanvas.getContext('2d');
+            
+            // Draw map canvas
+            combinedCtx.drawImage(canvas, 0, 0);
+            
+            // Draw drawing canvas
+            combinedCtx.drawImage(drawCanvas, 0, 0);
+            
+            // Convert to image and download
+            combinedCanvas.toBlob(function(blob) {
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'gv-map-' + activeArea + '-' + new Date().getTime() + '.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 'image/png');
+        }
+        
+        function switchLayer(newArea) {
+            if (newArea === activeArea) return;
+            
+            console.log('Switching layer from ' + activeArea + ' to ' + newArea);
+            
+            // Store current scroll position (relative to center)
+            var container = document.getElementById('map-container');
+            var oldScrollX = container.scrollLeft;
+            var oldScrollY = container.scrollTop;
+            var oldCenterX = oldScrollX + container.clientWidth / 2;
+            var oldCenterY = oldScrollY + container.clientHeight / 2;
+            
+            // Get old canvas center in canvas coordinates
+            var oldCanvasCenterX = oldCenterX / currentScale;
+            var oldCanvasCenterY = oldCenterY / currentScale;
+            
+            activeArea = newArea;
+            
+            // Resize canvas for new layer
+            resizeCanvasForLayer(activeArea);
+            
+            // Reset tracking
+            drawnTiles = {};
+            positionUsage = {};
+            
+            // Get bounds for the new layer
+            var bounds = layerBounds[activeArea];
+            if (bounds.minX === null) {
+                console.warn('Bounds not yet detected for ' + activeArea + ', using search range');
+                bounds.minX = searchMinX;
+                bounds.maxX = searchMaxX;
+                bounds.minY = searchMinY;
+                bounds.maxY = searchMaxY;
+            }
+            
+            // Redraw all tiles for the new active area
+            var redrawnCount = 0;
+            for (var y = bounds.minY; y <= bounds.maxY; y++) {
+                for (var x = bounds.minX; x <= bounds.maxX; x++) {
+                    var key = x + ',' + y + ',' + activeArea;
+                    var img = loadedTiles[key];
+                    
+                    if (img && img.complete && img.naturalWidth > 0) {
+                        // Coordinate system: X standard (0=left, 20=right), Y inverted (0=bottom, 17=top)
+                        // Use layer-specific bounds for positioning
+                        var px = (x - bounds.minX) * TILE_SIZE;
+                        var py = (bounds.maxY - y) * TILE_SIZE;
+                        
+                        if (px >= 0 && px < mapWidthPx && py >= 0 && py < mapHeightPx) {
+                            try {
+                                ctx.drawImage(img, px, py);
+                                drawnTiles[key] = true;
+                                redrawnCount++;
+                            } catch (e) {
+                                console.error('Error drawing tile x' + x + 'y' + y + ':', e);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Reset canvas offset and center it
+            canvasOffsetX = 0;
+            canvasOffsetY = 0;
+            updateCanvasPosition();
+            
+            console.log('Switched to ' + activeArea + ' layer: ' + redrawnCount + ' tiles drawn');
+            console.log('New canvas size: ' + mapWidthPx + 'x' + mapHeightPx);
+        }
+        
+        initializeMap();
+        console.log('Map initialized');
+    </script>
+  </body>
+</html>

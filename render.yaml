@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: gv-legacy-combined
+    env: static
+    buildCommand: echo "No build needed for static site"
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /map/*
+        destination: /map/index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html

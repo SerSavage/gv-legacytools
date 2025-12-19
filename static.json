@@ -1,0 +1,19 @@
+{
+  "root": ".",
+  "clean_urls": false,
+  "routes": {
+    "/map/**": "/map/index.html",
+    "/**": "/index.html"
+  },
+  "headers": {
+    "/**": {
+      "Cache-Control": "public, max-age=3600"
+    },
+    "/GVmaptiles/**": {
+      "Cache-Control": "public, max-age=86400"
+    },
+    "/map/GVmaptiles/**": {
+      "Cache-Control": "public, max-age=86400"
+    }
+  }
+}

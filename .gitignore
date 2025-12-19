@@ -1,0 +1,5 @@
+# Git ignore for combined GV Legacy site
+.DS_Store
+*.log
+.env
+node_modules/

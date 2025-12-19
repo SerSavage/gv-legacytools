@@ -1,0 +1,225 @@
+
+.topmenu a, .overlay a {
+        text-decoration: none;
+        font-family: "Germania One", Roboto;
+		-webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        text-decoration: none;
+        color: #fff;
+}
+
+
+    .menu_title {
+        position: relative;
+        font-style: bold;
+        font-size: 22px;       
+        margin-left: 50px;
+        top: 8px;
+        display: inline-block;
+        width: auto;
+        height: 40px;
+    }
+
+    .menu_title:hover {
+        color:  #a39964;
+    }
+
+
+
+
+    .placeholder {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 44px;
+    }
+
+    .topmenu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: black;
+        z-index: 21475;
+        overflow: hidden;
+        -webkit-transition: width 0.6s;
+        -moz-transition: width 0.6s;
+        transition: width 0.6s;
+        height: 44px;
+        border-bottom: 2px solid #a39964;
+    }
+
+    .topmenu.shrink {
+        width: 44px;
+        border-right: 2px solid #a39964;
+    }
+
+
+
+    .wrap-nav ul {
+        margin: 0;
+        padding: 0;
+        text-decoration: none;
+        list-style: none;
+    }
+
+    .wrap-nav li {
+        padding: 0;
+        margin: 0;
+    }
+
+    .wrap-nav li span {
+        color: grey;
+		cursor: default;
+    }
+
+    nav {
+        text-align: center;
+        width: 100%;
+        position: relative;
+        height: auto;
+        overflow: hidden;
+    }
+
+
+    nav ul li {
+        display: inline-block;
+    }
+
+
+
+
+    .menu-button, .button-inactive {
+		cursor: pointer;
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        z-index: 21476;
+        background: url('https://web.archive.org/web/20220806090412im_/https://www.gloriavictisgame.info/wp-content/uploads/logo_gv_nobackground-512.png');
+        background-repeat: no-repeat;
+        background-position: 3px 3px;
+        background-size: 36px 36px;
+        width: 36px;
+        height: 36px;
+        padding: 3px;
+        box-sizing: content-box;
+    }
+	
+	.button-inactive {
+		position: relative;
+	}
+
+    .menu-button:hover, .button-inactive:hover {
+        border-radius: 10px;
+    background-color: grey;
+    box-shadow: 0 0 15px white;
+    transition: all 0.5s ease;
+    }
+
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: #000;
+        overflow: auto;
+        z-index: 21477;
+    }
+
+    .wrap {
+        text-align: center;
+        max-width: 90%;
+        margin: 0 auto;
+    }
+
+    .wrap ul.wrap-nav {
+        border-bottom: 2px solid #a39964;
+        text-transform: capitalize;
+        padding: 50px 0px 100px;
+    }
+
+    .wrap ul.wrap-nav li {
+        font-size: 20px;
+        display: inline-block;
+        vertical-align: top;
+        width: 24%;
+        position: relative;
+    }
+
+    .wrap ul.wrap-nav li a {
+        display: block;
+        padding: 8px 0;
+        transition-property: all .2s linear 0s;
+        -moz-transition: all .2s linear 0s;
+        -webkit-transition: all .2s linear 0s;
+        -o-transition: all .2s linear 0s;
+    }
+
+
+
+    .wrap ul.wrap-nav ul {
+        padding: 20px 0;
+    }
+
+    .wrap ul.wrap-nav ul li {
+        display: block;
+        font-size: 18px;
+        width: 100%;
+    }
+
+
+
+    .wrap ul.wrap-nav ul li a:hover {
+       color:  #a39964;
+    }
+
+
+    @media screen and (max-width:48em) {
+        .wrap ul.wrap-nav>li {
+            width: 100%;
+            padding: 20px 0;
+            border-top: 1px solid #a39964;
+        }
+
+        .wrap ul.wrap-nav {
+            padding: 30px 0px 0px;
+        }
+
+        nav ul {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+    }
+
+    .content {
+        width: 100%;
+        margin-top: 200px;
+        font-size: 20px;
+        color#333;
+        text-align: center;
+    }
+/*
+     FILE ARCHIVED ON 09:04:12 Aug 06, 2022 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 03:13:38 Dec 17, 2025.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.635
+  exclusion.robots: 0.024
+  exclusion.robots.policy: 0.011
+  esindex: 0.014
+  cdx.remote: 16.413
+  LoadShardBlock: 931.88 (3)
+  PetaboxLoader3.datanode: 956.95 (5)
+  load_resource: 1347.205
+  PetaboxLoader3.resolve: 1156.953
+  loaddict: 80.463
+*/
