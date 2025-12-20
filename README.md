@@ -19,5 +19,3 @@ This is a static site ready for Render deployment.
 The site will be available at your Render URL with:
 - Character Builder at: `https://your-site.onrender.com/`
 - Interactive Map at: `https://your-site.onrender.com/map/`
-
-
