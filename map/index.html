@@ -113,6 +113,23 @@
             color: #000;
             font-weight: bold;
         }
+        .drawing-controls h3 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .minimize-btn {
+            width: auto !important;
+            padding: 2px 8px !important;
+            margin: 0 !important;
+            font-size: 18px !important;
+            line-height: 1;
+            min-width: 24px;
+            height: 24px;
+        }
+        .drawing-controls.collapsed #drawing-content {
+            display: none;
+        }
         #map-canvas {
             display: block;
             background: #1a1a1a;
@@ -167,25 +184,41 @@
             <label><input type="radio" name="layer" value="ArenaTournament"><span>Arena/Tournament</span></label>
         </div>
         <div class="drawing-controls">
-            <h3>Drawing Tools</h3>
-            <div class="control-group">
-                <button id="draw-toggle-btn">🎨 Enable Drawing</button>
-            </div>
-            <div class="control-group" id="draw-tools" style="display: none;">
-                <button id="pen-btn" class="active">✏️ Pen</button>
-                <button id="eraser-btn">🧹 Eraser</button>
-            </div>
-            <div class="control-group">
-                <label>Color:</label>
-                <input type="color" id="draw-color" value="#ffff00">
-            </div>
-            <div class="control-group">
-                <label>Size: <span id="size-value">5</span>px</label>
-                <input type="range" id="draw-size" min="1" max="20" value="5">
-            </div>
-            <div class="control-group">
-                <button id="clear-btn">🗑️ Clear All</button>
-                <button id="save-btn">💾 Save Image</button>
+            <h3>
+                Drawing Tools
+                <button id="drawing-minimize-btn" class="minimize-btn" title="Minimize">−</button>
+            </h3>
+            <div id="drawing-content">
+                <div class="control-group">
+                    <button id="draw-toggle-btn">🎨 Enable Drawing</button>
+                </div>
+                <div class="control-group" id="draw-tools" style="display: none;">
+                    <button id="pen-btn" class="active">✏️ Pen</button>
+                    <button id="eraser-btn">🧹 Eraser</button>
+                </div>
+                <div class="control-group">
+                    <label>Color:</label>
+                    <input type="color" id="draw-color" value="#ffff00">
+                </div>
+                <div class="control-group">
+                    <label>Size: <span id="size-value">5</span>px</label>
+                    <input type="range" id="draw-size" min="1" max="20" value="5">
+                </div>
+                <hr style="border: 1px solid #555; margin: 10px 0;">
+                <div class="control-group">
+                    <button id="text-toggle-btn" type="button">📝 Enable Text</button>
+                </div>
+                <div class="control-group" id="textbox-controls" style="display: none;">
+                    <label>Text:</label>
+                    <input type="text" id="textbox-input" placeholder="Enter text here..." style="width: 100%; padding: 5px; margin: 5px 0; background: #333; color: #fff; border: 1px solid #555; border-radius: 4px;">
+                    <label>Background Opacity: <span id="opacity-value">70</span>%</label>
+                    <input type="range" id="textbox-opacity" min="0" max="100" value="70">
+                </div>
+                <hr style="border: 1px solid #555; margin: 10px 0;">
+                <div class="control-group">
+                    <button id="clear-btn">🗑️ Clear All</button>
+                    <button id="save-btn">💾 Save Image</button>
+                </div>
             </div>
         </div>
     </div>
@@ -225,6 +258,10 @@
         var lastX = 0;
         var lastY = 0;
         var drawingModeEnabled = false;
+        var textModeEnabled = false;
+        var textBoxes = []; // Array to store text boxes: {x, y, text, color, opacity}
+        var textBoxInput = '';
+        var textBoxOpacity = 70;
         var loadingCount = 0;
         var totalToLoad = 0;
         var loadedCount = 0;
@@ -271,8 +308,24 @@
             
             // Resize drawing canvas to match
             if (drawCanvas) {
+                // Store current content temporarily (drawings only, text boxes are in array)
+                var tempCanvas = document.createElement('canvas');
+                tempCanvas.width = drawCanvas.width;
+                tempCanvas.height = drawCanvas.height;
+                var tempCtx = tempCanvas.getContext('2d');
+                tempCtx.drawImage(drawCanvas, 0, 0);
+                
+                // Resize canvas (this clears it)
                 drawCanvas.width = mapWidthPx;
                 drawCanvas.height = mapHeightPx;
+                
+                // Redraw previous content if it fits (drawings)
+                if (tempCanvas.width <= mapWidthPx && tempCanvas.height <= mapHeightPx) {
+                    drawCtx.drawImage(tempCanvas, 0, 0);
+                }
+                
+                // Redraw text boxes after resize (they're stored in array, so we can redraw them)
+                redrawTextBoxes();
             }
             
             // Center canvas in container
@@ -300,6 +353,7 @@
         }
         
         function initializeMap() {
+            console.log('=== Initializing Map ===');
             canvas = document.getElementById('map-canvas');
             ctx = canvas.getContext('2d');
             
@@ -322,10 +376,18 @@
             
             setupControls();
             setupLayerControls();
-            setupDrawingControls();
+            
+            // Wrap in try-catch to catch any errors
+            try {
+                setupDrawingControls();
+            } catch (error) {
+                console.error('Error setting up drawing controls:', error);
+            }
+            
             setupZonesToggle();
             
             // Canvas is already centered via CSS positioning
+            console.log('=== Map Initialization Complete ===');
         }
         
         function loadZonesImage() {
@@ -436,8 +498,9 @@
                         drawCanvas.style.display = 'none'; // Hide drawing on zones view
                     }
                     
-                    // Disable drawing mode and hide drawing controls
+                    // Disable drawing mode and text mode, hide drawing controls
                     drawingModeEnabled = false;
+                    textModeEnabled = false;
                     if (drawingControls) {
                         drawingControls.style.display = 'none';
                     }
@@ -446,9 +509,18 @@
                         drawToggleBtn.classList.remove('active');
                         drawToggleBtn.textContent = '🎨 Enable Drawing';
                     }
+                    var textToggleBtn = document.getElementById('text-toggle-btn');
+                    if (textToggleBtn) {
+                        textToggleBtn.classList.remove('active');
+                        textToggleBtn.textContent = '📝 Enable Text';
+                    }
                     var drawTools = document.getElementById('draw-tools');
                     if (drawTools) {
                         drawTools.style.display = 'none';
+                    }
+                    var textboxControls = document.getElementById('textbox-controls');
+                    if (textboxControls) {
+                        textboxControls.style.display = 'none';
                     }
                     isDrawing = false; // Stop any active drawing
                 } else {
@@ -738,8 +810,8 @@
             var startX, startY, startOffsetX, startOffsetY;
             
             container.addEventListener('mousedown', function(e) {
-                // Don't start dragging if drawing mode is enabled (let drawing canvas handle it)
-                if (drawingModeEnabled) return;
+                // Don't start dragging if drawing mode or text mode is enabled (let drawing canvas handle it)
+                if (drawingModeEnabled || textModeEnabled) return;
                 
                 // Handle zones view dragging
                 if (showZones && zonesCanvas) {
@@ -766,15 +838,15 @@
             });
             
             container.addEventListener('mouseup', function(e) {
-                // Only stop dragging if not in drawing mode, or if drawing is not active
-                if (!drawingModeEnabled || !isDrawing) {
+                // Only stop dragging if not in drawing/text mode, or if drawing is not active
+                if ((!drawingModeEnabled && !textModeEnabled) || !isDrawing) {
                     isDragging = false;
                 }
             });
             
             container.addEventListener('mousemove', function(e) {
-                // Don't pan if drawing mode is enabled and user is drawing
-                if (drawingModeEnabled && isDrawing) return;
+                // Don't pan if drawing mode is enabled and user is drawing, or if text mode is enabled
+                if ((drawingModeEnabled && isDrawing) || textModeEnabled) return;
                 if (!isDragging) return;
                 e.preventDefault();
                 
@@ -842,6 +914,7 @@
         }
         
         function setupDrawingControls() {
+            console.log('=== Setting up drawing controls ===');
             var drawToggleBtn = document.getElementById('draw-toggle-btn');
             var drawTools = document.getElementById('draw-tools');
             var penBtn = document.getElementById('pen-btn');
@@ -851,6 +924,26 @@
             var sizeValue = document.getElementById('size-value');
             var clearBtn = document.getElementById('clear-btn');
             var saveBtn = document.getElementById('save-btn');
+            
+            console.log('Drawing controls elements found:', {
+                drawToggleBtn: !!drawToggleBtn,
+                drawTools: !!drawTools,
+                penBtn: !!penBtn,
+                eraserBtn: !!eraserBtn
+            });
+            
+            // Minimize button for drawing controls
+            var drawingMinimizeBtn = document.getElementById('drawing-minimize-btn');
+            var drawingControls = document.querySelector('.drawing-controls');
+            if (drawingMinimizeBtn && drawingControls) {
+                drawingMinimizeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    drawingControls.classList.toggle('collapsed');
+                    drawingMinimizeBtn.textContent = drawingControls.classList.contains('collapsed') ? '+' : '−';
+                });
+                console.log('Drawing minimize button initialized');
+            }
             
             // Toggle drawing mode on/off
             drawToggleBtn.addEventListener('click', function() {
@@ -862,10 +955,14 @@
                     drawToggleBtn.classList.add('active');
                 } else {
                     drawTools.style.display = 'none';
-                    drawCanvas.classList.remove('drawing');
+                    // Only remove drawing class if text mode is also disabled
+                    if (!textModeEnabled) {
+                        drawCanvas.classList.remove('drawing');
+                    }
                     drawToggleBtn.textContent = '🎨 Enable Drawing';
                     drawToggleBtn.classList.remove('active');
                     isDrawing = false; // Stop any active drawing
+                    isEraser = false;
                 }
             });
             
@@ -884,6 +981,87 @@
                 penBtn.classList.remove('active');
             });
             
+            // Toggle text mode on/off
+            console.log('Initializing text toggle button...');
+            var textToggleBtn = document.getElementById('text-toggle-btn');
+            var textboxControls = document.getElementById('textbox-controls');
+            
+            console.log('Text elements found:', {
+                textToggleBtn: !!textToggleBtn,
+                textboxControls: !!textboxControls,
+                textToggleBtnElement: textToggleBtn,
+                textboxControlsElement: textboxControls
+            });
+            
+            if (!textToggleBtn) {
+                console.error('Text toggle button not found! Searching for element...');
+                var allButtons = document.querySelectorAll('button');
+                console.log('All buttons found:', allButtons.length);
+                allButtons.forEach(function(btn, idx) {
+                    console.log('Button', idx, ':', btn.id, btn.textContent);
+                });
+            }
+            if (!textboxControls) {
+                console.error('Textbox controls not found!');
+            }
+            
+            if (textToggleBtn && textboxControls) {
+                console.log('Both elements found, attaching event listener...');
+                textToggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    textModeEnabled = !textModeEnabled;
+                    console.log('Text mode toggled:', textModeEnabled);
+                    
+                    if (textModeEnabled) {
+                        textboxControls.style.display = 'block';
+                        if (drawCanvas) {
+                            drawCanvas.classList.add('drawing');
+                        }
+                        textToggleBtn.textContent = '🚫 Disable Text';
+                        textToggleBtn.classList.add('active');
+                        console.log('Text mode ENABLED - controls should be visible');
+                    } else {
+                        textboxControls.style.display = 'none';
+                        // Only remove drawing class if drawing mode is also disabled
+                        if (drawCanvas && !drawingModeEnabled) {
+                            drawCanvas.classList.remove('drawing');
+                        }
+                        textToggleBtn.textContent = '📝 Enable Text';
+                        textToggleBtn.classList.remove('active');
+                        console.log('Text mode DISABLED');
+                    }
+                });
+                
+                console.log('Text toggle button initialized successfully!');
+            } else {
+                console.error('Failed to initialize text toggle - button:', !!textToggleBtn, 'controls:', !!textboxControls);
+            }
+            
+            // Text box input
+            var textBoxInputEl = document.getElementById('textbox-input');
+            if (textBoxInputEl) {
+                textBoxInputEl.addEventListener('input', function() {
+                    textBoxInput = this.value;
+                    console.log('Text input updated:', textBoxInput);
+                });
+                // Also update on change
+                textBoxInputEl.addEventListener('change', function() {
+                    textBoxInput = this.value;
+                });
+            } else {
+                console.error('Text input element not found!');
+            }
+            
+            // Text box opacity
+            var textBoxOpacityEl = document.getElementById('textbox-opacity');
+            var opacityValueEl = document.getElementById('opacity-value');
+            textBoxOpacityEl.addEventListener('input', function() {
+                textBoxOpacity = parseInt(this.value);
+                opacityValueEl.textContent = textBoxOpacity;
+            });
+            
             // Color picker
             colorInput.addEventListener('change', function() {
                 drawColor = this.value;
@@ -897,8 +1075,11 @@
             
             // Clear button
             clearBtn.addEventListener('click', function() {
-                if (confirm('Clear all drawings?')) {
+                if (confirm('Clear all drawings and text boxes?')) {
                     drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+                    textBoxes = []; // Clear text boxes array
+                    // Redraw text boxes (will be empty, but ensures consistency)
+                    redrawTextBoxes();
                 }
             });
             
@@ -912,6 +1093,7 @@
             drawCanvas.addEventListener('mousemove', draw);
             drawCanvas.addEventListener('mouseup', stopDrawing);
             drawCanvas.addEventListener('mouseout', stopDrawing);
+            drawCanvas.addEventListener('click', handleCanvasClick);
             
             // Touch events for mobile
             drawCanvas.addEventListener('touchstart', function(e) {
@@ -941,12 +1123,43 @@
             });
             
             drawCanvas.addEventListener('touchend', function(e) {
+                if (textModeEnabled && e.changedTouches.length > 0) {
+                    // Handle text box placement on touch
+                    var touch = e.changedTouches[0];
+                    var rect = drawCanvas.getBoundingClientRect();
+                    var scale = currentScale;
+                    var x = (touch.clientX - rect.left) / scale;
+                    var y = (touch.clientY - rect.top) / scale;
+                    
+                    if (!textBoxInput || textBoxInput.trim() === '') {
+                        alert('Please enter some text first!');
+                        return;
+                    }
+                    
+                    textBoxes.push({
+                        x: x,
+                        y: y,
+                        text: textBoxInput,
+                        color: drawColor,
+                        opacity: textBoxOpacity
+                    });
+                    
+                    redrawTextBoxes();
+                }
                 stopDrawing(e);
+            });
+            
+            drawCanvas.addEventListener('touchstart', function(e) {
+                if (textModeEnabled) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
             });
         }
         
         function startDrawing(e) {
             if (!drawingModeEnabled || showZones) return; // Don't draw when zones is active
+            if (textModeEnabled) return; // Don't start drawing if text mode is active
             isDrawing = true;
             e.preventDefault();
             e.stopPropagation(); // Prevent map panning
@@ -957,7 +1170,7 @@
         }
         
         function draw(e) {
-            if (!isDrawing || !drawingModeEnabled || showZones) return; // Don't draw when zones is active
+            if (!isDrawing || !drawingModeEnabled || showZones || textModeEnabled) return; // Don't draw when zones is active or in text mode
             e.preventDefault();
             e.stopPropagation(); // Prevent map panning
             var rect = drawCanvas.getBoundingClientRect();
@@ -967,6 +1180,102 @@
             drawLine(lastX, lastY, x, y);
             lastX = x;
             lastY = y;
+        }
+        
+        function handleCanvasClick(e) {
+            if (!textModeEnabled || showZones) {
+                console.log('Text click ignored - textModeEnabled:', textModeEnabled, 'showZones:', showZones);
+                return;
+            }
+            
+            // Don't handle click if it was part of a drag/draw operation
+            if (isDrawing) {
+                console.log('Text click ignored - isDrawing:', isDrawing);
+                return;
+            }
+            
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Get text directly from input field to ensure we have the latest value
+            var textBoxInputEl = document.getElementById('textbox-input');
+            var textToUse = '';
+            if (textBoxInputEl) {
+                textToUse = textBoxInputEl.value;
+            } else {
+                textToUse = textBoxInput;
+            }
+            
+            if (!textToUse || textToUse.trim() === '') {
+                alert('Please enter some text first!');
+                return;
+            }
+            
+            var rect = drawCanvas.getBoundingClientRect();
+            var scale = currentScale;
+            var x = (e.clientX - rect.left) / scale;
+            var y = (e.clientY - rect.top) / scale;
+            
+            console.log('Adding text box at:', x, y, 'with text:', textToUse);
+            
+            // Add text box
+            textBoxes.push({
+                x: x,
+                y: y,
+                text: textToUse,
+                color: drawColor,
+                opacity: textBoxOpacity
+            });
+            
+            // Update the stored value
+            textBoxInput = textToUse;
+            
+            // Redraw all text boxes
+            redrawTextBoxes();
+            console.log('Total text boxes:', textBoxes.length);
+        }
+        
+        function redrawTextBoxes() {
+            // Draw all text boxes on the canvas
+            // Note: This draws on top of existing content (drawings)
+            // Text boxes are stored separately and redrawn when needed
+            textBoxes.forEach(function(box) {
+                drawTextBox(box.x, box.y, box.text, box.color, box.opacity);
+            });
+        }
+        
+        function drawTextBox(x, y, text, color, opacity) {
+            drawCtx.save();
+            
+            // Set font
+            drawCtx.font = '16px Arial';
+            drawCtx.textBaseline = 'top';
+            
+            // Measure text
+            var metrics = drawCtx.measureText(text);
+            var textWidth = metrics.width;
+            var textHeight = 20; // Approximate height
+            
+            // Padding
+            var padding = 8;
+            var boxWidth = textWidth + padding * 2;
+            var boxHeight = textHeight + padding * 2;
+            
+            // Draw transparent background box
+            var bgOpacity = opacity / 100;
+            drawCtx.fillStyle = 'rgba(0, 0, 0, ' + bgOpacity + ')';
+            drawCtx.fillRect(x, y, boxWidth, boxHeight);
+            
+            // Draw border
+            drawCtx.strokeStyle = color;
+            drawCtx.lineWidth = 2;
+            drawCtx.strokeRect(x, y, boxWidth, boxHeight);
+            
+            // Draw text
+            drawCtx.fillStyle = color;
+            drawCtx.fillText(text, x + padding, y + padding);
+            
+            drawCtx.restore();
         }
         
         function drawLine(x1, y1, x2, y2) {
@@ -1005,7 +1314,7 @@
             // Draw map canvas
             combinedCtx.drawImage(canvas, 0, 0);
             
-            // Draw drawing canvas
+            // Draw drawing canvas (includes text boxes already drawn on it)
             combinedCtx.drawImage(drawCanvas, 0, 0);
             
             // Convert to image and download
@@ -1091,8 +1400,24 @@
             console.log('New canvas size: ' + mapWidthPx + 'x' + mapHeightPx);
         }
         
+        // Test if elements exist before initialization
+        console.log('=== Pre-initialization check ===');
+        console.log('Text toggle button exists:', !!document.getElementById('text-toggle-btn'));
+        console.log('Drawing controls exists:', !!document.querySelector('.drawing-controls'));
+        
         initializeMap();
         console.log('Map initialized');
+        
+        // Post-initialization check
+        setTimeout(function() {
+            console.log('=== Post-initialization check ===');
+            var textBtn = document.getElementById('text-toggle-btn');
+            console.log('Text toggle button after init:', !!textBtn);
+            if (textBtn) {
+                console.log('Text button text:', textBtn.textContent);
+                console.log('Text button visible:', textBtn.offsetWidth > 0 && textBtn.offsetHeight > 0);
+            }
+        }, 1000);
     </script>
   </body>
 </html>
