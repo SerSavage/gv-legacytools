@@ -58,3 +58,4 @@ After deployment, test:
 - All assets use relative paths
 - No backend required - pure static site
 
+
