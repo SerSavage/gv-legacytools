@@ -97,7 +97,6 @@
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
             border: 2px solid transparent;
-            position: relative;
         }
         
         .item-card:hover {
@@ -105,11 +104,6 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             border-color: rgba(255, 255, 255, 0.3);
             background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .item-card:hover .item-name {
-            opacity: 1;
-            font-weight: 600;
         }
         
         .item-icon {
@@ -126,8 +120,6 @@
             font-weight: 500;
             line-height: 1.3;
             word-wrap: break-word;
-            transition: opacity 0.3s, font-weight 0.3s;
-            opacity: 0.9;
         }
         
         .stats {
@@ -268,10 +260,9 @@
                         const card = document.createElement('div');
                         card.className = 'item-card';
                         card.innerHTML = `
-                            <img src="wp-content/uploads/${item.icon}" alt="${item.name}" class="item-icon" title="${item.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'padding:20px;\\'>${item.name}</div>'">
+                            <img src="../../wp-content/uploads/${item.icon}" alt="${item.name}" class="item-icon" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'padding:20px;\\'>${item.name}</div>'">
                             <div class="item-name">${item.name}</div>
                         `;
-                        card.title = item.name;
                         grid.appendChild(card);
                     });
                     
