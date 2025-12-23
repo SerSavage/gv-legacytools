@@ -6,10 +6,10 @@ services:
     routes:
       - type: rewrite
         source: /database
-        destination: /database/index.html
+        destination: /database/database/index.html
       - type: rewrite
         source: /database/*
-        destination: /database/index.html
+        destination: /database/database/index.html
       - type: rewrite
         source: /map/*
         destination: /map/index.html

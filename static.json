@@ -2,8 +2,8 @@
   "root": ".",
   "clean_urls": false,
   "routes": {
-    "/database": "/database/index.html",
-    "/database/**": "/database/index.html",
+    "/database": "/database/database/index.html",
+    "/database/**": "/database/database/index.html",
     "/map/**": "/map/index.html",
     "/**": "/index.html"
   },
