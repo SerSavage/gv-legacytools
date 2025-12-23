@@ -5,8 +5,11 @@ services:
     staticPublishPath: .
     routes:
       - type: rewrite
+        source: /database
+        destination: /database/index.html
+      - type: rewrite
         source: /database/*
-        destination: /database/database/index.html
+        destination: /database/index.html
       - type: rewrite
         source: /map/*
         destination: /map/index.html
