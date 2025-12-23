@@ -20,6 +20,27 @@
             flex-direction: column;
         }
         
+        .topmenu {
+            background: #333;
+            padding: 10px;
+            text-align: center;
+            z-index: 1000;
+            position: relative;
+            border-bottom: 2px solid #444;
+        }
+        
+        .topmenu a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 5px 10px;
+            transition: color 0.3s;
+        }
+        
+        .topmenu a:hover {
+            color: #ffff00;
+        }
+        
         .header {
             background: #2a2a2a;
             padding: 15px 20px;
@@ -258,6 +279,12 @@
     </style>
 </head>
 <body>
+    <div class="topmenu">
+        <a href="/">Home</a>
+        <a href="/">Character Builder</a>
+        <a href="/map/">Interactive Map</a>
+        <a href="/database/">Item Database</a>
+    </div>
     <div class="header">
         <div class="header-icons">
             <span class="header-icon" title="Home">🏠</span>
