@@ -7,13 +7,13 @@ node_modules/
 # PowerShell scripts (development only)
 *.ps1
 
-# Database files (not needed for static site)
-database/
+# Database files - KEEP THIS (needed for static site)
+# database/ - REMOVED - we need this folder
 
 # Development files
 discord-bot.py
 env.example
-requirements.txt
 upload-to-github.sh
 DEPLOYMENT.md
 GIT-SETUP.md
+# Note: requirements.txt is kept (empty) to prevent Render Python build errors
