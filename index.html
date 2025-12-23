@@ -607,21 +607,7 @@ $(document).ready(function() {
 				return;
 			}
 			
-			// Handle boundary stops at 150 and 200
-			if (newVal > 150 && oldValue <= 150) {
-				newVal = 150;
-			}	
-			if (newVal < 150 && oldValue >= 150) {
-				newVal = 150;
-			}	
-			if (newVal > 200 && oldValue <= 200) {
-				newVal = 200;
-			}
-			if (newVal < 200 && oldValue >= 200) {
-				newVal = 200;
-			}
-			
-			// Apply the change
+			// Apply the change - no restrictions on max value, only total points limit
 			$input.val(newVal);
 			
 			// Recalculate total points spent (from all attributes)
