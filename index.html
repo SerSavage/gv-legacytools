@@ -512,7 +512,12 @@ function Update_Statistics(){
 
 
 $(document).ready(function() {
-	reset_attributes();reset_passives();	
+	reset_attributes();reset_passives();
+	
+	// Initialize attribute points display
+	var initialPoints = CalculateAttributePoints();
+	document.getElementById("attribute_points").innerHTML = initialPoints;
+	document.getElementById("attribute_points_remaining").innerHTML = 535 - initialPoints;	
 	
 	var handler = function(e) { // on image click
 		e.preventDefault();
@@ -560,40 +565,72 @@ $(document).ready(function() {
 	$(function attribute_click() {
 		$(".attribute_button").on("click", function attribute_click() {
 			var $button = $(this);
-			var oldValue = $button.parent().find("input").val(); 
-			var tot = document.getElementById("attribute_points").innerHTML;
-			var num_inc = 3;
-			var num_dec = 3;
-			if (oldValue < 150){num_inc = 1;num_dec = 1;}
-			else if (oldValue == 150){num_inc = 2;num_dec = 1;}
-			else if (oldValue > 150 && oldValue < 200){num_inc = 2;num_dec = 2;}
-			else if (oldValue == 200){num_inc = 3;num_dec = 2;}		
-			if ($button.text() == ">"){var newVal = parseFloat(oldValue) + 1; var newTot = +tot + num_inc;}
-			if ($button.text() == ">>"){var newVal = parseFloat(oldValue) + 10; var newTot = +tot + num_inc*10;}	
-			if ($button.text() == "<"){var newVal = parseFloat(oldValue) - 1; var newTot = +tot - num_dec;}
-			if ($button.text() == "<<"){var newVal = parseFloat(oldValue) - 10; var newTot = +tot - num_dec*10;}		 
-			if (newVal < 80){console.log("cannot go below 80");return;} // Don't allow stat below 80
-			if (newTot < 0){console.log("out of skill points");return;} // Don't allow skill points below zero
-			if (newTot > 535){return;} // Don't allow above 535 skill points    
-			if (newVal > 150 && oldValue < 150){ // stop at 150 on increase
-				newVal = 150;
-				newTot = 150-80;
-			}	
-			if (newVal < 150 && oldValue > 150){ // stop at 150 on decrease
-				newVal = 150;
-				newTot = 150-80;
-			}	
-			if (newVal > 200 && oldValue < 200){ // stop at 200 on increase
-				newVal = 200;
-				newTot = 250-80;
+			var $input = $button.parent().find("input");
+			var attributeId = $input.attr('id'); // Get which attribute (strength, constitution, dexterity)
+			var oldValue = parseFloat($input.val()) || 80;
+			
+			// Determine the change amount
+			var change = 0;
+			if ($button.text() == ">") change = 1;
+			else if ($button.text() == ">>") change = 10;
+			else if ($button.text() == "<") change = -1;
+			else if ($button.text() == "<<") change = -10;
+			
+			// Calculate new value
+			var newVal = oldValue + change;
+			
+			// Don't allow stat below 80
+			if (newVal < 80) {
+				console.log("cannot go below 80");
+				return;
 			}
-			if (newVal < 200 && oldValue > 200){ // stop at 200 on decrease
-				newVal = 200;
-				newTot = 250-80;
+			
+			// Temporarily set the new value to calculate total points
+			var originalValue = $input.val();
+			$input.val(newVal);
+			
+			// Calculate what the total points would be with this change
+			var newTotalPoints = CalculateAttributePoints();
+			
+			// Restore original value
+			$input.val(originalValue);
+			
+			// Validate: Don't allow above 535 total points
+			if (newTotalPoints > 535) {
+				console.log("Cannot exceed 535 total points. Current total would be: " + newTotalPoints);
+				return;
 			}
-			$button.parent().find("input").val(newVal);
-			document.getElementById("attribute_points").innerHTML  = newTot;
-			document.getElementById("attribute_points_remaining").innerHTML  = 535 - newTot;
+			
+			// Validate: Don't allow below 0 (shouldn't happen, but safety check)
+			if (newTotalPoints < 0) {
+				console.log("Points cannot go below 0");
+				return;
+			}
+			
+			// Handle boundary stops at 150 and 200
+			if (newVal > 150 && oldValue <= 150) {
+				newVal = 150;
+			}	
+			if (newVal < 150 && oldValue >= 150) {
+				newVal = 150;
+			}	
+			if (newVal > 200 && oldValue <= 200) {
+				newVal = 200;
+			}
+			if (newVal < 200 && oldValue >= 200) {
+				newVal = 200;
+			}
+			
+			// Apply the change
+			$input.val(newVal);
+			
+			// Recalculate total points spent (from all attributes)
+			var finalTotalPoints = CalculateAttributePoints();
+			
+			// Update display
+			document.getElementById("attribute_points").innerHTML = finalTotalPoints;
+			document.getElementById("attribute_points_remaining").innerHTML = 535 - finalTotalPoints;
+			
 			Update_Statistics();			
 		});
 	});

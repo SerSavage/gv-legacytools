@@ -61,14 +61,39 @@ function reset_passives(){
 	SetColors();
 }
 
+// Calculate total attribute points spent (must be defined before reset_attributes)
+function CalculateAttributePoints() {
+	var str = parseFloat(document.getElementById('strength').value) || 80;
+	var con = parseFloat(document.getElementById('constitution').value) || 80;
+	var dex = parseFloat(document.getElementById('dexterity').value) || 80;
+	
+	var totalPoints = 0;
+	
+	// Helper function to calculate points for a single attribute
+	function getPointsForAttribute(value) {
+		if (value <= 80) return 0;
+		if (value <= 150) return value - 80; // 1 point per attribute point (80-150)
+		if (value <= 200) return 70 + (value - 150) * 2; // 70 points for 80-150, then 2 points per (150-200)
+		return 70 + 100 + (value - 200) * 3; // 70 + 100 for 80-200, then 3 points per (200+)
+	}
+	
+	totalPoints += getPointsForAttribute(str);
+	totalPoints += getPointsForAttribute(con);
+	totalPoints += getPointsForAttribute(dex);
+	
+	return totalPoints;
+}
+
 function reset_attributes(){
 	 array = document.getElementsByClassName("attribute");
 		for (var i = 0; i < array.length; i++) {
 		  array[i].value = 80;
 		  
 		}  
-		document.getElementById('attribute_points_remaining').innerHTML = 535;
-		document.getElementById('attribute_points').innerHTML = 0;
+		// Recalculate points after reset
+		var totalPoints = CalculateAttributePoints();
+		document.getElementById('attribute_points_remaining').innerHTML = 535 - totalPoints;
+		document.getElementById('attribute_points').innerHTML = totalPoints;
 
 	Update_Statistics();
 }
