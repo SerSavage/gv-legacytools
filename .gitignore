@@ -3,3 +3,17 @@
 *.log
 .env
 node_modules/
+
+# PowerShell scripts (development only)
+*.ps1
+
+# Database files (not needed for static site)
+database/
+
+# Development files
+discord-bot.py
+env.example
+requirements.txt
+upload-to-github.sh
+DEPLOYMENT.md
+GIT-SETUP.md
