@@ -1,7 +1,6 @@
 services:
-  - type: web
+  - type: static
     name: gv-legacy-combined
-    env: static
     buildCommand: echo "No build needed"
     staticPublishPath: .
     routes:
