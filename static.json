@@ -5,6 +5,7 @@
     "/database": "/database/index.html",
     "/database/**": "/database/index.html",
     "/map/**": "/map/index.html",
+    "/builder/**": "/builder/index.html",
     "/**": "/index.html"
   },
   "headers": {
