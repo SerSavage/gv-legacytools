@@ -217,12 +217,28 @@
         const menuScreen = document.getElementById('menu-screen');
         const splashGif = document.getElementById('splash-gif');
         
+        // Check if user has seen splash screen before (only show on first visit)
+        const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
+        
+        if (hasSeenSplash) {
+            // User has seen splash before, show menu directly
+            splashScreen.style.display = 'none';
+            menuScreen.style.display = 'flex';
+            menuScreen.classList.add('visible');
+        } else {
+            // First visit - show splash screen
+            menuScreen.style.display = 'none';
+        }
+        
         // Handle click/touch to show menu
         function showMenu(e) {
             if (e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
+            
+            // Mark as seen
+            sessionStorage.setItem('hasSeenSplash', 'true');
             
             splashScreen.classList.add('hidden');
             
@@ -233,28 +249,31 @@
             }, 50);
         }
         
-        // Listen for clicks/touches on splash screen
-        splashScreen.addEventListener('click', showMenu);
-        splashScreen.addEventListener('touchstart', showMenu, { passive: false });
-        
-        // Also listen on the GIF itself
-        splashGif.addEventListener('click', showMenu);
-        splashGif.addEventListener('touchstart', showMenu, { passive: false });
-        
-        // Listen on body as fallback
-        document.body.addEventListener('click', (e) => {
-            if (!menuScreen.classList.contains('visible') && !splashScreen.classList.contains('hidden')) {
-                showMenu(e);
-            }
-        });
-        
-        // Handle keyboard (Enter/Space)
-        document.addEventListener('keydown', (e) => {
-            if ((e.key === 'Enter' || e.key === ' ') && !menuScreen.classList.contains('visible')) {
-                e.preventDefault();
-                showMenu(e);
-            }
-        });
+        // Only add event listeners if splash is visible
+        if (!hasSeenSplash) {
+            // Listen for clicks/touches on splash screen
+            splashScreen.addEventListener('click', showMenu);
+            splashScreen.addEventListener('touchstart', showMenu, { passive: false });
+            
+            // Also listen on the GIF itself
+            splashGif.addEventListener('click', showMenu);
+            splashGif.addEventListener('touchstart', showMenu, { passive: false });
+            
+            // Listen on body as fallback
+            document.body.addEventListener('click', (e) => {
+                if (!menuScreen.classList.contains('visible') && !splashScreen.classList.contains('hidden')) {
+                    showMenu(e);
+                }
+            });
+            
+            // Handle keyboard (Enter/Space)
+            document.addEventListener('keydown', (e) => {
+                if ((e.key === 'Enter' || e.key === ' ') && !menuScreen.classList.contains('visible')) {
+                    e.preventDefault();
+                    showMenu(e);
+                }
+            });
+        }
     </script>
 </body>
 </html>
