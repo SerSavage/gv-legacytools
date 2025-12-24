@@ -27,7 +27,7 @@
         "IconFile": "icon_2h_mlot_mostowy.png",
         "BaseName": "2h_mlot_mostowy",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "2h mlot mostowy",
         "PolishName": "2h_mlot_mostowy"
     },
@@ -130,8 +130,8 @@
     {
         "IconFile": "icon_BeggarsRippedRag.png",
         "BaseName": "BeggarsRippedRag",
-        "Category": "Food",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "BeggarsRippedRag",
         "PolishName": "BeggarsRippedRag"
     },
@@ -338,8 +338,8 @@
     {
         "IconFile": "icon_BrownLinenShirt.png",
         "BaseName": "BrownLinenShirt",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "BrownLinenShirt",
         "PolishName": "BrownLinenShirt"
     },
@@ -746,7 +746,7 @@
     {
         "IconFile": "icon_Chleb.png",
         "BaseName": "Chleb",
-        "Category": "Other",
+        "Category": "Materials",
         "SubCategory": "",
         "EnglishName": "Chleb",
         "PolishName": "Chleb"
@@ -770,8 +770,8 @@
     {
         "IconFile": "icon_CiastoChlebowe.png",
         "BaseName": "CiastoChlebowe",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Materials",
+        "SubCategory": "",
         "EnglishName": "CiastoChlebowe",
         "PolishName": "CiastoChlebowe"
     },
@@ -1234,8 +1234,8 @@
     {
         "IconFile": "icon_east_tunic_Skin_1.png",
         "BaseName": "east_tunic_Skin_1",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "east tunic Skin",
         "PolishName": "east_tunic_Skin_1"
     },
@@ -1330,7 +1330,7 @@
     {
         "IconFile": "icon_FishTrap.png",
         "BaseName": "FishTrap",
-        "Category": "Food",
+        "Category": "Tools",
         "SubCategory": "",
         "EnglishName": "FishTrap",
         "PolishName": "FishTrap"
@@ -1507,7 +1507,7 @@
         "IconFile": "icon_Glov_M_Glory_Heavy_Armor.png",
         "BaseName": "Glov_M_Glory_Heavy_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M Glory Heavy Armor",
         "PolishName": "Glov_M_Glory_Heavy_Armor"
     },
@@ -1515,7 +1515,7 @@
         "IconFile": "icon_Glov_M_Glory_Heavy_Armor_Skin_1.png",
         "BaseName": "Glov_M_Glory_Heavy_Armor_Skin_1",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M Glory Heavy Armor Skin",
         "PolishName": "Glov_M_Glory_Heavy_Armor_Skin_1"
     },
@@ -1523,7 +1523,7 @@
         "IconFile": "icon_Glov_M_Glory_Low_Armor.png",
         "BaseName": "Glov_M_Glory_Low_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M Glory Low Armor",
         "PolishName": "Glov_M_Glory_Low_Armor"
     },
@@ -1531,7 +1531,7 @@
         "IconFile": "icon_Glov_M_Glory_Medium_Armor.png",
         "BaseName": "Glov_M_Glory_Medium_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M Glory Medium Armor",
         "PolishName": "Glov_M_Glory_Medium_Armor"
     },
@@ -1666,8 +1666,8 @@
     {
         "IconFile": "icon_GreenWoolenTights.png",
         "BaseName": "GreenWoolenTights",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "GreenWoolenTights",
         "PolishName": "GreenWoolenTights"
     },
@@ -1682,7 +1682,7 @@
     {
         "IconFile": "icon_Grub.png",
         "BaseName": "Grub",
-        "Category": "Other",
+        "Category": "Materials",
         "SubCategory": "",
         "EnglishName": "Grub",
         "PolishName": "Grub"
@@ -1826,7 +1826,7 @@
     {
         "IconFile": "icon_gv_fishing_rod.png",
         "BaseName": "gv_fishing_rod",
-        "Category": "Food",
+        "Category": "Tools",
         "SubCategory": "",
         "EnglishName": "gv fishing rod",
         "PolishName": "gv_fishing_rod"
@@ -1867,7 +1867,7 @@
         "IconFile": "icon_gv_mace_spikes_2.png",
         "BaseName": "gv_mace_spikes_2",
         "Category": "Weapons",
-        "SubCategory": "One-handed Spears",
+        "SubCategory": "One-handed Blunts",
         "EnglishName": "gv mace spikes",
         "PolishName": "gv_mace_spikes_2"
     },
@@ -1939,7 +1939,7 @@
         "IconFile": "icon_GV_ShoulD_Armor_Roman_Lorica_01.png",
         "BaseName": "GV_ShoulD_Armor_Roman_Lorica_01",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Shoulders",
         "EnglishName": "GV ShoulD Armor Roman Lorica",
         "PolishName": "GV_ShoulD_Armor_Roman_Lorica_01"
     },
@@ -2698,8 +2698,8 @@
     {
         "IconFile": "icon_HerbalistsLinenShirt.png",
         "BaseName": "HerbalistsLinenShirt",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "HerbalistsLinenShirt",
         "PolishName": "HerbalistsLinenShirt"
     },
@@ -2730,8 +2730,8 @@
     {
         "IconFile": "icon_HuntsmanKnife.png",
         "BaseName": "HuntsmanKnife",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Weapons",
+        "SubCategory": "Knives",
         "EnglishName": "HuntsmanKnife",
         "PolishName": "HuntsmanKnife"
     },
@@ -2763,7 +2763,7 @@
         "IconFile": "icon_ismir_2h_01.png",
         "BaseName": "ismir_2h_01",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "ismir 2h",
         "PolishName": "ismir_2h_01"
     },
@@ -2771,7 +2771,7 @@
         "IconFile": "icon_ismir_2h_02.png",
         "BaseName": "ismir_2h_02",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "ismir 2h",
         "PolishName": "ismir_2h_02"
     },
@@ -2779,7 +2779,7 @@
         "IconFile": "icon_ismir_2h_03.png",
         "BaseName": "ismir_2h_03",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "ismir 2h",
         "PolishName": "ismir_2h_03"
     },
@@ -2787,7 +2787,7 @@
         "IconFile": "icon_ismir_2h_04.png",
         "BaseName": "ismir_2h_04",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "ismir 2h",
         "PolishName": "ismir_2h_04"
     },
@@ -3330,8 +3330,8 @@
     {
         "IconFile": "icon_KnightsMorningstar.png",
         "BaseName": "KnightsMorningstar",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Weapons",
+        "SubCategory": "One-handed Blunts",
         "EnglishName": "KnightsMorningstar",
         "PolishName": "KnightsMorningstar"
     },
@@ -3491,7 +3491,7 @@
         "IconFile": "icon_Kora.png",
         "BaseName": "Kora",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Legs",
         "EnglishName": "Kora",
         "PolishName": "Kora"
     },
@@ -3594,7 +3594,7 @@
     {
         "IconFile": "icon_latarnia_01.png",
         "BaseName": "latarnia_01",
-        "Category": "Other",
+        "Category": "Tools",
         "SubCategory": "",
         "EnglishName": "latarnia",
         "PolishName": "latarnia_01"
@@ -3843,7 +3843,7 @@
         "IconFile": "icon_logres_2h_01.png",
         "BaseName": "logres_2h_01",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "logres 2h",
         "PolishName": "logres_2h_01"
     },
@@ -3851,7 +3851,7 @@
         "IconFile": "icon_logres_2h_02.png",
         "BaseName": "logres_2h_02",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "logres 2h",
         "PolishName": "logres_2h_02"
     },
@@ -4178,8 +4178,8 @@
     {
         "IconFile": "icon_LowArm_M_fartuch_skora_A.png",
         "BaseName": "LowArm_M_fartuch_skora_A",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M fartuch skora A",
         "PolishName": "LowArm_M_fartuch_skora_A"
     },
@@ -4187,7 +4187,7 @@
         "IconFile": "icon_LowArm_M_Glory_Heavy_Armor.png",
         "BaseName": "LowArm_M_Glory_Heavy_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M Glory Heavy Armor",
         "PolishName": "LowArm_M_Glory_Heavy_Armor"
     },
@@ -4195,7 +4195,7 @@
         "IconFile": "icon_LowArm_M_Glory_Low_Armor.png",
         "BaseName": "LowArm_M_Glory_Low_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M Glory Low Armor",
         "PolishName": "LowArm_M_Glory_Low_Armor"
     },
@@ -4203,7 +4203,7 @@
         "IconFile": "icon_LowArm_M_Glory_Low_Armor_Skin_1.png",
         "BaseName": "LowArm_M_Glory_Low_Armor_Skin_1",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M Glory Low Armor Skin",
         "PolishName": "LowArm_M_Glory_Low_Armor_Skin_1"
     },
@@ -4211,7 +4211,7 @@
         "IconFile": "icon_LowArm_M_Glory_Medium_Armor.png",
         "BaseName": "LowArm_M_Glory_Medium_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M Glory Medium Armor",
         "PolishName": "LowArm_M_Glory_Medium_Armor"
     },
@@ -4379,7 +4379,7 @@
         "IconFile": "icon_maczuga2h.png",
         "BaseName": "maczuga2h",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "maczuga2h",
         "PolishName": "maczuga2h"
     },
@@ -4434,8 +4434,8 @@
     {
         "IconFile": "icon_MaraudersFlail.png",
         "BaseName": "MaraudersFlail",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Weapons",
+        "SubCategory": "One-handed Blunts",
         "EnglishName": "MaraudersFlail",
         "PolishName": "MaraudersFlail"
     },
@@ -4603,7 +4603,7 @@
         "IconFile": "icon_mlot_bojowy_2h.png",
         "BaseName": "mlot_bojowy_2h",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "mlot bojowy 2h",
         "PolishName": "mlot_bojowy_2h"
     },
@@ -4611,7 +4611,7 @@
         "IconFile": "icon_mlot_olbrzymow_2h.png",
         "BaseName": "mlot_olbrzymow_2h",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "mlot olbrzymow 2h",
         "PolishName": "mlot_olbrzymow_2h"
     },
@@ -4619,7 +4619,7 @@
         "IconFile": "icon_mlot_pogromcow_2h.png",
         "BaseName": "mlot_pogromcow_2h",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "mlot pogromcow 2h",
         "PolishName": "mlot_pogromcow_2h"
     },
@@ -4627,7 +4627,7 @@
         "IconFile": "icon_mlot_wojaka_2h.png",
         "BaseName": "mlot_wojaka_2h",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "mlot wojaka 2h",
         "PolishName": "mlot_wojaka_2h"
     },
@@ -4635,7 +4635,7 @@
         "IconFile": "icon_mlot_z_ortos_2h.png",
         "BaseName": "mlot_z_ortos_2h",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "mlot z ortos 2h",
         "PolishName": "mlot_z_ortos_2h"
     },
@@ -5050,8 +5050,8 @@
     {
         "IconFile": "icon_PeasantLinenShirt.png",
         "BaseName": "PeasantLinenShirt",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "PeasantLinenShirt",
         "PolishName": "PeasantLinenShirt"
     },
@@ -5066,8 +5066,8 @@
     {
         "IconFile": "icon_pickaxe_craft.png",
         "BaseName": "pickaxe_craft",
-        "Category": "Weapons",
-        "SubCategory": "One-handed Axes",
+        "Category": "Tools",
+        "SubCategory": "",
         "EnglishName": "pickaxe craft",
         "PolishName": "pickaxe_craft"
     },
@@ -5170,8 +5170,8 @@
     {
         "IconFile": "icon_PlatedGauntlet.png",
         "BaseName": "PlatedGauntlet",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Hands",
         "EnglishName": "PlatedGauntlet",
         "PolishName": "PlatedGauntlet"
     },
@@ -5522,8 +5522,8 @@
     {
         "IconFile": "icon_QuacksLinenShirt.png",
         "BaseName": "QuacksLinenShirt",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "QuacksLinenShirt",
         "PolishName": "QuacksLinenShirt"
     },
@@ -5618,8 +5618,8 @@
     {
         "IconFile": "icon_RedWoolenTights.png",
         "BaseName": "RedWoolenTights",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "RedWoolenTights",
         "PolishName": "RedWoolenTights"
     },
@@ -5698,8 +5698,8 @@
     {
         "IconFile": "icon_RetinueCleaver.png",
         "BaseName": "RetinueCleaver",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Weapons",
+        "SubCategory": "One-handed Blunts",
         "EnglishName": "RetinueCleaver",
         "PolishName": "RetinueCleaver"
     },
@@ -5754,7 +5754,7 @@
     {
         "IconFile": "icon_RottenTree.png",
         "BaseName": "RottenTree",
-        "Category": "Objects",
+        "Category": "Materials",
         "SubCategory": "",
         "EnglishName": "RottenTree",
         "PolishName": "RottenTree"
@@ -6163,7 +6163,7 @@
         "IconFile": "icon_Shoes_M_Glory_Heavy_Armor.png",
         "BaseName": "Shoes_M_Glory_Heavy_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Feet",
         "EnglishName": "Shoes M Glory Heavy Armor",
         "PolishName": "Shoes_M_Glory_Heavy_Armor"
     },
@@ -6171,7 +6171,7 @@
         "IconFile": "icon_Shoes_M_Glory_Low_Armor.png",
         "BaseName": "Shoes_M_Glory_Low_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Feet",
         "EnglishName": "Shoes M Glory Low Armor",
         "PolishName": "Shoes_M_Glory_Low_Armor"
     },
@@ -6179,7 +6179,7 @@
         "IconFile": "icon_Shoes_M_Glory_Medium_Armor.png",
         "BaseName": "Shoes_M_Glory_Medium_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Feet",
         "EnglishName": "Shoes M Glory Medium Armor",
         "PolishName": "Shoes_M_Glory_Medium_Armor"
     },
@@ -6355,7 +6355,7 @@
         "IconFile": "icon_ShoulD_M_Glory_Heavy_Armor.png",
         "BaseName": "ShoulD_M_Glory_Heavy_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Shoulders",
         "EnglishName": "ShoulD M Glory Heavy Armor",
         "PolishName": "ShoulD_M_Glory_Heavy_Armor"
     },
@@ -6363,7 +6363,7 @@
         "IconFile": "icon_ShoulD_M_Glory_Low_Armor.png",
         "BaseName": "ShoulD_M_Glory_Low_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Shoulders",
         "EnglishName": "ShoulD M Glory Low Armor",
         "PolishName": "ShoulD_M_Glory_Low_Armor"
     },
@@ -6371,7 +6371,7 @@
         "IconFile": "icon_ShoulD_M_Glory_Medium_Armor.png",
         "BaseName": "ShoulD_M_Glory_Medium_Armor",
         "Category": "Armor",
-        "SubCategory": "Chest",
+        "SubCategory": "Shoulders",
         "EnglishName": "ShoulD M Glory Medium Armor",
         "PolishName": "ShoulD_M_Glory_Medium_Armor"
     },
@@ -6530,72 +6530,72 @@
     {
         "IconFile": "icon_SkoraGarbowanaPlat.png",
         "BaseName": "SkoraGarbowanaPlat",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Materials",
+        "SubCategory": "",
         "EnglishName": "SkoraGarbowanaPlat",
         "PolishName": "SkoraGarbowanaPlat"
     },
     {
         "IconFile": "icon_SkoraGarbowanaPlatCienki.png",
         "BaseName": "SkoraGarbowanaPlatCienki",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Materials",
+        "SubCategory": "",
         "EnglishName": "SkoraGarbowanaPlatCienki",
         "PolishName": "SkoraGarbowanaPlatCienki"
     },
     {
         "IconFile": "icon_SkoraGarbowanaPlatCienkiDuzy.png",
         "BaseName": "SkoraGarbowanaPlatCienkiDuzy",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Materials",
+        "SubCategory": "",
         "EnglishName": "SkoraGarbowanaPlatCienkiDuzy",
         "PolishName": "SkoraGarbowanaPlatCienkiDuzy"
     },
     {
         "IconFile": "icon_SkoraGarbowanaPlatCienkiMaly.png",
         "BaseName": "SkoraGarbowanaPlatCienkiMaly",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Materials",
+        "SubCategory": "",
         "EnglishName": "SkoraGarbowanaPlatCienkiMaly",
         "PolishName": "SkoraGarbowanaPlatCienkiMaly"
     },
     {
         "IconFile": "icon_SkoraGarbowanaPlatDuzy.png",
         "BaseName": "SkoraGarbowanaPlatDuzy",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Materials",
+        "SubCategory": "",
         "EnglishName": "SkoraGarbowanaPlatDuzy",
         "PolishName": "SkoraGarbowanaPlatDuzy"
     },
     {
         "IconFile": "icon_SkoraGarbowanaPlatGruby.png",
         "BaseName": "SkoraGarbowanaPlatGruby",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Materials",
+        "SubCategory": "",
         "EnglishName": "SkoraGarbowanaPlatGruby",
         "PolishName": "SkoraGarbowanaPlatGruby"
     },
     {
         "IconFile": "icon_SkoraGarbowanaPlatGrubyDuzy.png",
         "BaseName": "SkoraGarbowanaPlatGrubyDuzy",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Materials",
+        "SubCategory": "",
         "EnglishName": "SkoraGarbowanaPlatGrubyDuzy",
         "PolishName": "SkoraGarbowanaPlatGrubyDuzy"
     },
     {
         "IconFile": "icon_SkoraGarbowanaPlatGrubyMaly.png",
         "BaseName": "SkoraGarbowanaPlatGrubyMaly",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Materials",
+        "SubCategory": "",
         "EnglishName": "SkoraGarbowanaPlatGrubyMaly",
         "PolishName": "SkoraGarbowanaPlatGrubyMaly"
     },
     {
         "IconFile": "icon_SkoraGarbowanaPlatMaly.png",
         "BaseName": "SkoraGarbowanaPlatMaly",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Materials",
+        "SubCategory": "",
         "EnglishName": "SkoraGarbowanaPlatMaly",
         "PolishName": "SkoraGarbowanaPlatMaly"
     },
@@ -7682,8 +7682,8 @@
     {
         "IconFile": "icon_UpArm_M_Beggar_Tunic.png",
         "BaseName": "UpArm_M_Beggar_Tunic",
-        "Category": "Food",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M Beggar Tunic",
         "PolishName": "UpArm_M_Beggar_Tunic"
     },
@@ -8162,24 +8162,24 @@
     {
         "IconFile": "icon_UpArm_M_tabard_bryg_kolczy_rekaw_AB.png",
         "BaseName": "UpArm_M_tabard_bryg_kolczy_rekaw_AB",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M tabard bryg kolczy rekaw AB",
         "PolishName": "UpArm_M_tabard_bryg_kolczy_rekaw_AB"
     },
     {
         "IconFile": "icon_UpArm_M_tabard_rekaw_bryg_black_short_AB.png",
         "BaseName": "UpArm_M_tabard_rekaw_bryg_black_short_AB",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M tabard rekaw bryg black short AB",
         "PolishName": "UpArm_M_tabard_rekaw_bryg_black_short_AB"
     },
     {
         "IconFile": "icon_UpArm_M_tabard_rekaw_bryg_yel_short_AB.png",
         "BaseName": "UpArm_M_tabard_rekaw_bryg_yel_short_AB",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M tabard rekaw bryg yel short AB",
         "PolishName": "UpArm_M_tabard_rekaw_bryg_yel_short_AB"
     },
@@ -8259,7 +8259,7 @@
         "IconFile": "icon_vond_2h_cep_bojowy.png",
         "BaseName": "vond_2h_cep_bojowy",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "vond 2h cep bojowy",
         "PolishName": "vond_2h_cep_bojowy"
     },
@@ -8459,7 +8459,7 @@
         "IconFile": "icon_wenedia_2h_01.png",
         "BaseName": "wenedia_2h_01",
         "Category": "Weapons",
-        "SubCategory": "One-handed Swords",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "wenedia 2h",
         "PolishName": "wenedia_2h_01"
     },
@@ -8506,8 +8506,8 @@
     {
         "IconFile": "icon_WhiteLinenShirt.png",
         "BaseName": "WhiteLinenShirt",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "WhiteLinenShirt",
         "PolishName": "WhiteLinenShirt"
     },
@@ -8818,16 +8818,16 @@
     {
         "IconFile": "icon_YellowLinenShirt.png",
         "BaseName": "YellowLinenShirt",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "YellowLinenShirt",
         "PolishName": "YellowLinenShirt"
     },
     {
         "IconFile": "icon_YellowWoolenTights.png",
         "BaseName": "YellowWoolenTights",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "YellowWoolenTights",
         "PolishName": "YellowWoolenTights"
     },
@@ -8970,8 +8970,8 @@
     {
         "IconFile": "icon_ZupaGrzybowa.png",
         "BaseName": "ZupaGrzybowa",
-        "Category": "Weapons",
-        "SubCategory": "Short Bows",
+        "Category": "Food",
+        "SubCategory": "",
         "EnglishName": "ZupaGrzybowa",
         "PolishName": "ZupaGrzybowa"
     },
