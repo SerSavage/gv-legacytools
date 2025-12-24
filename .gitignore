@@ -7,6 +7,11 @@ node_modules/
 # PowerShell scripts (development only)
 *.ps1
 
+# Python scripts (development/data processing only - not needed for Render)
+*.py
+!requirements.txt  # Keep requirements.txt (empty) to prevent Render Python build errors
+requirements_ocr.txt
+
 # Database files - KEEP THIS (needed for static site)
 # database/ - REMOVED - we need this folder
 
@@ -16,4 +21,5 @@ env.example
 upload-to-github.sh
 DEPLOYMENT.md
 GIT-SETUP.md
-# Note: requirements.txt is kept (empty) to prevent Render Python build errors
+UPDATE_ITEMS_INSTRUCTIONS.md
+database/reference_matching.csv

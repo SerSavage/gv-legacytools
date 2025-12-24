@@ -1,1 +1,2 @@
-
+# Empty file - kept to prevent Render from attempting Python build
+# This is a static site, no Python dependencies needed
