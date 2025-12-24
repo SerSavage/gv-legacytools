@@ -39,11 +39,10 @@
         }
         
         #splash-gif {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            object-position: center;
         }
         
         #menu-screen {
@@ -56,11 +55,14 @@
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 999;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
         }
         
         #menu-screen.visible {
             display: flex;
+            opacity: 1;
         }
         
         .menu-container {
@@ -208,34 +210,42 @@
         const splashGif = document.getElementById('splash-gif');
         
         // Handle click/touch to show menu
-        function showMenu() {
+        function showMenu(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
             splashScreen.classList.add('hidden');
+            
+            // Show menu immediately but fade in
+            menuScreen.style.display = 'flex';
             setTimeout(() => {
                 menuScreen.classList.add('visible');
-            }, 500);
+            }, 50);
         }
         
-        // Listen for clicks/touches
+        // Listen for clicks/touches on splash screen
         splashScreen.addEventListener('click', showMenu);
-        splashScreen.addEventListener('touchstart', showMenu);
+        splashScreen.addEventListener('touchstart', showMenu, { passive: false });
         
         // Also listen on the GIF itself
         splashGif.addEventListener('click', showMenu);
-        splashGif.addEventListener('touchstart', showMenu);
+        splashGif.addEventListener('touchstart', showMenu, { passive: false });
         
-        // Handle keyboard (Enter/Space)
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                if (!menuScreen.classList.contains('visible')) {
-                    showMenu();
-                }
+        // Listen on body as fallback
+        document.body.addEventListener('click', (e) => {
+            if (!menuScreen.classList.contains('visible') && !splashScreen.classList.contains('hidden')) {
+                showMenu(e);
             }
         });
         
-        // Preload the menu screen for smoother transition
-        window.addEventListener('load', () => {
-            menuScreen.style.display = 'none';
+        // Handle keyboard (Enter/Space)
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === 'Enter' || e.key === ' ') && !menuScreen.classList.contains('visible')) {
+                e.preventDefault();
+                showMenu(e);
+            }
         });
     </script>
 </body>
