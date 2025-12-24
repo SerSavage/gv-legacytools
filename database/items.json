@@ -570,8 +570,8 @@
     {
         "IconFile": "icon_ButcherBlade.png",
         "BaseName": "ButcherBlade",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Weapons",
+        "SubCategory": "Knives",
         "EnglishName": "ButcherBlade",
         "PolishName": "ButcherBlade"
     },
@@ -674,8 +674,8 @@
     {
         "IconFile": "icon_Celeta.png",
         "BaseName": "Celeta",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Head",
         "EnglishName": "Celeta",
         "PolishName": "Celeta"
     },
@@ -798,14 +798,6 @@
         "SubCategory": "",
         "EnglishName": "Cienkusz",
         "PolishName": "Cienkusz"
-    },
-    {
-        "IconFile": "icon_CoatOfArmsSymbol.png",
-        "BaseName": "CoatOfArmsSymbol",
-        "Category": "Other",
-        "SubCategory": "",
-        "EnglishName": "CoatOfArmsSymbol",
-        "PolishName": "CoatOfArmsSymbol"
     },
     {
         "IconFile": "icon_CoifedCeleta.png",
@@ -1050,8 +1042,8 @@
     {
         "IconFile": "icon_DogtatteredCoat.png",
         "BaseName": "DogtatteredCoat",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "DogtatteredCoat",
         "PolishName": "DogtatteredCoat"
     },
@@ -1466,16 +1458,16 @@
     {
         "IconFile": "icon_Glov_M_brygantynowe_Vond.png",
         "BaseName": "Glov_M_brygantynowe_Vond",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M brygantynowe Vond",
         "PolishName": "Glov_M_brygantynowe_Vond"
     },
     {
         "IconFile": "icon_Glov_M_ChainGauntlet.png",
         "BaseName": "Glov_M_ChainGauntlet",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M ChainGauntlet",
         "PolishName": "Glov_M_ChainGauntlet"
     },
@@ -1490,24 +1482,24 @@
     {
         "IconFile": "icon_Glov_M_fartuch_ism.png",
         "BaseName": "Glov_M_fartuch_ism",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M fartuch ism",
         "PolishName": "Glov_M_fartuch_ism"
     },
     {
         "IconFile": "icon_Glov_M_fartuch_mid.png",
         "BaseName": "Glov_M_fartuch_mid",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M fartuch mid",
         "PolishName": "Glov_M_fartuch_mid"
     },
     {
         "IconFile": "icon_Glov_M_fartuch_skora.png",
         "BaseName": "Glov_M_fartuch_skora",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M fartuch skora",
         "PolishName": "Glov_M_fartuch_skora"
     },
@@ -1578,32 +1570,32 @@
     {
         "IconFile": "icon_Glov_M_owijki_bokserskie.png",
         "BaseName": "Glov_M_owijki_bokserskie",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M owijki bokserskie",
         "PolishName": "Glov_M_owijki_bokserskie"
     },
     {
         "IconFile": "icon_Glov_M_przeszywane.png",
         "BaseName": "Glov_M_przeszywane",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M przeszywane",
         "PolishName": "Glov_M_przeszywane"
     },
     {
         "IconFile": "icon_Glov_M_rekawiceskorzane_0.png",
         "BaseName": "Glov_M_rekawiceskorzane_0",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M rekawiceskorzane",
         "PolishName": "Glov_M_rekawiceskorzane_0"
     },
     {
         "IconFile": "icon_Glov_M_spyridon_AB.png",
         "BaseName": "Glov_M_spyridon_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Hands",
         "EnglishName": "Glov M spyridon AB",
         "PolishName": "Glov_M_spyridon_AB"
     },
@@ -1866,8 +1858,8 @@
     {
         "IconFile": "icon_gv_LowArm_Santa_Suit.png",
         "BaseName": "gv_LowArm_Santa_Suit",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "gv LowArm Santa Suit",
         "PolishName": "gv_LowArm_Santa_Suit"
     },
@@ -2042,8 +2034,8 @@
     {
         "IconFile": "icon_gv_UpArm_Santa_Suit.png",
         "BaseName": "gv_UpArm_Santa_Suit",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "gv UpArm Santa Suit",
         "PolishName": "gv_UpArm_Santa_Suit"
     },
@@ -2074,8 +2066,8 @@
     {
         "IconFile": "icon_HarmonyTabardRingMail.png",
         "BaseName": "HarmonyTabardRingMail",
-        "Category": "Materials",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "HarmonyTabardRingMail",
         "PolishName": "HarmonyTabardRingMail"
     },
@@ -2746,7 +2738,7 @@
     {
         "IconFile": "icon_isemir_tarcza_01.png",
         "BaseName": "isemir_tarcza_01",
-        "Category": "Other",
+        "Category": "Shields",
         "SubCategory": "",
         "EnglishName": "isemir tarcza",
         "PolishName": "isemir_tarcza_01"
@@ -3498,8 +3490,8 @@
     {
         "IconFile": "icon_Kora.png",
         "BaseName": "Kora",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "Kora",
         "PolishName": "Kora"
     },
@@ -4146,16 +4138,16 @@
     {
         "IconFile": "icon_LowArm_M_bigwanty_spyridon.png",
         "BaseName": "LowArm_M_bigwanty_spyridon",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M bigwanty spyridon",
         "PolishName": "LowArm_M_bigwanty_spyridon"
     },
     {
         "IconFile": "icon_LowArm_M_chlopskie_A.png",
         "BaseName": "LowArm_M_chlopskie_A",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M chlopskie A",
         "PolishName": "LowArm_M_chlopskie_A"
     },
@@ -4178,8 +4170,8 @@
     {
         "IconFile": "icon_LowArm_M_fartuch_mid_A.png",
         "BaseName": "LowArm_M_fartuch_mid_A",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M fartuch mid A",
         "PolishName": "LowArm_M_fartuch_mid_A"
     },
@@ -4282,48 +4274,48 @@
     {
         "IconFile": "icon_LowArm_M_obwiazanesznurkiem_A.png",
         "BaseName": "LowArm_M_obwiazanesznurkiem_A",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M obwiazanesznurkiem A",
         "PolishName": "LowArm_M_obwiazanesznurkiem_A"
     },
     {
         "IconFile": "icon_LowArm_M_pikowane_A.png",
         "BaseName": "LowArm_M_pikowane_A",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M pikowane A",
         "PolishName": "LowArm_M_pikowane_A"
     },
     {
         "IconFile": "icon_LowArm_M_pikowane_nakolanniki_A.png",
         "BaseName": "LowArm_M_pikowane_nakolanniki_A",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M pikowane nakolanniki A",
         "PolishName": "LowArm_M_pikowane_nakolanniki_A"
     },
     {
         "IconFile": "icon_LowArm_M_pikowane_zbrojniki_A.png",
         "BaseName": "LowArm_M_pikowane_zbrojniki_A",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M pikowane zbrojniki A",
         "PolishName": "LowArm_M_pikowane_zbrojniki_A"
     },
     {
         "IconFile": "icon_LowArm_M_spodnie_Arek.png",
         "BaseName": "LowArm_M_spodnie_Arek",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M spodnie Arek",
         "PolishName": "LowArm_M_spodnie_Arek"
     },
     {
         "IconFile": "icon_LowArm_M_spodnie_pirat.png",
         "BaseName": "LowArm_M_spodnie_pirat",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M spodnie pirat",
         "PolishName": "LowArm_M_spodnie_pirat"
     },
@@ -4338,8 +4330,8 @@
     {
         "IconFile": "icon_LowArm_M_szkarada_lach.png",
         "BaseName": "LowArm_M_szkarada_lach",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm M szkarada lach",
         "PolishName": "LowArm_M_szkarada_lach"
     },
@@ -4362,8 +4354,8 @@
     {
         "IconFile": "icon_LowArm_sangmar_light_01_Skin_1.png",
         "BaseName": "LowArm_sangmar_light_01_Skin_1",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Legs",
         "EnglishName": "LowArm sangmar light 01 Skin",
         "PolishName": "LowArm_sangmar_light_01_Skin_1"
     },
@@ -4450,16 +4442,16 @@
     {
         "IconFile": "icon_MaraudersSuit.png",
         "BaseName": "MaraudersSuit",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "MaraudersSuit",
         "PolishName": "MaraudersSuit"
     },
     {
         "IconFile": "icon_MaraudersYellowSuit.png",
         "BaseName": "MaraudersYellowSuit",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "MaraudersYellowSuit",
         "PolishName": "MaraudersYellowSuit"
     },
@@ -4762,16 +4754,16 @@
     {
         "IconFile": "icon_M_spyridon_plyta_full_opcja.png",
         "BaseName": "M_spyridon_plyta_full_opcja",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "M spyridon plyta full opcja",
         "PolishName": "M_spyridon_plyta_full_opcja"
     },
     {
         "IconFile": "icon_M_spyridon_plyta_joanna.png",
         "BaseName": "M_spyridon_plyta_joanna",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "M spyridon plyta joanna",
         "PolishName": "M_spyridon_plyta_joanna"
     },
@@ -4970,7 +4962,7 @@
     {
         "IconFile": "icon_OutlawsBuckle.png",
         "BaseName": "OutlawsBuckle",
-        "Category": "Other",
+        "Category": "Shields",
         "SubCategory": "",
         "EnglishName": "OutlawsBuckle",
         "PolishName": "OutlawsBuckle"
@@ -6282,24 +6274,24 @@
     {
         "IconFile": "icon_ShoulD_M_folgowy_Vond.png",
         "BaseName": "ShoulD_M_folgowy_Vond",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Shoulders",
         "EnglishName": "ShoulD M folgowy Vond",
         "PolishName": "ShoulD_M_folgowy_Vond"
     },
     {
         "IconFile": "icon_ShoulD_M_folgowy_z_tarczkami_Vond.png",
         "BaseName": "ShoulD_M_folgowy_z_tarczkami_Vond",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Shoulders",
         "EnglishName": "ShoulD M folgowy z tarczkami Vond",
         "PolishName": "ShoulD_M_folgowy_z_tarczkami_Vond"
     },
     {
         "IconFile": "icon_ShoulD_M_futro_czaszka_Arek_X.png",
         "BaseName": "ShoulD_M_futro_czaszka_Arek_X",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Head",
         "EnglishName": "ShoulD M futro czaszka Arek X",
         "PolishName": "ShoulD_M_futro_czaszka_Arek_X"
     },
@@ -6338,8 +6330,8 @@
     {
         "IconFile": "icon_ShoulD_M_futro_niedzwiedz_Arek_X.png",
         "BaseName": "ShoulD_M_futro_niedzwiedz_Arek_X",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Head",
         "EnglishName": "ShoulD M futro niedzwiedz Arek X",
         "PolishName": "ShoulD_M_futro_niedzwiedz_Arek_X"
     },
@@ -6354,8 +6346,8 @@
     {
         "IconFile": "icon_ShoulD_M_futrzany.png",
         "BaseName": "ShoulD_M_futrzany",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Shoulders",
         "EnglishName": "ShoulD M futrzany",
         "PolishName": "ShoulD_M_futrzany"
     },
@@ -6442,16 +6434,16 @@
     {
         "IconFile": "icon_ShoulD_M_Sangmar_Light_01_Skin_1.png",
         "BaseName": "ShoulD_M_Sangmar_Light_01_Skin_1",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Shoulders",
         "EnglishName": "ShoulD M Sangmar Light 01 Skin",
         "PolishName": "ShoulD_M_Sangmar_Light_01_Skin_1"
     },
     {
         "IconFile": "icon_ShoulD_M_spyridon_plytkowy.png",
         "BaseName": "ShoulD_M_spyridon_plytkowy",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Shoulders",
         "EnglishName": "ShoulD M spyridon plytkowy",
         "PolishName": "ShoulD_M_spyridon_plytkowy"
     },
@@ -6466,8 +6458,8 @@
     {
         "IconFile": "icon_ShoulD_M_szkarada.png",
         "BaseName": "ShoulD_M_szkarada",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Shoulders",
         "EnglishName": "ShoulD M szkarada",
         "PolishName": "ShoulD_M_szkarada"
     },
@@ -6490,7 +6482,7 @@
     {
         "IconFile": "icon_sickle_craft.png",
         "BaseName": "sickle_craft",
-        "Category": "Other",
+        "Category": "Tools",
         "SubCategory": "",
         "EnglishName": "sickle craft",
         "PolishName": "sickle_craft"
@@ -7282,15 +7274,15 @@
     {
         "IconFile": "icon_sztylet_01_Vond_0.png",
         "BaseName": "sztylet_01_Vond_0",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Weapons",
+        "SubCategory": "One-handed Swords",
         "EnglishName": "sztylet 01 Vond",
         "PolishName": "sztylet_01_Vond_0"
     },
     {
         "IconFile": "icon_tarcza_dzikich_01.png",
         "BaseName": "tarcza_dzikich_01",
-        "Category": "Other",
+        "Category": "Shields",
         "SubCategory": "",
         "EnglishName": "tarcza dzikich",
         "PolishName": "tarcza_dzikich_01"
@@ -7314,7 +7306,7 @@
     {
         "IconFile": "icon_tarcze_migdal_01.png",
         "BaseName": "tarcze_migdal_01",
-        "Category": "Other",
+        "Category": "Shields",
         "SubCategory": "",
         "EnglishName": "tarcze migdal",
         "PolishName": "tarcze_migdal_01"
@@ -7338,7 +7330,7 @@
     {
         "IconFile": "icon_tarcze_plaska_01.png",
         "BaseName": "tarcze_plaska_01",
-        "Category": "Other",
+        "Category": "Shields",
         "SubCategory": "",
         "EnglishName": "tarcze plaska",
         "PolishName": "tarcze_plaska_01"
@@ -7354,7 +7346,7 @@
     {
         "IconFile": "icon_tarcze_trojkatna_01.png",
         "BaseName": "tarcze_trojkatna_01",
-        "Category": "Other",
+        "Category": "Shields",
         "SubCategory": "",
         "EnglishName": "tarcze trojkatna",
         "PolishName": "tarcze_trojkatna_01"
@@ -7578,16 +7570,16 @@
     {
         "IconFile": "icon_UpArm_fartuch_mid_caly.png",
         "BaseName": "UpArm_fartuch_mid_caly",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm fartuch mid caly",
         "PolishName": "UpArm_fartuch_mid_caly"
     },
     {
         "IconFile": "icon_UpArm_fartuch_mid_roz.png",
         "BaseName": "UpArm_fartuch_mid_roz",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm fartuch mid roz",
         "PolishName": "UpArm_fartuch_mid_roz"
     },
@@ -7626,16 +7618,16 @@
     {
         "IconFile": "icon_UpArm_kamizelka_pirat.png",
         "BaseName": "UpArm_kamizelka_pirat",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm kamizelka pirat",
         "PolishName": "UpArm_kamizelka_pirat"
     },
     {
         "IconFile": "icon_UpArm_koszula_pirat.png",
         "BaseName": "UpArm_koszula_pirat",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm koszula pirat",
         "PolishName": "UpArm_koszula_pirat"
     },
@@ -7698,56 +7690,56 @@
     {
         "IconFile": "icon_UpArm_M_brygantyna_full_bryg_rekaw_AB.png",
         "BaseName": "UpArm_M_brygantyna_full_bryg_rekaw_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M brygantyna full bryg rekaw AB",
         "PolishName": "UpArm_M_brygantyna_full_bryg_rekaw_AB"
     },
     {
         "IconFile": "icon_UpArm_M_brygantyna_full_kolczy_lokiec_AB.png",
         "BaseName": "UpArm_M_brygantyna_full_kolczy_lokiec_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M brygantyna full kolczy lokiec AB",
         "PolishName": "UpArm_M_brygantyna_full_kolczy_lokiec_AB"
     },
     {
         "IconFile": "icon_UpArm_M_brygantyna_medium_kolczy_lokiec_AB.png",
         "BaseName": "UpArm_M_brygantyna_medium_kolczy_lokiec_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M brygantyna medium kolczy lokiec AB",
         "PolishName": "UpArm_M_brygantyna_medium_kolczy_lokiec_AB"
     },
     {
         "IconFile": "icon_UpArm_M_brygantyna_medium_red_bryg_rekaw_AB.png",
         "BaseName": "UpArm_M_brygantyna_medium_red_bryg_rekaw_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M brygantyna medium red bryg rekaw AB",
         "PolishName": "UpArm_M_brygantyna_medium_red_bryg_rekaw_AB"
     },
     {
         "IconFile": "icon_UpArm_M_brygantyna_rusty_short_drop_AB.png",
         "BaseName": "UpArm_M_brygantyna_rusty_short_drop_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M brygantyna rusty short drop AB",
         "PolishName": "UpArm_M_brygantyna_rusty_short_drop_AB"
     },
     {
         "IconFile": "icon_UpArm_M_brygantyna_short_kolczy_lokiec_AB.png",
         "BaseName": "UpArm_M_brygantyna_short_kolczy_lokiec_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M brygantyna short kolczy lokiec AB",
         "PolishName": "UpArm_M_brygantyna_short_kolczy_lokiec_AB"
     },
     {
         "IconFile": "icon_UpArm_M_futro_drwala_01_0.png",
         "BaseName": "UpArm_M_futro_drwala_01_0",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M futro drwala 01",
         "PolishName": "UpArm_M_futro_drwala_01_0"
     },
@@ -7770,8 +7762,8 @@
     {
         "IconFile": "icon_UpArm_M_futro_odrzuceni.png",
         "BaseName": "UpArm_M_futro_odrzuceni",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M futro odrzuceni",
         "PolishName": "UpArm_M_futro_odrzuceni"
     },
@@ -7954,24 +7946,24 @@
     {
         "IconFile": "icon_UpArm_M_kolczuga_dlugi_A.png",
         "BaseName": "UpArm_M_kolczuga_dlugi_A",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M kolczuga dlugi A",
         "PolishName": "UpArm_M_kolczuga_dlugi_A"
     },
     {
         "IconFile": "icon_UpArm_M_kolczuga_dlugi_krotki_AB.png",
         "BaseName": "UpArm_M_kolczuga_dlugi_krotki_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M kolczuga dlugi krotki AB",
         "PolishName": "UpArm_M_kolczuga_dlugi_krotki_AB"
     },
     {
         "IconFile": "icon_UpArm_M_kolczuga_lokcie_dlugi_AB.png",
         "BaseName": "UpArm_M_kolczuga_lokcie_dlugi_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M kolczuga lokcie dlugi AB",
         "PolishName": "UpArm_M_kolczuga_lokcie_dlugi_AB"
     },
@@ -7994,40 +7986,40 @@
     {
         "IconFile": "icon_UpArm_M_koszula_Arek_AB.png",
         "BaseName": "UpArm_M_koszula_Arek_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M koszula Arek AB",
         "PolishName": "UpArm_M_koszula_Arek_AB"
     },
     {
         "IconFile": "icon_UpArm_M_koszula_Arek_blue_AB.png",
         "BaseName": "UpArm_M_koszula_Arek_blue_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M koszula Arek blue AB",
         "PolishName": "UpArm_M_koszula_Arek_blue_AB"
     },
     {
         "IconFile": "icon_UpArm_M_koszula_Arek_green_AB.png",
         "BaseName": "UpArm_M_koszula_Arek_green_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M koszula Arek green AB",
         "PolishName": "UpArm_M_koszula_Arek_green_AB"
     },
     {
         "IconFile": "icon_UpArm_M_koszula_chlopska_AB.png",
         "BaseName": "UpArm_M_koszula_chlopska_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M koszula chlopska AB",
         "PolishName": "UpArm_M_koszula_chlopska_AB"
     },
     {
         "IconFile": "icon_UpArm_M_koszula_podarta_Arek_AB.png",
         "BaseName": "UpArm_M_koszula_podarta_Arek_AB",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M koszula podarta Arek AB",
         "PolishName": "UpArm_M_koszula_podarta_Arek_AB"
     },
@@ -8194,8 +8186,8 @@
     {
         "IconFile": "icon_UpArm_M_Townsman_Tunic.png",
         "BaseName": "UpArm_M_Townsman_Tunic",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M Townsman Tunic",
         "PolishName": "UpArm_M_Townsman_Tunic"
     },
@@ -8218,8 +8210,8 @@
     {
         "IconFile": "icon_UpArm_M_Zbroja_szkarady.png",
         "BaseName": "UpArm_M_Zbroja_szkarady",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm M Zbroja szkarady",
         "PolishName": "UpArm_M_Zbroja_szkarady"
     },
@@ -8234,8 +8226,8 @@
     {
         "IconFile": "icon_UpArm_sangmar_light_01_Skin_1.png",
         "BaseName": "UpArm_sangmar_light_01_Skin_1",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "UpArm sangmar light 01 Skin",
         "PolishName": "UpArm_sangmar_light_01_Skin_1"
     },
@@ -8274,16 +8266,16 @@
     {
         "IconFile": "icon_VoyagersSuit.png",
         "BaseName": "VoyagersSuit",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "VoyagersSuit",
         "PolishName": "VoyagersSuit"
     },
     {
         "IconFile": "icon_VoyagersTreads.png",
         "BaseName": "VoyagersTreads",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Feet",
         "EnglishName": "VoyagersTreads",
         "PolishName": "VoyagersTreads"
     },
@@ -8322,16 +8314,16 @@
     {
         "IconFile": "icon_WardenSuit.png",
         "BaseName": "WardenSuit",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Armor",
+        "SubCategory": "Chest",
         "EnglishName": "WardenSuit",
         "PolishName": "WardenSuit"
     },
     {
         "IconFile": "icon_WarriorsClub.png",
         "BaseName": "WarriorsClub",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Weapons",
+        "SubCategory": "One-handed Blunts",
         "EnglishName": "WarriorsClub",
         "PolishName": "WarriorsClub"
     },
@@ -8578,8 +8570,8 @@
     {
         "IconFile": "icon_wie_berdysz_01.png",
         "BaseName": "wie_berdysz_01",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Weapons",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "wie berdysz",
         "PolishName": "wie_berdysz_01"
     },
@@ -8626,8 +8618,8 @@
     {
         "IconFile": "icon_wie_gizarma_01.png",
         "BaseName": "wie_gizarma_01",
-        "Category": "Other",
-        "SubCategory": "",
+        "Category": "Weapons",
+        "SubCategory": "Two-handed Blunts",
         "EnglishName": "wie gizarma",
         "PolishName": "wie_gizarma_01"
     },
