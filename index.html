@@ -1008,8 +1008,8 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 </div>
                 
                 <div class="char-creation-nav">
-                    <button class="char-creation-btn" onclick="charCreation.prevStep()">← Back</button>
-                    <button class="char-creation-btn" onclick="charCreation.nextStep()" id="btn-next-name">Next →</button>
+                    <button class="char-creation-btn" onclick="if(window.charCreation) window.charCreation.prevStep();">← Back</button>
+                    <button class="char-creation-btn" onclick="if(window.charCreation) window.charCreation.nextStep();" id="btn-next-name" disabled>Next →</button>
                 </div>
             </div>
             
@@ -1041,8 +1041,8 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 </div>
                 
                 <div class="char-creation-nav">
-                    <button class="char-creation-btn" onclick="charCreation.prevStep()">← Back</button>
-                    <button class="char-creation-btn" onclick="charCreation.nextStep()" id="btn-next-gender" disabled>Next →</button>
+                    <button class="char-creation-btn" onclick="if(window.charCreation) window.charCreation.prevStep();">← Back</button>
+                    <button class="char-creation-btn" onclick="if(window.charCreation) window.charCreation.nextStep();" id="btn-next-gender" disabled>Next →</button>
                 </div>
             </div>
             
@@ -1079,9 +1079,9 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 </div>
                 
                 <div class="char-creation-nav">
-                    <button class="char-creation-btn" onclick="charCreation.prevStep()">← Back</button>
-                    <button class="char-creation-btn skip" onclick="charCreation.skipArchetype()">Skip</button>
-                    <button class="char-creation-btn" onclick="charCreation.nextStep()" id="btn-next-archetype">Next →</button>
+                    <button class="char-creation-btn" onclick="if(window.charCreation) window.charCreation.prevStep();">← Back</button>
+                    <button class="char-creation-btn skip" onclick="if(window.charCreation) window.charCreation.skipArchetype();">Skip</button>
+                    <button class="char-creation-btn" onclick="if(window.charCreation) window.charCreation.nextStep();" id="btn-next-archetype">Next →</button>
                 </div>
             </div>
             
@@ -1095,8 +1095,8 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 </div>
                 
                 <div class="char-creation-nav">
-                    <button class="char-creation-btn" onclick="charCreation.prevStep()">← Back</button>
-                    <button class="char-creation-btn" onclick="charCreation.finishCreation()" id="btn-finish">Finish →</button>
+                    <button class="char-creation-btn" onclick="if(window.charCreation) window.charCreation.prevStep();">← Back</button>
+                    <button class="char-creation-btn" onclick="if(window.charCreation) window.charCreation.finishCreation();" id="btn-finish">Finish →</button>
                 </div>
             </div>
         </div>
@@ -2188,15 +2188,26 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                     if (this.characterData.playerName) {
                         nameInput.value = this.characterData.playerName;
                     }
-                    nameInput.addEventListener('input', () => {
+                    
+                    const updateNextButton = () => {
                         this.characterData.playerName = nameInput.value.trim();
                         const nextBtn = document.getElementById('btn-next-name');
                         if (nextBtn) {
                             nextBtn.disabled = !this.characterData.playerName;
+                            console.log('Next button disabled:', !this.characterData.playerName, 'playerName:', this.characterData.playerName);
                         }
-                    });
+                    };
+                    
+                    nameInput.addEventListener('input', updateNextButton);
+                    nameInput.addEventListener('keyup', updateNextButton);
+                    nameInput.addEventListener('change', updateNextButton);
+                    
+                    // Initial check
+                    updateNextButton();
+                    
                     nameInput.addEventListener('keypress', (e) => {
                         if (e.key === 'Enter' && this.characterData.playerName) {
+                            e.preventDefault();
                             this.nextStep();
                         }
                     });
