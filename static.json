@@ -16,6 +16,10 @@
     },
     "/map/GVmaptiles/**": {
       "Cache-Control": "public, max-age=86400"
+    },
+    "/_music/**": {
+      "Cache-Control": "public, max-age=86400",
+      "Content-Type": "audio/ogg"
     }
   }
 }

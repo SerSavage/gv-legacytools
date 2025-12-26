@@ -13,6 +13,7 @@
 </script>
 <link rel="stylesheet" type="text/css" href="index_files/banner-styles.css">
 <link rel="stylesheet" type="text/css" href="index_files/iconochive.css">
+<link rel="stylesheet" type="text/css" href="music-player.css">
 <!-- End Wayback Rewrite JS Include -->
 
     
@@ -1100,6 +1101,38 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
 
 
 
+    <!-- Music Player -->
+    <div id="music-player-container">
+        <div id="music-player-header">
+            <h3 id="music-player-title">🎵 Music</h3>
+            <button id="music-player-toggle">−</button>
+        </div>
+        <div id="music-player-content">
+            <div id="music-controls">
+                <button class="music-button" id="music-prev" title="Previous">⏮</button>
+                <button class="music-button" id="music-play-pause" title="Play">▶</button>
+                <button class="music-button" id="music-next" title="Next">⏭</button>
+            </div>
+            <div id="music-volume-control">
+                <span id="music-volume-label">Volume:</span>
+                <input type="range" id="music-volume-slider" min="0" max="100" value="50">
+                <span id="music-volume-display">50%</span>
+            </div>
+            <div id="music-track-info"></div>
+        </div>
+    </div>
+    <script src="music-player.js"></script>
+    <script>
+        // Toggle player collapse
+        const toggleBtn = document.getElementById('music-player-toggle');
+        const container = document.getElementById('music-player-container');
+        if (toggleBtn && container) {
+            toggleBtn.addEventListener('click', () => {
+                container.classList.toggle('collapsed');
+                toggleBtn.textContent = container.classList.contains('collapsed') ? '+' : '−';
+            });
+        }
+    </script>
 
 </body></html>
 <!-- Page supported by LiteSpeed Cache 5.2.1 on 2023-01-28 10:36:48 -->
