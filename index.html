@@ -820,6 +820,10 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                     charCreationScreen.style.display = 'flex';
                     setTimeout(() => {
                         charCreationScreen.classList.add('visible');
+                        // Initialize character creation system
+                        if (window.charCreation && typeof window.charCreation.init === 'function') {
+                            window.charCreation.init();
+                        }
                     }, 50);
                 }
                 
@@ -2213,6 +2217,7 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             },
             
             showStep: function(step) {
+                console.log('showStep called with step:', step);
                 // Hide all steps
                 document.querySelectorAll('.char-creation-step').forEach(s => {
                     s.classList.remove('active');
@@ -2223,6 +2228,9 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 const stepElement = document.getElementById(`step-${stepNames[step - 1]}`);
                 if (stepElement) {
                     stepElement.classList.add('active');
+                    console.log('Step element found and activated:', stepNames[step - 1]);
+                } else {
+                    console.error('Step element not found:', `step-${stepNames[step - 1]}`);
                 }
                 
                 this.currentStep = step;
@@ -2248,8 +2256,11 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             },
             
             nextStep: function() {
+                console.log('nextStep called, current:', this.currentStep, 'total:', this.totalSteps);
                 if (this.currentStep < this.totalSteps) {
                     this.showStep(this.currentStep + 1);
+                } else {
+                    console.log('Already at last step');
                 }
             },
             
