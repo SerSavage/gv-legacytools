@@ -86,8 +86,9 @@
         border-radius: 20px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(10px);
-        max-width: 900px;
+        max-width: 1200px;
         width: 90%;
+        min-height: 600px;
     }
     
     .character-creation-title {
@@ -101,6 +102,148 @@
         font-size: 1.2em;
         color: #ccc;
         margin-bottom: 40px;
+    }
+    
+    .char-creation-step {
+        display: none;
+    }
+    
+    .char-creation-step.active {
+        display: block;
+    }
+    
+    .char-creation-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+    }
+    
+    .char-creation-btn {
+        padding: 12px 30px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .char-creation-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .char-creation-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .char-creation-btn.skip {
+        background: rgba(255, 255, 0, 0.2);
+        border-color: rgba(255, 255, 0, 0.4);
+    }
+    
+    .gender-selection,
+    .archetype-selection {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+    
+    .gender-option,
+    .archetype-option {
+        cursor: pointer;
+        position: relative;
+        transition: transform 0.3s ease;
+        border: 3px solid transparent;
+        border-radius: 10px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .gender-option:hover,
+    .archetype-option:hover {
+        transform: translateY(-5px) scale(1.05);
+        border-color: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .gender-option.selected,
+    .archetype-option.selected {
+        border-color: #ffff00;
+        background: rgba(255, 255, 0, 0.2);
+        box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+    }
+    
+    .gender-image,
+    .archetype-image {
+        display: block;
+        width: 150px;
+        height: auto;
+        border-radius: 5px;
+    }
+    
+    .gender-name,
+    .archetype-name {
+        margin-top: 10px;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #fff;
+    }
+    
+    .customization-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 10px;
+    }
+    
+    .customization-item {
+        cursor: pointer;
+        position: relative;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .customization-item:hover {
+        border-color: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+    }
+    
+    .customization-item.selected {
+        border-color: #ffff00;
+        background: rgba(255, 255, 0, 0.2);
+        box-shadow: 0 0 15px rgba(255, 255, 0, 0.4);
+    }
+    
+    .customization-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 4px;
+    }
+    
+    .customization-category {
+        margin-bottom: 30px;
+    }
+    
+    .customization-category-title {
+        font-size: 1.3em;
+        color: #fff;
+        margin-bottom: 15px;
+        text-align: left;
+        padding-left: 10px;
     }
     
     .nation-selection {
@@ -603,44 +746,134 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
     <!-- Character Creation Screen -->
     <div id="character-creation-screen">
         <div class="character-creation-container">
-            <h1 class="character-creation-title">Choose Your Nation</h1>
-            <p class="character-creation-subtitle">Select your allegiance to begin</p>
+            <!-- Step 1: Nation Selection -->
+            <div class="char-creation-step active" id="step-nation">
+                <h1 class="character-creation-title">Choose Your Nation</h1>
+                <p class="character-creation-subtitle">Select your allegiance to begin</p>
+                
+                <div class="nation-selection">
+                    <div class="nation-option" data-nation="midland">
+                        <img src="charactercreation/resources/create_nacja1a.png" 
+                             data-default="charactercreation/resources/create_nacja1a.png"
+                             data-hover="charactercreation/resources/create_nacja1b.png"
+                             class="nation-image" 
+                             alt="Midland">
+                        <div class="nation-name">Midland</div>
+                        <div class="nation-description">
+                            The Midlanders are a proud nation from the North. Their history can be tracked back to the days of Geliand of Hillead. Even though their realm is divided into two kingdoms, they unite in the face of a common enemy – The Empire of Azebia. The Midlanders worship the Forefather and his son, and they value honour above all else.
+                        </div>
+                    </div>
+                    
+                    <div class="nation-option" data-nation="ismir">
+                        <img src="charactercreation/resources/create_nacja2a.png"
+                             data-default="charactercreation/resources/create_nacja2a.png"
+                             data-hover="charactercreation/resources/create_nacja2b.png"
+                             class="nation-image" 
+                             alt="Ismir">
+                        <div class="nation-name">Ismir</div>
+                        <div class="nation-description">
+                            The Ismirs are tough but honourable clan warriors hailing from the frozen wastes of Nordheim. They are truly intimidating in their height and the ease with which they swing heavy axes. They have been raiding Midlandic lands for centuries, but they unite with Midland in the fight against Azebia.
+                        </div>
+                    </div>
+                    
+                    <div class="nation-option" data-nation="sangmar">
+                        <img src="charactercreation/resources/create_nacja3a.png"
+                             data-default="charactercreation/resources/create_nacja3a.png"
+                             data-hover="charactercreation/resources/create_nacja3b.png"
+                             class="nation-image" 
+                             alt="Sangmar">
+                        <div class="nation-name">Sangmar Empire</div>
+                        <div class="nation-description">
+                            Sangmar was once the greatest power in the South. However, the Empire fell when the Azebs freed themselves from its yoke and began their conquest. Today Sangmar, still full of splendour and riches, is an oasis of cultural and scientific development. The Sangarians have everything – be it wonderful weapons, armour or gilded robes – except for freedom.
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            <div class="nation-selection">
-                <div class="nation-option" data-nation="midland">
-                    <img src="charactercreation/resources/create_nacja1a.png" 
-                         data-default="charactercreation/resources/create_nacja1a.png"
-                         data-hover="charactercreation/resources/create_nacja1b.png"
-                         class="nation-image" 
-                         alt="Midland">
-                    <div class="nation-name">Midland</div>
-                    <div class="nation-description">
-                        The Midlanders are a proud nation from the North. Their history can be tracked back to the days of Geliand of Hillead. Even though their realm is divided into two kingdoms, they unite in the face of a common enemy – The Empire of Azebia. The Midlanders worship the Forefather and his son, and they value honour above all else.
+            <!-- Step 2: Gender Selection -->
+            <div class="char-creation-step" id="step-gender">
+                <h1 class="character-creation-title">Choose Your Gender</h1>
+                <p class="character-creation-subtitle">Select your character's gender</p>
+                
+                <div class="gender-selection">
+                    <div class="gender-option" data-gender="male">
+                        <img src="charactercreation/resources/create_plecM_a.png"
+                             data-default="charactercreation/resources/create_plecM_a.png"
+                             data-hover="charactercreation/resources/create_plecM_b.png"
+                             data-selected="charactercreation/resources/create_plecM_c.png"
+                             class="gender-image" 
+                             alt="Male">
+                        <div class="gender-name">Male</div>
+                    </div>
+                    
+                    <div class="gender-option" data-gender="female">
+                        <img src="charactercreation/resources/create_plecK_a.png"
+                             data-default="charactercreation/resources/create_plecK_a.png"
+                             data-hover="charactercreation/resources/create_plecK_b.png"
+                             data-selected="charactercreation/resources/create_plecK_c.png"
+                             class="gender-image" 
+                             alt="Female">
+                        <div class="gender-name">Female</div>
                     </div>
                 </div>
                 
-                <div class="nation-option" data-nation="ismir">
-                    <img src="charactercreation/resources/create_nacja2a.png"
-                         data-default="charactercreation/resources/create_nacja2a.png"
-                         data-hover="charactercreation/resources/create_nacja2b.png"
-                         class="nation-image" 
-                         alt="Ismir">
-                    <div class="nation-name">Ismir</div>
-                    <div class="nation-description">
-                        The Ismirs are tough but honourable clan warriors hailing from the frozen wastes of Nordheim. They are truly intimidating in their height and the ease with which they swing heavy axes. They have been raiding Midlandic lands for centuries, but they unite with Midland in the fight against Azebia.
+                <div class="char-creation-nav">
+                    <button class="char-creation-btn" onclick="charCreation.prevStep()">← Back</button>
+                    <button class="char-creation-btn" onclick="charCreation.nextStep()" id="btn-next-gender" disabled>Next →</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Archetype Selection (Optional) -->
+            <div class="char-creation-step" id="step-archetype">
+                <h1 class="character-creation-title">Choose Your Archetype</h1>
+                <p class="character-creation-subtitle">Select your starting archetype (optional - can skip)</p>
+                
+                <div class="archetype-selection">
+                    <div class="archetype-option" data-archetype="light">
+                        <img src="charactercreation/resources/create_archetype_light.png" class="archetype-image" alt="Light">
+                        <div class="archetype-name">Light</div>
+                    </div>
+                    <div class="archetype-option" data-archetype="medium">
+                        <img src="charactercreation/resources/create_archetype_medium.png" class="archetype-image" alt="Medium">
+                        <div class="archetype-name">Medium</div>
+                    </div>
+                    <div class="archetype-option" data-archetype="heavy">
+                        <img src="charactercreation/resources/create_archetype_heavy.png" class="archetype-image" alt="Heavy">
+                        <div class="archetype-name">Heavy</div>
+                    </div>
+                    <div class="archetype-option" data-archetype="armoursmith">
+                        <img src="charactercreation/resources/create_archetype_armoursmith.png" class="archetype-image" alt="Armoursmith">
+                        <div class="archetype-name">Armoursmith</div>
+                    </div>
+                    <div class="archetype-option" data-archetype="weaponsmith">
+                        <img src="charactercreation/resources/create_archetype_weaponsmith.png" class="archetype-image" alt="Weaponsmith">
+                        <div class="archetype-name">Weaponsmith</div>
+                    </div>
+                    <div class="archetype-option" data-archetype="tailor">
+                        <img src="charactercreation/resources/create_archetype_tailor.png" class="archetype-image" alt="Tailor">
+                        <div class="archetype-name">Tailor</div>
                     </div>
                 </div>
                 
-                <div class="nation-option" data-nation="sangmar">
-                    <img src="charactercreation/resources/create_nacja3a.png"
-                         data-default="charactercreation/resources/create_nacja3a.png"
-                         data-hover="charactercreation/resources/create_nacja3b.png"
-                         class="nation-image" 
-                         alt="Sangmar">
-                    <div class="nation-name">Sangmar Empire</div>
-                    <div class="nation-description">
-                        Sangmar was once the greatest power in the South. However, the Empire fell when the Azebs freed themselves from its yoke and began their conquest. Today Sangmar, still full of splendour and riches, is an oasis of cultural and scientific development. The Sangarians have everything – be it wonderful weapons, armour or gilded robes – except for freedom.
-                    </div>
+                <div class="char-creation-nav">
+                    <button class="char-creation-btn" onclick="charCreation.prevStep()">← Back</button>
+                    <button class="char-creation-btn skip" onclick="charCreation.skipArchetype()">Skip</button>
+                    <button class="char-creation-btn" onclick="charCreation.nextStep()" id="btn-next-archetype">Next →</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Character Customization -->
+            <div class="char-creation-step" id="step-customization">
+                <h1 class="character-creation-title">Customize Your Character</h1>
+                <p class="character-creation-subtitle">Customize your appearance</p>
+                
+                <div id="customization-content">
+                    <!-- Will be populated by JavaScript based on gender -->
+                </div>
+                
+                <div class="char-creation-nav">
+                    <button class="char-creation-btn" onclick="charCreation.prevStep()">← Back</button>
+                    <button class="char-creation-btn" onclick="charCreation.finishCreation()" id="btn-finish">Finish →</button>
                 </div>
             </div>
         </div>
@@ -1601,59 +1834,313 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             setTimeout(() => clearInterval(checkMusicPlayer), 5000);
         }
         
+        // Character Creation System
+        window.charCreation = {
+            currentStep: 1,
+            totalSteps: 4,
+            characterData: {
+                nation: null,
+                gender: null,
+                archetype: null,
+                head: null,
+                hair: null,
+                beard: null,
+                bodyDetail: null,
+                headDetail: null
+            },
+            
+            init: function() {
+                // Load saved character data
+                const saved = localStorage.getItem('gv_character_data');
+                if (saved) {
+                    try {
+                        this.characterData = JSON.parse(saved);
+                    } catch(e) {
+                        console.error('Error loading character data:', e);
+                    }
+                }
+                
+                // Load nation if already selected
+                const savedNation = localStorage.getItem('gv_selected_nation');
+                if (savedNation) {
+                    this.characterData.nation = savedNation;
+                }
+                
+                this.setupNationSelection();
+                this.setupGenderSelection();
+                this.setupArchetypeSelection();
+                
+                // Show appropriate step
+                if (!this.characterData.nation) {
+                    this.showStep(1);
+                } else if (!this.characterData.gender) {
+                    this.showStep(2);
+                } else if (!this.characterData.archetype && !localStorage.getItem('gv_archetype_skipped')) {
+                    this.showStep(3);
+                } else {
+                    this.showStep(4);
+                }
+            },
+            
+            showStep: function(step) {
+                // Hide all steps
+                document.querySelectorAll('.char-creation-step').forEach(s => {
+                    s.classList.remove('active');
+                });
+                
+                // Show current step
+                const stepElement = document.getElementById(`step-${['nation', 'gender', 'archetype', 'customization'][step - 1]}`);
+                if (stepElement) {
+                    stepElement.classList.add('active');
+                }
+                
+                this.currentStep = step;
+                
+                // Update navigation buttons
+                if (step === 4) {
+                    this.loadCustomization();
+                }
+            },
+            
+            nextStep: function() {
+                if (this.currentStep < this.totalSteps) {
+                    this.showStep(this.currentStep + 1);
+                }
+            },
+            
+            prevStep: function() {
+                if (this.currentStep > 1) {
+                    this.showStep(this.currentStep - 1);
+                }
+            },
+            
+            setupNationSelection: function() {
+                const nationOptions = document.querySelectorAll('.nation-option');
+                
+                nationOptions.forEach(option => {
+                    const img = option.querySelector('.nation-image');
+                    option.addEventListener('mouseenter', () => {
+                        if (img && img.dataset.hover && !option.classList.contains('selected')) {
+                            img.src = img.dataset.hover;
+                        }
+                    });
+                    option.addEventListener('mouseleave', () => {
+                        if (img && img.dataset.default && !option.classList.contains('selected')) {
+                            img.src = img.dataset.default;
+                        }
+                    });
+                    
+                    option.addEventListener('click', () => {
+                        nationOptions.forEach(opt => {
+                            opt.classList.remove('selected');
+                            const optImg = opt.querySelector('.nation-image');
+                            if (optImg && optImg.dataset.default) {
+                                optImg.src = optImg.dataset.default;
+                            }
+                        });
+                        
+                        option.classList.add('selected');
+                        const selectedImg = option.querySelector('.nation-image');
+                        if (selectedImg && selectedImg.dataset.hover) {
+                            selectedImg.src = selectedImg.dataset.hover;
+                        }
+                        
+                        this.characterData.nation = option.dataset.nation;
+                        localStorage.setItem('gv_selected_nation', this.characterData.nation);
+                        applyTheme(this.characterData.nation);
+                        
+                        // Enable next button and proceed to gender selection
+                        document.getElementById('btn-next-gender').disabled = false;
+                        setTimeout(() => {
+                            this.nextStep();
+                        }, 500);
+                    });
+                });
+            },
+            
+            setupGenderSelection: function() {
+                const genderOptions = document.querySelectorAll('.gender-option');
+                const nextBtn = document.getElementById('btn-next-gender');
+                
+                genderOptions.forEach(option => {
+                    const img = option.querySelector('.gender-image');
+                    option.addEventListener('mouseenter', () => {
+                        if (img && img.dataset.hover && !option.classList.contains('selected')) {
+                            img.src = img.dataset.hover;
+                        }
+                    });
+                    option.addEventListener('mouseleave', () => {
+                        if (img && img.dataset.default && !option.classList.contains('selected')) {
+                            img.src = img.dataset.default;
+                        }
+                    });
+                    
+                    option.addEventListener('click', () => {
+                        genderOptions.forEach(opt => {
+                            opt.classList.remove('selected');
+                            const optImg = opt.querySelector('.gender-image');
+                            if (optImg && optImg.dataset.default) {
+                                optImg.src = optImg.dataset.default;
+                            }
+                        });
+                        
+                        option.classList.add('selected');
+                        const selectedImg = option.querySelector('.gender-image');
+                        if (selectedImg && selectedImg.dataset.selected) {
+                            selectedImg.src = selectedImg.dataset.selected;
+                        }
+                        
+                        this.characterData.gender = option.dataset.gender;
+                        if (nextBtn) nextBtn.disabled = false;
+                    });
+                });
+            },
+            
+            setupArchetypeSelection: function() {
+                const archetypeOptions = document.querySelectorAll('.archetype-option');
+                
+                archetypeOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        archetypeOptions.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        this.characterData.archetype = option.dataset.archetype;
+                    });
+                });
+            },
+            
+            skipArchetype: function() {
+                this.characterData.archetype = null;
+                localStorage.setItem('gv_archetype_skipped', 'true');
+                this.nextStep();
+            },
+            
+            loadCustomization: function() {
+                const content = document.getElementById('customization-content');
+                if (!content) return;
+                
+                const gender = this.characterData.gender;
+                const basePath = 'charactercreation/resources/';
+                
+                let html = '';
+                
+                // Head selection
+                html += '<div class="customization-category">';
+                html += '<div class="customization-category-title">Head</div>';
+                html += '<div class="customization-grid">';
+                for (let i = 1; i <= 6; i++) {
+                    html += `<div class="customization-item" data-type="head" data-value="${i}">
+                        <img src="${basePath}create_slot_head_0${i}.png" class="customization-image" alt="Head ${i}">
+                    </div>`;
+                }
+                html += '</div></div>';
+                
+                // Hair selection
+                html += '<div class="customization-category">';
+                html += '<div class="customization-category-title">Hair</div>';
+                html += '<div class="customization-grid">';
+                html += `<div class="customization-item" data-type="hair" data-value="none">
+                    <img src="${basePath}create_slot_brak.png" class="customization-image" alt="None">
+                </div>`;
+                for (let i = 1; i <= 14; i++) {
+                    const num = i < 10 ? `0${i}` : i;
+                    html += `<div class="customization-item" data-type="hair" data-value="${i}">
+                        <img src="${basePath}create_slot_hair_${num}.png" class="customization-image" alt="Hair ${i}">
+                    </div>`;
+                }
+                html += '</div></div>';
+                
+                // Beard selection (only for male)
+                if (gender === 'male') {
+                    html += '<div class="customization-category">';
+                    html += '<div class="customization-category-title">Beard</div>';
+                    html += '<div class="customization-grid">';
+                    html += `<div class="customization-item" data-type="beard" data-value="none">
+                        <img src="${basePath}create_slot_brak.png" class="customization-image" alt="None">
+                    </div>`;
+                    for (let i = 1; i <= 8; i++) {
+                        const num = i < 10 ? `0${i}` : i;
+                        html += `<div class="customization-item" data-type="beard" data-value="${i}">
+                            <img src="${basePath}create_slot_beard_${num}.png" class="customization-image" alt="Beard ${i}">
+                        </div>`;
+                    }
+                    html += '</div></div>';
+                }
+                
+                // Body Details
+                html += '<div class="customization-category">';
+                html += '<div class="customization-category-title">Body Details</div>';
+                html += '<div class="customization-grid">';
+                html += `<div class="customization-item" data-type="bodyDetail" data-value="none">
+                    <img src="${basePath}create_slot_brak.png" class="customization-image" alt="None">
+                </div>`;
+                for (let i = 1; i <= 4; i++) {
+                    const num = i < 10 ? `0${i}` : i;
+                    html += `<div class="customization-item" data-type="bodyDetail" data-value="${i}">
+                        <img src="${basePath}create_slot_detal_body_${num}.png" class="customization-image" alt="Body Detail ${i}">
+                    </div>`;
+                }
+                html += '</div></div>';
+                
+                // Head Details
+                html += '<div class="customization-category">';
+                html += '<div class="customization-category-title">Head Details</div>';
+                html += '<div class="customization-grid">';
+                html += `<div class="customization-item" data-type="headDetail" data-value="none">
+                    <img src="${basePath}create_slot_brak.png" class="customization-image" alt="None">
+                </div>`;
+                for (let i = 1; i <= 8; i++) {
+                    const num = i < 10 ? `0${i}` : i;
+                    html += `<div class="customization-item" data-type="headDetail" data-value="${i}">
+                        <img src="${basePath}create_slot_detal_head_${num}.png" class="customization-image" alt="Head Detail ${i}">
+                    </div>`;
+                }
+                html += '</div></div>';
+                
+                content.innerHTML = html;
+                
+                // Setup customization item clicks
+                content.querySelectorAll('.customization-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const type = item.dataset.type;
+                        const value = item.dataset.value;
+                        
+                        // Remove selection from same type
+                        content.querySelectorAll(`.customization-item[data-type="${type}"]`).forEach(i => {
+                            i.classList.remove('selected');
+                        });
+                        
+                        // Select clicked item
+                        item.classList.add('selected');
+                        this.characterData[type] = value;
+                    });
+                });
+            },
+            
+            finishCreation: function() {
+                // Save character data
+                localStorage.setItem('gv_character_data', JSON.stringify(this.characterData));
+                
+                // Show menu
+                showMenu();
+                setupMenuNavigation();
+            }
+        };
+        
         // Character Creation Logic
         const charCreationScreen = document.getElementById('character-creation-screen');
         const selectedNation = localStorage.getItem('gv_selected_nation');
         
-        // Setup nation selection
-        function setupNationSelection() {
-            const nationOptions = document.querySelectorAll('.nation-option');
-            const nationImages = document.querySelectorAll('.nation-image');
-            
-            // Hover effects for images
-            nationOptions.forEach(option => {
-                const img = option.querySelector('.nation-image');
-                option.addEventListener('mouseenter', () => {
-                    if (img && img.dataset.hover && !option.classList.contains('selected')) {
-                        img.src = img.dataset.hover;
-                    }
-                });
-                option.addEventListener('mouseleave', () => {
-                    if (img && img.dataset.default && !option.classList.contains('selected')) {
-                        img.src = img.dataset.default;
-                    }
-                });
-                
-                option.addEventListener('click', () => {
-                    // Remove selection from all
-                    nationOptions.forEach(opt => {
-                        opt.classList.remove('selected');
-                        const optImg = opt.querySelector('.nation-image');
-                        if (optImg && optImg.dataset.default) {
-                            optImg.src = optImg.dataset.default;
-                        }
-                    });
-                    
-                    // Select clicked nation
-                    option.classList.add('selected');
-                    const selectedImg = option.querySelector('.nation-image');
-                    if (selectedImg && selectedImg.dataset.hover) {
-                        selectedImg.src = selectedImg.dataset.hover;
-                    }
-                    
-                    const nation = option.dataset.nation;
-                    localStorage.setItem('gv_selected_nation', nation);
-                    
-                    // Apply theme
-                    applyTheme(nation);
-                    
-                    // Show menu after selection
-                    setTimeout(() => {
-                        showMenu();
-                        setupMenuNavigation();
-                    }, 500);
-                });
+        // Initialize character creation when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                if (charCreationScreen) {
+                    window.charCreation.init();
+                }
             });
+        } else {
+            if (charCreationScreen) {
+                window.charCreation.init();
+            }
         }
         
         // Apply theme based on selected nation
@@ -1688,18 +2175,24 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             // User has seen splash before
             if (splashScreen) splashScreen.style.display = 'none';
             
-            // Check if nation is selected
-            if (selectedNation) {
-                // Nation already selected, show menu and apply theme
-                applyTheme(selectedNation);
-                loadThemeCSS(selectedNation);
-                showMenu();
-                setTimeout(startMusicOnInteraction, 500);
-                setupMenuNavigation();
+            // Check if character is fully created
+            const charData = localStorage.getItem('gv_character_data');
+            if (charData && selectedNation) {
+                const data = JSON.parse(charData);
+                if (data.nation && data.gender) {
+                    // Character fully created, show menu and apply theme
+                    applyTheme(selectedNation);
+                    loadThemeCSS(selectedNation);
+                    showMenu();
+                    setTimeout(startMusicOnInteraction, 500);
+                    setupMenuNavigation();
+                } else {
+                    // Character creation incomplete, show character creation
+                    showCharacterCreation();
+                }
             } else {
-                // No nation selected, show character creation
+                // No character data, show character creation
                 showCharacterCreation();
-                setupNationSelection();
             }
         } else {
             // Hide character builder content initially
@@ -1710,24 +2203,20 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 splashScreen.addEventListener('click', () => {
                     startMusicOnInteraction();
                     showCharacterCreation();
-                    setTimeout(setupNationSelection, 100);
                 });
                 splashScreen.addEventListener('touchstart', () => {
                     startMusicOnInteraction();
                     showCharacterCreation();
-                    setTimeout(setupNationSelection, 100);
                 }, { passive: false });
             }
             if (splashGif) {
                 splashGif.addEventListener('click', () => {
                     startMusicOnInteraction();
                     showCharacterCreation();
-                    setTimeout(setupNationSelection, 100);
                 });
                 splashGif.addEventListener('touchstart', () => {
                     startMusicOnInteraction();
                     showCharacterCreation();
-                    setTimeout(setupNationSelection, 100);
                 }, { passive: false });
             }
         }
