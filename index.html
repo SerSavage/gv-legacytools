@@ -2613,7 +2613,7 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                     return;
                 }
                 
-                // Save character data to localStorage
+                // Prepare character data to save
                 const dataToSave = {
                     playerName: this.characterData.playerName,
                     nation: this.characterData.nation,
@@ -2623,13 +2623,54 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                     hair: this.characterData.hair || null,
                     beard: this.characterData.beard || null,
                     bodyDetail: this.characterData.bodyDetail || null,
-                    headDetail: this.characterData.headDetail || null
+                    headDetail: this.characterData.headDetail || null,
+                    createdAt: new Date().toISOString()
                 };
                 
+                // Load existing characters array (max 5)
+                let characters = [];
+                const existingData = localStorage.getItem('gv_characters');
+                if (existingData) {
+                    try {
+                        characters = JSON.parse(existingData);
+                    } catch(e) {
+                        console.error('Error loading characters:', e);
+                    }
+                } else {
+                    // Backward compatibility: check for old single character format
+                    const oldCharData = localStorage.getItem('gv_character_data');
+                    if (oldCharData) {
+                        try {
+                            const oldChar = JSON.parse(oldCharData);
+                            oldChar.createdAt = new Date().toISOString();
+                            characters = [oldChar];
+                        } catch(e) {
+                            console.error('Error migrating old character:', e);
+                        }
+                    }
+                }
+                
+                // Check if we're at the limit (5 characters)
+                if (characters.length >= 5) {
+                    if (!confirm('You have reached the maximum of 5 characters. Creating a new character will delete the oldest one. Continue?')) {
+                        return;
+                    }
+                    // Remove the oldest character
+                    characters.shift();
+                }
+                
+                // Add new character
+                characters.push(dataToSave);
+                
+                // Save characters array
+                localStorage.setItem('gv_characters', JSON.stringify(characters));
+                
+                // Also save as active character (for backward compatibility)
                 localStorage.setItem('gv_character_data', JSON.stringify(dataToSave));
                 localStorage.setItem('gv_selected_nation', this.characterData.nation);
+                localStorage.setItem('gv_active_character_index', (characters.length - 1).toString());
                 
-                console.log('Character data saved successfully:', dataToSave);
+                console.log('Character data saved successfully. Total characters:', characters.length);
                 
                 // Apply theme
                 if (typeof applyTheme === 'function') {
