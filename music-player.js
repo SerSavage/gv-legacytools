@@ -39,11 +39,29 @@ class PersistentMusicPlayer {
         
         // Always start playing automatically
         if (this.playlist.length > 0) {
-            // Small delay to ensure page is loaded
+            // Try to start playing immediately
+            this.loadTrack(this.currentTrackIndex, this.savedPosition);
+            
+            // Attempt to play - if autoplay is blocked, wait for user interaction
             setTimeout(() => {
-                this.loadTrack(this.currentTrackIndex, this.savedPosition);
                 this.play();
-            }, 1000);
+            }, 500);
+            
+            // Also try after page is fully loaded
+            if (document.readyState === 'complete') {
+                setTimeout(() => this.play(), 1500);
+            } else {
+                window.addEventListener('load', () => {
+                    setTimeout(() => this.play(), 500);
+                });
+            }
+            
+            // Try again after a longer delay (some browsers need more time)
+            setTimeout(() => {
+                if (!this.isPlaying) {
+                    this.play();
+                }
+            }, 2000);
         }
     }
     
@@ -192,15 +210,41 @@ class PersistentMusicPlayer {
             this.loadTrack(this.currentTrackIndex, this.savedPosition);
         }
         
-        this.audio.play().then(() => {
-            this.isPlaying = true;
-            this.saveState();
-            this.updatePlayButton();
-        }).catch((error) => {
-            console.warn('Playback failed:', error);
-            // Try next track if this one fails
-            setTimeout(() => this.nextTrack(), 1000);
-        });
+        const playPromise = this.audio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                this.isPlaying = true;
+                this.saveState();
+                this.updatePlayButton();
+            }).catch((error) => {
+                console.warn('Autoplay prevented:', error);
+                // Autoplay was prevented - wait for user interaction
+                this.waitForUserInteraction();
+            });
+        }
+    }
+    
+    waitForUserInteraction() {
+        // Wait for any user interaction to start playback
+        const startPlayback = () => {
+            if (this.audio && !this.isPlaying) {
+                this.audio.play().then(() => {
+                    this.isPlaying = true;
+                    this.saveState();
+                }).catch(() => {
+                    // Still failed, try again later
+                });
+            }
+            // Remove listeners after first interaction
+            document.removeEventListener('click', startPlayback);
+            document.removeEventListener('touchstart', startPlayback);
+            document.removeEventListener('keydown', startPlayback);
+        };
+        
+        document.addEventListener('click', startPlayback, { once: true });
+        document.addEventListener('touchstart', startPlayback, { once: true });
+        document.addEventListener('keydown', startPlayback, { once: true });
     }
     
     pause() {
@@ -302,10 +346,12 @@ let musicPlayer;
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         musicPlayer = new PersistentMusicPlayer();
+        window.musicPlayer = musicPlayer; // Make globally accessible
         setupMusicPlayerUI();
     });
 } else {
     musicPlayer = new PersistentMusicPlayer();
+    window.musicPlayer = musicPlayer; // Make globally accessible
     setupMusicPlayerUI();
 }
 

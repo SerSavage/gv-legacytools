@@ -1317,30 +1317,8 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         const menuScreen = document.getElementById('menu-screen');
         const splashGif = document.getElementById('splash-gif');
         
-        // Force GIF to loop continuously
-        if (splashGif) {
-            // Ensure GIF loads and animates
-            splashGif.onload = function() {
-                // Force a reload to restart animation if it stopped
-                const img = this;
-                const originalSrc = img.src;
-                // Periodically check and restart animation
-                setInterval(() => {
-                    if (img.complete && img.naturalWidth > 0) {
-                        // GIF is loaded, ensure it's animating
-                        const currentSrc = img.src;
-                        img.src = '';
-                        setTimeout(() => {
-                            img.src = currentSrc;
-                        }, 1);
-                    }
-                }, 1000); // Check every second
-            };
-            // Trigger load event if already loaded
-            if (splashGif.complete) {
-                splashGif.onload();
-            }
-        }
+        // GIF should animate naturally - no need to force reload
+        // The browser will handle GIF animation automatically
         
         function showMenu() {
             if (splashScreen) {
@@ -1368,21 +1346,42 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         // Check if user has seen splash screen before
         const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
         
+        // Start music when user interacts (clicking splash screen)
+        function startMusicOnInteraction() {
+            if (window.musicPlayer && !window.musicPlayer.isPlaying) {
+                window.musicPlayer.play();
+            }
+        }
+        
         if (hasSeenSplash) {
             // User has seen splash before, show menu directly
             if (splashScreen) splashScreen.style.display = 'none';
             showMenu();
+            // Try to start music
+            setTimeout(startMusicOnInteraction, 500);
         } else {
             // Hide character builder content initially
             document.body.classList.add('menu-visible');
             // First visit - show splash screen, then menu on click
             if (splashScreen) {
-                splashScreen.addEventListener('click', showMenu);
-                splashScreen.addEventListener('touchstart', showMenu, { passive: false });
+                splashScreen.addEventListener('click', () => {
+                    startMusicOnInteraction();
+                    showMenu();
+                });
+                splashScreen.addEventListener('touchstart', () => {
+                    startMusicOnInteraction();
+                    showMenu();
+                }, { passive: false });
             }
             if (splashGif) {
-                splashGif.addEventListener('click', showMenu);
-                splashGif.addEventListener('touchstart', showMenu, { passive: false });
+                splashGif.addEventListener('click', () => {
+                    startMusicOnInteraction();
+                    showMenu();
+                });
+                splashGif.addEventListener('touchstart', () => {
+                    startMusicOnInteraction();
+                    showMenu();
+                }, { passive: false });
             }
         }
         

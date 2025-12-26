@@ -545,6 +545,13 @@
     </div>
     <script src="../music-player.js"></script>
     <script>
+        // Start music on this page
+        setTimeout(() => {
+            if (window.musicPlayer && !window.musicPlayer.isPlaying) {
+                window.musicPlayer.play();
+            }
+        }, 1000);
+        
         // Toggle player collapse
         const toggleBtn = document.getElementById('music-player-toggle');
         const container = document.getElementById('music-player-container');
