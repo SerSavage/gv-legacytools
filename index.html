@@ -871,6 +871,495 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
     </style>
     
     <script>
+        // Character Creation System - Define IMMEDIATELY so it's available for splash handlers
+        (function() {
+            window.charCreation = {
+                currentStep: 1,
+                totalSteps: 5,
+                characterData: {
+                    playerName: null,
+                    nation: null,
+                    gender: null,
+                    archetype: null,
+                    head: null,
+                    hair: null,
+                    beard: null,
+                    bodyDetail: null,
+                    headDetail: null
+                },
+                
+                init: function() {
+                    console.log('charCreation.init() called');
+                    
+                    // Only load saved data if characterData is empty (not reset for new character)
+                    if (!this.characterData.nation && !this.characterData.playerName) {
+                        const saved = localStorage.getItem('gv_character_data');
+                        if (saved) {
+                            try {
+                                const savedData = JSON.parse(saved);
+                                // Only load if we have valid saved data
+                                if (savedData.nation || savedData.playerName) {
+                                    this.characterData = { ...this.characterData, ...savedData };
+                                    console.log('Loaded saved character data:', this.characterData);
+                                }
+                            } catch(e) {
+                                console.error('Error loading character data:', e);
+                            }
+                        }
+                        
+                        // Load nation if already selected
+                        const savedNation = localStorage.getItem('gv_selected_nation');
+                        if (savedNation && !this.characterData.nation) {
+                            this.characterData.nation = savedNation;
+                            console.log('Loaded saved nation:', savedNation);
+                        }
+                    }
+                    
+                    console.log('Current character data:', this.characterData);
+                    console.log('Setting up nation selection...');
+                    this.setupNationSelection();
+                    this.setupGenderSelection();
+                    this.setupArchetypeSelection();
+                    
+                    // Setup player name input
+                    const nameInput = document.getElementById('player-name-input');
+                    if (nameInput) {
+                        if (this.characterData.playerName) {
+                            nameInput.value = this.characterData.playerName;
+                        }
+                        
+                        const updateNextButton = () => {
+                            this.characterData.playerName = nameInput.value.trim();
+                            const nextBtn = document.getElementById('btn-next-name');
+                            if (nextBtn) {
+                                nextBtn.disabled = !this.characterData.playerName;
+                                console.log('Next button disabled:', !this.characterData.playerName, 'playerName:', this.characterData.playerName);
+                            }
+                        };
+                        
+                        nameInput.addEventListener('input', updateNextButton);
+                        nameInput.addEventListener('keyup', updateNextButton);
+                        nameInput.addEventListener('change', updateNextButton);
+                        
+                        // Initial check
+                        updateNextButton();
+                        
+                        nameInput.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter' && this.characterData.playerName) {
+                                e.preventDefault();
+                                this.nextStep();
+                            }
+                        });
+                    }
+                    
+                    // Show appropriate step
+                    if (!this.characterData.nation) {
+                        this.showStep(1);
+                    } else if (!this.characterData.playerName) {
+                        this.showStep(2);
+                    } else if (!this.characterData.gender) {
+                        this.showStep(3);
+                    } else if (!this.characterData.archetype && !localStorage.getItem('gv_archetype_skipped')) {
+                        this.showStep(4);
+                    } else {
+                        this.showStep(5);
+                    }
+                },
+                
+                showStep: function(step) {
+                    console.log('showStep called with step:', step);
+                    // Hide all steps
+                    document.querySelectorAll('.char-creation-step').forEach(s => {
+                        s.classList.remove('active');
+                    });
+                    
+                    // Show current step
+                    const stepNames = ['nation', 'name', 'gender', 'archetype', 'customization'];
+                    const stepElement = document.getElementById(`step-${stepNames[step - 1]}`);
+                    if (stepElement) {
+                        stepElement.classList.add('active');
+                        console.log('Step element found and activated:', stepNames[step - 1]);
+                    } else {
+                        console.error('Step element not found:', `step-${stepNames[step - 1]}`);
+                    }
+                    
+                    this.currentStep = step;
+                    
+                    // Update navigation buttons
+                    if (step === 5) {
+                        this.loadCustomization();
+                    }
+                    
+                    // Focus name input if on name step
+                    if (step === 2) {
+                        setTimeout(() => {
+                            const nameInput = document.getElementById('player-name-input');
+                            if (nameInput) {
+                                nameInput.focus();
+                                if (this.characterData.playerName) {
+                                    const nextBtn = document.getElementById('btn-next-name');
+                                    if (nextBtn) nextBtn.disabled = false;
+                                }
+                            }
+                        }, 100);
+                    }
+                },
+                
+                nextStep: function() {
+                    console.log('nextStep called, current:', this.currentStep, 'total:', this.totalSteps);
+                    if (this.currentStep < this.totalSteps) {
+                        this.showStep(this.currentStep + 1);
+                    } else {
+                        console.log('Already at last step');
+                    }
+                },
+                
+                prevStep: function() {
+                    if (this.currentStep > 1) {
+                        this.showStep(this.currentStep - 1);
+                    }
+                },
+                
+                setupNationSelection: function() {
+                    const self = this;
+                    const nationOptions = document.querySelectorAll('.nation-option');
+                    
+                    console.log('setupNationSelection called, found', nationOptions.length, 'nation options');
+                    
+                    if (nationOptions.length === 0) {
+                        console.error('No nation options found! Retrying in 100ms...');
+                        setTimeout(() => this.setupNationSelection(), 100);
+                        return;
+                    }
+                    
+                    nationOptions.forEach((option, index) => {
+                        const img = option.querySelector('.nation-image');
+                        const nation = option.dataset.nation;
+                        
+                        console.log('Setting up nation option:', nation, 'index:', index);
+                        
+                        option.style.cursor = 'pointer';
+                        option.style.pointerEvents = 'auto';
+                        option.style.zIndex = '10';
+                        
+                        option.addEventListener('mouseenter', () => {
+                            if (img && img.dataset.hover && !option.classList.contains('selected')) {
+                                img.src = img.dataset.hover;
+                            }
+                        });
+                        
+                        option.addEventListener('mouseleave', () => {
+                            if (img && img.dataset.default && !option.classList.contains('selected')) {
+                                img.src = img.dataset.default;
+                            }
+                        });
+                        
+                        const clickHandler = function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log('Nation clicked:', nation);
+                            
+                            nationOptions.forEach(opt => {
+                                opt.classList.remove('selected');
+                                const optImg = opt.querySelector('.nation-image');
+                                if (optImg && optImg.dataset.default) {
+                                    optImg.src = optImg.dataset.default;
+                                }
+                            });
+                            
+                            option.classList.add('selected');
+                            const selectedImg = option.querySelector('.nation-image');
+                            if (selectedImg && selectedImg.dataset.hover) {
+                                selectedImg.src = selectedImg.dataset.hover;
+                            }
+                            
+                            self.characterData.nation = nation;
+                            localStorage.setItem('gv_selected_nation', nation);
+                            
+                            if (typeof window.applyTheme === 'function') {
+                                window.applyTheme(nation);
+                            }
+                            
+                            console.log('Nation selected:', nation, 'Proceeding to next step...');
+                            
+                            setTimeout(() => {
+                                self.nextStep();
+                            }, 500);
+                        };
+                        
+                        option.addEventListener('click', clickHandler, true);
+                        option.addEventListener('mousedown', clickHandler, true);
+                        option.onclick = clickHandler;
+                    });
+                    
+                    console.log('Nation selection setup complete');
+                },
+                
+                setupGenderSelection: function() {
+                    const genderOptions = document.querySelectorAll('.gender-option');
+                    const nextBtn = document.getElementById('btn-next-gender');
+                    
+                    genderOptions.forEach(option => {
+                        const img = option.querySelector('.gender-image');
+                        option.addEventListener('mouseenter', () => {
+                            if (img && img.dataset.hover && !option.classList.contains('selected')) {
+                                img.src = img.dataset.hover;
+                            }
+                        });
+                        option.addEventListener('mouseleave', () => {
+                            if (img && img.dataset.default && !option.classList.contains('selected')) {
+                                img.src = img.dataset.default;
+                            }
+                        });
+                        
+                        option.addEventListener('click', () => {
+                            genderOptions.forEach(opt => opt.classList.remove('selected'));
+                            option.classList.add('selected');
+                            this.characterData.gender = option.dataset.gender;
+                            if (nextBtn) nextBtn.disabled = false;
+                            
+                            setTimeout(() => {
+                                this.nextStep();
+                            }, 500);
+                        });
+                    });
+                },
+                
+                setupArchetypeSelection: function() {
+                    const archetypeOptions = document.querySelectorAll('.archetype-option');
+                    
+                    archetypeOptions.forEach(option => {
+                        option.addEventListener('click', () => {
+                            archetypeOptions.forEach(opt => opt.classList.remove('selected'));
+                            option.classList.add('selected');
+                            this.characterData.archetype = option.dataset.archetype;
+                        });
+                    });
+                },
+                
+                skipArchetype: function() {
+                    this.characterData.archetype = null;
+                    localStorage.setItem('gv_archetype_skipped', 'true');
+                    this.nextStep();
+                },
+                
+                loadCustomization: function() {
+                    const content = document.getElementById('customization-content');
+                    if (!content) return;
+                    
+                    const gender = this.characterData.gender || 'male';
+                    const basePath = 'charactercreation/resources/';
+                    
+                    let html = '';
+                    
+                    // Head selection
+                    html += '<div class="customization-category">';
+                    html += '<div class="customization-category-title">Head</div>';
+                    html += '<div class="customization-grid">';
+                    for (let i = 1; i <= 6; i++) {
+                        html += `<div class="customization-item" data-type="head" data-value="${i}">
+                            <img src="${basePath}create_slot_head_0${i}.png" class="customization-image" alt="Head ${i}">
+                        </div>`;
+                    }
+                    html += '</div></div>';
+                    
+                    // Hair selection
+                    html += '<div class="customization-category">';
+                    html += '<div class="customization-category-title">Hair</div>';
+                    html += '<div class="customization-grid">';
+                    html += `<div class="customization-item" data-type="hair" data-value="none">
+                        <img src="${basePath}create_slot_brak.png" class="customization-image" alt="None">
+                    </div>`;
+                    for (let i = 1; i <= 14; i++) {
+                        const num = i < 10 ? `0${i}` : i;
+                        html += `<div class="customization-item" data-type="hair" data-value="${i}">
+                            <img src="${basePath}create_slot_hair_${num}.png" class="customization-image" alt="Hair ${i}">
+                        </div>`;
+                    }
+                    html += '</div></div>';
+                    
+                    // Beard selection (only for male)
+                    if (gender === 'male') {
+                        html += '<div class="customization-category">';
+                        html += '<div class="customization-category-title">Beard</div>';
+                        html += '<div class="customization-grid">';
+                        html += `<div class="customization-item" data-type="beard" data-value="none">
+                            <img src="${basePath}create_slot_brak.png" class="customization-image" alt="None">
+                        </div>`;
+                        for (let i = 1; i <= 8; i++) {
+                            const num = i < 10 ? `0${i}` : i;
+                            html += `<div class="customization-item" data-type="beard" data-value="${i}">
+                                <img src="${basePath}create_slot_beard_${num}.png" class="customization-image" alt="Beard ${i}">
+                            </div>`;
+                        }
+                        html += '</div></div>';
+                    }
+                    
+                    // Body Details
+                    html += '<div class="customization-category">';
+                    html += '<div class="customization-category-title">Body Details</div>';
+                    html += '<div class="customization-grid">';
+                    html += `<div class="customization-item" data-type="bodyDetail" data-value="none">
+                        <img src="${basePath}create_slot_brak.png" class="customization-image" alt="None">
+                    </div>`;
+                    for (let i = 1; i <= 4; i++) {
+                        const num = i < 10 ? `0${i}` : i;
+                        html += `<div class="customization-item" data-type="bodyDetail" data-value="${i}">
+                            <img src="${basePath}create_slot_detal_body_${num}.png" class="customization-image" alt="Body Detail ${i}">
+                        </div>`;
+                    }
+                    html += '</div></div>';
+                    
+                    // Head Details
+                    html += '<div class="customization-category">';
+                    html += '<div class="customization-category-title">Head Details</div>';
+                    html += '<div class="customization-grid">';
+                    html += `<div class="customization-item" data-type="headDetail" data-value="none">
+                        <img src="${basePath}create_slot_brak.png" class="customization-image" alt="None">
+                    </div>`;
+                    for (let i = 1; i <= 8; i++) {
+                        const num = i < 10 ? `0${i}` : i;
+                        html += `<div class="customization-item" data-type="headDetail" data-value="${i}">
+                            <img src="${basePath}create_slot_detal_head_${num}.png" class="customization-image" alt="Head Detail ${i}">
+                        </div>`;
+                    }
+                    html += '</div></div>';
+                    
+                    content.innerHTML = html;
+                    
+                    // Setup customization item clicks
+                    content.querySelectorAll('.customization-item').forEach(item => {
+                        item.addEventListener('click', () => {
+                            const type = item.dataset.type;
+                            const value = item.dataset.value;
+                            
+                            content.querySelectorAll(`.customization-item[data-type="${type}"]`).forEach(i => {
+                                i.classList.remove('selected');
+                            });
+                            
+                            item.classList.add('selected');
+                            this.characterData[type] = value;
+                        });
+                    });
+                },
+                
+                finishCreation: function() {
+                    console.log('finishCreation called, saving character data:', this.characterData);
+                    
+                    if (!this.characterData.nation) {
+                        console.error('Cannot finish: Nation not selected');
+                        alert('Please select a nation first');
+                        this.showStep(1);
+                        return;
+                    }
+                    
+                    if (!this.characterData.playerName) {
+                        console.error('Cannot finish: Player name not set');
+                        alert('Please enter a player name');
+                        this.showStep(2);
+                        return;
+                    }
+                    
+                    if (!this.characterData.gender) {
+                        console.error('Cannot finish: Gender not selected');
+                        alert('Please select a gender');
+                        this.showStep(3);
+                        return;
+                    }
+                    
+                    // Prepare character data to save
+                    const dataToSave = {
+                        playerName: this.characterData.playerName,
+                        nation: this.characterData.nation,
+                        gender: this.characterData.gender,
+                        archetype: this.characterData.archetype || null,
+                        head: this.characterData.head || null,
+                        hair: this.characterData.hair || null,
+                        beard: this.characterData.beard || null,
+                        bodyDetail: this.characterData.bodyDetail || null,
+                        headDetail: this.characterData.headDetail || null,
+                        createdAt: new Date().toISOString()
+                    };
+                    
+                    // Load existing characters array (max 5)
+                    let characters = [];
+                    const existingData = localStorage.getItem('gv_characters');
+                    if (existingData) {
+                        try {
+                            characters = JSON.parse(existingData);
+                        } catch(e) {
+                            console.error('Error loading characters:', e);
+                        }
+                    } else {
+                        // Backward compatibility: check for old single character format
+                        const oldCharData = localStorage.getItem('gv_character_data');
+                        if (oldCharData) {
+                            try {
+                                const oldChar = JSON.parse(oldCharData);
+                                oldChar.createdAt = new Date().toISOString();
+                                characters = [oldChar];
+                            } catch(e) {
+                                console.error('Error migrating old character:', e);
+                            }
+                        }
+                    }
+                    
+                    // Check if we're at the limit (5 characters)
+                    if (characters.length >= 5) {
+                        if (!confirm('You have reached the maximum of 5 characters. Creating a new character will delete the oldest one. Continue?')) {
+                            return;
+                        }
+                        characters.shift();
+                    }
+                    
+                    // Add new character
+                    characters.push(dataToSave);
+                    
+                    // Save characters array
+                    localStorage.setItem('gv_characters', JSON.stringify(characters));
+                    
+                    // Also save as active character (for backward compatibility)
+                    localStorage.setItem('gv_character_data', JSON.stringify(dataToSave));
+                    localStorage.setItem('gv_selected_nation', this.characterData.nation);
+                    localStorage.setItem('gv_active_character_index', (characters.length - 1).toString());
+                    
+                    console.log('Character data saved successfully. Total characters:', characters.length);
+                    
+                    // Apply theme
+                    if (typeof window.applyTheme === 'function') {
+                        window.applyTheme(this.characterData.nation);
+                    }
+                    if (typeof window.loadThemeCSS === 'function') {
+                        window.loadThemeCSS(this.characterData.nation);
+                    }
+                    
+                    // Hide character creation screen
+                    const charCreationScreen = document.getElementById('character-creation-screen');
+                    if (charCreationScreen) {
+                        charCreationScreen.classList.remove('visible');
+                        setTimeout(() => {
+                            charCreationScreen.style.display = 'none';
+                        }, 300);
+                    }
+                    
+                    // Show menu
+                    if (typeof window.showMenu === 'function') {
+                        window.showMenu();
+                    }
+                    if (typeof window.setupMenuNavigation === 'function') {
+                        window.setupMenuNavigation();
+                    }
+                    
+                    // Switch music to function mode
+                    if (window.musicPlayer && window.musicPlayer.isMainMenuMode) {
+                        window.musicPlayer.switchToFunctionMode();
+                    }
+                }
+            };
+            
+            console.log('charCreation object defined and ready');
+        })();
+        
         // Loading Screen System with Random Images from resources folder
         (function() {
             // Get all location images from resources folder
