@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop - Character Customization | Gloria Victis Legacy Tools</title>
+    <link rel="stylesheet" href="../music-player.css">
+    <link rel="stylesheet" href="../themes/ismir-theme.css">
+    <link rel="stylesheet" href="../themes/midland-theme.css">
+    <link rel="stylesheet" href="../themes/sangmar-theme.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            min-height: 100vh;
+            padding-top: 50px;
+        }
+        
+        .topmenu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px;
+            text-align: center;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .topmenu a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+        
+        .topmenu a:hover {
+            color: #ffff00;
+        }
+        
+        .workshop-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+        }
+        
+        .workshop-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .workshop-title {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .workshop-subtitle {
+            font-size: 1.2em;
+            color: #ccc;
+        }
+        
+        .character-display {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .character-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .info-label {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .character-customization {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .customization-preview {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .customization-preview img {
+            max-width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        
+        .customization-label {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .customization-value {
+            font-size: 1em;
+            color: #fff;
+        }
+        
+        .no-character {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+        
+        .no-character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .no-character-text {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        
+        .btn-create-character {
+            display: inline-block;
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-create-character:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .edit-button {
+            display: inline-block;
+            padding: 10px 25px;
+            background: rgba(255, 255, 0, 0.2);
+            border: 2px solid rgba(255, 255, 0, 0.4);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1em;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-button:hover {
+            background: rgba(255, 255, 0, 0.3);
+            border-color: rgba(255, 255, 0, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="topmenu">
+        <a href="https://discord.gg/gloriavictis" target="_blank">Home</a>
+        <a href="/map/">Interactive Map</a>
+        <a href="/database/">Item Database</a>
+        <a href="/workshop/">Workshop</a>
+        <a href="/">Character Builder</a>
+    </div>
+    
+    <div class="workshop-container">
+        <div class="workshop-header">
+            <h1 class="workshop-title">Character Workshop</h1>
+            <p class="workshop-subtitle">View and manage your character customization</p>
+        </div>
+        
+        <div id="character-content">
+            <!-- Character data will be loaded here -->
+        </div>
+    </div>
+    
+    <script src="../music-player.js"></script>
+    <script>
+        // Load and apply theme
+        (function() {
+            const selectedNation = localStorage.getItem('gv_selected_nation');
+            if (selectedNation) {
+                document.body.classList.add('theme-' + selectedNation);
+                const themeLink = document.createElement('link');
+                themeLink.id = 'theme-css';
+                themeLink.rel = 'stylesheet';
+                themeLink.href = `../themes/${selectedNation}-theme.css`;
+                document.head.appendChild(themeLink);
+            }
+        })();
+        
+        // Ensure we're in function mode and music is playing
+        setTimeout(() => {
+            if (window.musicPlayer) {
+                if (window.musicPlayer.isMainMenuMode) {
+                    window.musicPlayer.switchToFunctionMode();
+                }
+                if (!window.musicPlayer.isPlaying) {
+                    window.musicPlayer.play();
+                }
+            }
+        }, 1000);
+        
+        // Load and display character data
+        function loadCharacterData() {
+            const charData = localStorage.getItem('gv_character_data');
+            const content = document.getElementById('character-content');
+            
+            if (!charData) {
+                content.innerHTML = `
+                    <div class="no-character">
+                        <div class="no-character-icon">⚒️</div>
+                        <div class="no-character-text">No character created yet</div>
+                        <a href="/" class="btn-create-character">Create Your Character</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                const data = JSON.parse(charData);
+                const basePath = '../charactercreation/resources/';
+                
+                let html = '<div class="character-display">';
+                html += '<h2 style="margin-bottom: 20px; font-size: 2em;">Your Character</h2>';
+                
+                // Character Info
+                html += '<div class="character-info">';
+                html += `<div class="info-card">
+                    <div class="info-label">Player Name</div>
+                    <div class="info-value">${data.playerName || 'Unnamed'}</div>
+                </div>`;
+                html += `<div class="info-card">
+                    <div class="info-label">Nation</div>
+                    <div class="info-value">${data.nation ? data.nation.charAt(0).toUpperCase() + data.nation.slice(1) : 'Not selected'}</div>
+                </div>`;
+                html += `<div class="info-card">
+                    <div class="info-label">Gender</div>
+                    <div class="info-value">${data.gender ? data.gender.charAt(0).toUpperCase() + data.gender.slice(1) : 'Not selected'}</div>
+                </div>`;
+                html += `<div class="info-card">
+                    <div class="info-label">Archetype</div>
+                    <div class="info-value">${data.archetype ? data.archetype.charAt(0).toUpperCase() + data.archetype.slice(1) : 'None (Skipped)'}</div>
+                </div>`;
+                html += '</div>';
+                
+                // Customization Preview
+                html += '<h3 style="margin-top: 30px; margin-bottom: 15px; font-size: 1.5em;">Customization</h3>';
+                html += '<div class="character-customization">';
+                
+                if (data.head) {
+                    html += `<div class="customization-preview">
+                        <div class="customization-label">Head</div>
+                        <img src="${basePath}create_slot_head_0${data.head}.png" alt="Head ${data.head}">
+                        <div class="customization-value">Head ${data.head}</div>
+                    </div>`;
+                }
+                
+                if (data.hair && data.hair !== 'none') {
+                    html += `<div class="customization-preview">
+                        <div class="customization-label">Hair</div>
+                        <img src="${basePath}create_slot_hair_${data.hair < 10 ? '0' + data.hair : data.hair}.png" alt="Hair ${data.hair}">
+                        <div class="customization-value">Hair ${data.hair}</div>
+                    </div>`;
+                } else if (data.hair === 'none') {
+                    html += `<div class="customization-preview">
+                        <div class="customization-label">Hair</div>
+                        <img src="${basePath}create_slot_brak.png" alt="None">
+                        <div class="customization-value">None</div>
+                    </div>`;
+                }
+                
+                if (data.gender === 'male' && data.beard) {
+                    if (data.beard !== 'none') {
+                        html += `<div class="customization-preview">
+                            <div class="customization-label">Beard</div>
+                            <img src="${basePath}create_slot_beard_0${data.beard}.png" alt="Beard ${data.beard}">
+                            <div class="customization-value">Beard ${data.beard}</div>
+                        </div>`;
+                    } else {
+                        html += `<div class="customization-preview">
+                            <div class="customization-label">Beard</div>
+                            <img src="${basePath}create_slot_brak.png" alt="None">
+                            <div class="customization-value">None</div>
+                        </div>`;
+                    }
+                }
+                
+                if (data.bodyDetail && data.bodyDetail !== 'none') {
+                    html += `<div class="customization-preview">
+                        <div class="customization-label">Body Detail</div>
+                        <img src="${basePath}create_slot_detal_body_0${data.bodyDetail}.png" alt="Body Detail ${data.bodyDetail}">
+                        <div class="customization-value">Detail ${data.bodyDetail}</div>
+                    </div>`;
+                }
+                
+                if (data.headDetail && data.headDetail !== 'none') {
+                    html += `<div class="customization-preview">
+                        <div class="customization-label">Head Detail</div>
+                        <img src="${basePath}create_slot_detal_head_0${data.headDetail}.png" alt="Head Detail ${data.headDetail}">
+                        <div class="customization-value">Detail ${data.headDetail}</div>
+                    </div>`;
+                }
+                
+                html += '</div>';
+                html += '<a href="/" class="edit-button">Edit Character</a>';
+                html += '</div>';
+                
+                content.innerHTML = html;
+            } catch(e) {
+                console.error('Error loading character data:', e);
+                content.innerHTML = `
+                    <div class="no-character">
+                        <div class="no-character-icon">⚠️</div>
+                        <div class="no-character-text">Error loading character data</div>
+                        <a href="/" class="btn-create-character">Create Your Character</a>
+                    </div>
+                `;
+            }
+        }
+        
+        // Load character data on page load
+        loadCharacterData();
+    </script>
+</body>
+</html>
+

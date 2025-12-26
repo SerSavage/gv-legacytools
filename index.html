@@ -812,7 +812,26 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 </div>
             </div>
             
-            <!-- Step 2: Gender Selection -->
+            <!-- Step 2: Player Name -->
+            <div class="char-creation-step" id="step-name">
+                <h1 class="character-creation-title">Enter Your Player Name</h1>
+                <p class="character-creation-subtitle">Choose a name for your character</p>
+                
+                <div style="margin-top: 30px;">
+                    <input type="text" 
+                           id="player-name-input" 
+                           placeholder="Enter player name..." 
+                           style="padding: 15px 20px; font-size: 1.2em; width: 100%; max-width: 400px; border-radius: 8px; border: 2px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); color: #fff; text-align: center;">
+                    <p style="margin-top: 15px; color: #aaa; font-size: 0.9em;">This name will be saved with your character</p>
+                </div>
+                
+                <div class="char-creation-nav">
+                    <button class="char-creation-btn" onclick="charCreation.prevStep()">← Back</button>
+                    <button class="char-creation-btn" onclick="charCreation.nextStep()" id="btn-next-name">Next →</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Gender Selection -->
             <div class="char-creation-step" id="step-gender">
                 <h1 class="character-creation-title">Choose Your Gender</h1>
                 <p class="character-creation-subtitle">Select your character's gender</p>
@@ -845,7 +864,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 </div>
             </div>
             
-            <!-- Step 3: Archetype Selection (Optional) -->
+            <!-- Step 4: Archetype Selection (Optional) -->
             <div class="char-creation-step" id="step-archetype">
                 <h1 class="character-creation-title">Choose Your Archetype</h1>
                 <p class="character-creation-subtitle">Select your starting archetype (optional - can skip)</p>
@@ -884,7 +903,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 </div>
             </div>
             
-            <!-- Step 4: Character Customization -->
+            <!-- Step 5: Character Customization -->
             <div class="char-creation-step" id="step-customization">
                 <h1 class="character-creation-title">Customize Your Character</h1>
                 <p class="character-creation-subtitle">Customize your appearance</p>
@@ -925,6 +944,12 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                     <div class="menu-item-title">Item Database</div>
                     <div class="menu-item-desc">Browse all game items and equipment</div>
                 </a>
+                
+                <a href="/workshop/" class="menu-item">
+                    <div class="menu-item-icon">⚒️</div>
+                    <div class="menu-item-title">Workshop</div>
+                    <div class="menu-item-desc">View and manage your character</div>
+                </a>
             </div>
         </div>
     </div>
@@ -935,7 +960,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
     <span><a class="menu_title" style="left: 20px;" href="https://discord.gg/gloriavictis" target="_blank">Home</a></span>
     <span><a class="menu_title" href="/map/">Interactive Map</a></span>
     <span><a class="menu_title" href="/database/">Item Database</a></span>
-    <span><a class="menu_title" href="https://web.archive.org/web/20230128103648/https://www.gloriavictisgame.info/workshop/">Workshop</a></span>
+    <span><a class="menu_title" href="/workshop/">Workshop</a></span>
     <span><a class="menu_title" href="/">Character Builder</a></span>
 </div>
 
@@ -947,7 +972,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 <ul>
                     <li><a href="/map/">Interactive Map</a></li>
                     <li><a href="/database/">Item Database</a></li>
-                    <li><a href="https://web.archive.org/web/20230128103648/https://www.gloriavictisgame.info/workshop/">Workshop</a></li>
+                    <li><a href="/workshop/">Workshop</a></li>
                     <li><a href="/">Character Builder</a></li>
                     <li><a href="https://web.archive.org/web/20230128103648/https://www.gloriavictisgame.info/calendar/">Events Schedule</a></li>
                 </ul>
@@ -1859,8 +1884,9 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         // Character Creation System
         window.charCreation = {
             currentStep: 1,
-            totalSteps: 4,
+            totalSteps: 5,
             characterData: {
+                playerName: null,
                 nation: null,
                 gender: null,
                 archetype: null,
@@ -1892,15 +1918,37 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 this.setupGenderSelection();
                 this.setupArchetypeSelection();
                 
+                // Setup player name input
+                const nameInput = document.getElementById('player-name-input');
+                if (nameInput) {
+                    if (this.characterData.playerName) {
+                        nameInput.value = this.characterData.playerName;
+                    }
+                    nameInput.addEventListener('input', () => {
+                        this.characterData.playerName = nameInput.value.trim();
+                        const nextBtn = document.getElementById('btn-next-name');
+                        if (nextBtn) {
+                            nextBtn.disabled = !this.characterData.playerName;
+                        }
+                    });
+                    nameInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter' && this.characterData.playerName) {
+                            this.nextStep();
+                        }
+                    });
+                }
+                
                 // Show appropriate step
                 if (!this.characterData.nation) {
                     this.showStep(1);
-                } else if (!this.characterData.gender) {
+                } else if (!this.characterData.playerName) {
                     this.showStep(2);
-                } else if (!this.characterData.archetype && !localStorage.getItem('gv_archetype_skipped')) {
+                } else if (!this.characterData.gender) {
                     this.showStep(3);
-                } else {
+                } else if (!this.characterData.archetype && !localStorage.getItem('gv_archetype_skipped')) {
                     this.showStep(4);
+                } else {
+                    this.showStep(5);
                 }
             },
             
@@ -1911,7 +1959,8 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 });
                 
                 // Show current step
-                const stepElement = document.getElementById(`step-${['nation', 'gender', 'archetype', 'customization'][step - 1]}`);
+                const stepNames = ['nation', 'name', 'gender', 'archetype', 'customization'];
+                const stepElement = document.getElementById(`step-${stepNames[step - 1]}`);
                 if (stepElement) {
                     stepElement.classList.add('active');
                 }
@@ -1919,8 +1968,22 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 this.currentStep = step;
                 
                 // Update navigation buttons
-                if (step === 4) {
+                if (step === 5) {
                     this.loadCustomization();
+                }
+                
+                // Focus name input if on name step
+                if (step === 2) {
+                    setTimeout(() => {
+                        const nameInput = document.getElementById('player-name-input');
+                        if (nameInput) {
+                            nameInput.focus();
+                            if (this.characterData.playerName) {
+                                const nextBtn = document.getElementById('btn-next-name');
+                                if (nextBtn) nextBtn.disabled = false;
+                            }
+                        }
+                    }, 100);
                 }
             },
             
@@ -1971,8 +2034,7 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                         localStorage.setItem('gv_selected_nation', this.characterData.nation);
                         applyTheme(this.characterData.nation);
                         
-                        // Enable next button and proceed to gender selection
-                        document.getElementById('btn-next-gender').disabled = false;
+                        // Proceed to player name step
                         setTimeout(() => {
                             this.nextStep();
                         }, 500);
