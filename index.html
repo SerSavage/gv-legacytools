@@ -28,6 +28,17 @@
         justify-content: center;
         transition: opacity 0.5s ease-out;
         cursor: pointer;
+        overflow: hidden;
+    }
+    
+    body.splash-active {
+        overflow: hidden !important;
+        height: 100vh !important;
+    }
+    
+    html.splash-active {
+        overflow: hidden !important;
+        height: 100vh !important;
     }
     
     #splash-screen.hidden {
@@ -1813,44 +1824,70 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             const splash = document.getElementById('splash-screen');
             const gif = document.getElementById('splash-gif');
             
-            if (!splash) return;
+            if (!splash) {
+                console.log('Splash screen not found');
+                return;
+            }
             
-            // Click handler
+            // Disable scrolling when splash is active
+            document.body.classList.add('splash-active');
+            document.documentElement.classList.add('splash-active');
+            
+            // Click handler - use a simple, direct approach
             const handleClick = (e) => {
+                console.log('Splash clicked!');
                 e.preventDefault();
                 e.stopPropagation();
+                e.stopImmediatePropagation();
+                
+                // Remove scroll lock
+                document.body.classList.remove('splash-active');
+                document.documentElement.classList.remove('splash-active');
+                
                 startMusicOnInteraction();
                 showCharacterCreation();
+                return false;
             };
             
-            // Remove old listeners and add new ones
-            const newSplash = splash.cloneNode(true);
-            splash.parentNode.replaceChild(newSplash, splash);
-            const newSplashEl = document.getElementById('splash-screen');
-            const newGif = document.getElementById('splash-gif');
+            // Remove any existing listeners by using once option or removing and re-adding
+            splash.onclick = null;
+            splash.onmousedown = null;
             
-            // Add click handlers to the new element
-            newSplashEl.addEventListener('click', handleClick, true);
-            newSplashEl.addEventListener('mousedown', handleClick, true);
-            if (newGif) {
-                newGif.style.pointerEvents = 'none';
+            // Add click handlers with capture phase to catch early
+            splash.addEventListener('click', handleClick, { capture: true, once: false });
+            splash.addEventListener('mousedown', handleClick, { capture: true, once: false });
+            splash.addEventListener('touchstart', handleClick, { capture: true, once: false, passive: false });
+            
+            if (gif) {
+                gif.style.pointerEvents = 'none';
             }
             
             // Keyboard handler
             const handleKeyPress = (e) => {
-                const splashEl = document.getElementById('splash-screen');
-                if (splashEl && splashEl.style.display !== 'none' && 
+                if (splash.style.display !== 'none' && 
                     (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32)) {
                     e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Remove scroll lock
+                    document.body.classList.remove('splash-active');
+                    document.documentElement.classList.remove('splash-active');
+                    
                     startMusicOnInteraction();
                     showCharacterCreation();
                 }
             };
             
-            document.addEventListener('keydown', handleKeyPress);
+            document.addEventListener('keydown', handleKeyPress, true);
+            
+            console.log('Splash handlers setup complete');
         }
         
         function showCharacterCreation() {
+            // Remove scroll lock
+            document.body.classList.remove('splash-active');
+            document.documentElement.classList.remove('splash-active');
+            
             const charCreationScreen = document.getElementById('character-creation-screen');
             if (splashScreen) {
                 splashScreen.classList.add('hidden');
@@ -2394,9 +2431,23 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             }
         }
         
-        // Always setup splash handlers when splash screen is visible
-        if (splashScreen && splashScreen.style.display !== 'none') {
-            setupSplashHandlers();
+        // Always setup splash handlers immediately if splash screen exists
+        if (splashScreen) {
+            // Setup handlers immediately
+            setTimeout(() => {
+                if (splashScreen.style.display !== 'none' && !splashScreen.classList.contains('hidden')) {
+                    setupSplashHandlers();
+                }
+            }, 100);
+            
+            // Also setup when DOM is fully ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    if (splashScreen.style.display !== 'none' && !splashScreen.classList.contains('hidden')) {
+                        setupSplashHandlers();
+                    }
+                });
+            }
         }
         
         // Apply theme on page load if nation is already selected
