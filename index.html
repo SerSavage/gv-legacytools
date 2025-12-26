@@ -2196,24 +2196,32 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             
             init: function() {
                 console.log('charCreation.init() called');
-                // Load saved character data
-                const saved = localStorage.getItem('gv_character_data');
-                if (saved) {
-                    try {
-                        this.characterData = JSON.parse(saved);
-                        console.log('Loaded saved character data:', this.characterData);
-                    } catch(e) {
-                        console.error('Error loading character data:', e);
+                
+                // Only load saved data if characterData is empty (not reset for new character)
+                if (!this.characterData.nation && !this.characterData.playerName) {
+                    const saved = localStorage.getItem('gv_character_data');
+                    if (saved) {
+                        try {
+                            const savedData = JSON.parse(saved);
+                            // Only load if we have valid saved data
+                            if (savedData.nation || savedData.playerName) {
+                                this.characterData = { ...this.characterData, ...savedData };
+                                console.log('Loaded saved character data:', this.characterData);
+                            }
+                        } catch(e) {
+                            console.error('Error loading character data:', e);
+                        }
+                    }
+                    
+                    // Load nation if already selected
+                    const savedNation = localStorage.getItem('gv_selected_nation');
+                    if (savedNation && !this.characterData.nation) {
+                        this.characterData.nation = savedNation;
+                        console.log('Loaded saved nation:', savedNation);
                     }
                 }
                 
-                // Load nation if already selected
-                const savedNation = localStorage.getItem('gv_selected_nation');
-                if (savedNation) {
-                    this.characterData.nation = savedNation;
-                    console.log('Loaded saved nation:', savedNation);
-                }
-                
+                console.log('Current character data:', this.characterData);
                 console.log('Setting up nation selection...');
                 this.setupNationSelection();
                 this.setupGenderSelection();
@@ -2562,12 +2570,72 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             },
             
             finishCreation: function() {
-                // Save character data
-                localStorage.setItem('gv_character_data', JSON.stringify(this.characterData));
+                console.log('finishCreation called, saving character data:', this.characterData);
+                
+                // Ensure all required data is saved
+                if (!this.characterData.nation) {
+                    console.error('Cannot finish: Nation not selected');
+                    alert('Please select a nation first');
+                    this.showStep(1);
+                    return;
+                }
+                
+                if (!this.characterData.playerName) {
+                    console.error('Cannot finish: Player name not set');
+                    alert('Please enter a player name');
+                    this.showStep(2);
+                    return;
+                }
+                
+                if (!this.characterData.gender) {
+                    console.error('Cannot finish: Gender not selected');
+                    alert('Please select a gender');
+                    this.showStep(3);
+                    return;
+                }
+                
+                // Save character data to localStorage
+                const dataToSave = {
+                    playerName: this.characterData.playerName,
+                    nation: this.characterData.nation,
+                    gender: this.characterData.gender,
+                    archetype: this.characterData.archetype || null,
+                    head: this.characterData.head || null,
+                    hair: this.characterData.hair || null,
+                    beard: this.characterData.beard || null,
+                    bodyDetail: this.characterData.bodyDetail || null,
+                    headDetail: this.characterData.headDetail || null
+                };
+                
+                localStorage.setItem('gv_character_data', JSON.stringify(dataToSave));
+                localStorage.setItem('gv_selected_nation', this.characterData.nation);
+                
+                console.log('Character data saved successfully:', dataToSave);
+                
+                // Apply theme
+                if (typeof applyTheme === 'function') {
+                    applyTheme(this.characterData.nation);
+                }
+                if (typeof loadThemeCSS === 'function') {
+                    loadThemeCSS(this.characterData.nation);
+                }
+                
+                // Hide character creation screen
+                if (charCreationScreen) {
+                    charCreationScreen.classList.remove('visible');
+                    setTimeout(() => {
+                        charCreationScreen.style.display = 'none';
+                    }, 300);
+                }
                 
                 // Show menu
                 showMenu();
                 setupMenuNavigation();
+                
+                // Switch music to function mode
+                if (window.musicPlayer && window.musicPlayer.isMainMenuMode) {
+                    window.musicPlayer.switchToFunctionMode();
+                }
             }
         };
         
@@ -2575,18 +2643,8 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         const charCreationScreen = document.getElementById('character-creation-screen');
         const selectedNation = localStorage.getItem('gv_selected_nation');
         
-        // Initialize character creation when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                if (charCreationScreen) {
-                    window.charCreation.init();
-                }
-            });
-        } else {
-            if (charCreationScreen) {
-                window.charCreation.init();
-            }
-        }
+        // DO NOT initialize character creation automatically
+        // It will be initialized only when showCharacterCreation() is called
         
         // Apply theme based on selected nation
         function applyTheme(nation) {
