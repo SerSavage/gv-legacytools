@@ -62,39 +62,7 @@
 }
 
 #music-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.music-button {
-    background: #333;
-    border: 1px solid #555;
-    color: #fff;
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-}
-
-.music-button:hover {
-    background: #444;
-}
-
-.music-button:active {
-    background: #555;
-}
-
-#music-play-pause {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
+    display: none;
 }
 
 #music-volume-control {
@@ -147,14 +115,7 @@
 }
 
 #music-track-info {
-    font-size: 11px;
-    color: #aaa;
-    text-align: center;
-    margin-top: 4px;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: none;
 }
 
 /* Responsive adjustments */

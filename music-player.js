@@ -37,13 +37,13 @@ class PersistentMusicPlayer {
         // Setup event listeners
         this.setupEventListeners();
         
-        // Start playing if it was playing before
-        if (this.isPlaying && this.playlist.length > 0) {
+        // Always start playing automatically
+        if (this.playlist.length > 0) {
             // Small delay to ensure page is loaded
             setTimeout(() => {
                 this.loadTrack(this.currentTrackIndex, this.savedPosition);
                 this.play();
-            }, 500);
+            }, 1000);
         }
     }
     
@@ -114,11 +114,8 @@ class PersistentMusicPlayer {
             this.volume = parseFloat(savedVolume);
         }
         
-        // Restore playing state
-        const savedPlaying = localStorage.getItem(this.STORAGE_KEYS.IS_PLAYING);
-        if (savedPlaying !== null) {
-            this.isPlaying = savedPlaying === 'true';
-        }
+        // Always set to playing (auto-play mode)
+        this.isPlaying = true;
     }
     
     createAudioElement() {
@@ -312,32 +309,8 @@ if (document.readyState === 'loading') {
     setupMusicPlayerUI();
 }
 
-// Setup UI controls
+// Setup UI controls (only volume control)
 function setupMusicPlayerUI() {
-    // Play/Pause button
-    const playButton = document.getElementById('music-play-pause');
-    if (playButton) {
-        playButton.addEventListener('click', () => {
-            if (musicPlayer) musicPlayer.togglePlayPause();
-        });
-    }
-    
-    // Previous button
-    const prevButton = document.getElementById('music-prev');
-    if (prevButton) {
-        prevButton.addEventListener('click', () => {
-            if (musicPlayer) musicPlayer.previousTrack();
-        });
-    }
-    
-    // Next button
-    const nextButton = document.getElementById('music-next');
-    if (nextButton) {
-        nextButton.addEventListener('click', () => {
-            if (musicPlayer) musicPlayer.nextTrack();
-        });
-    }
-    
     // Volume slider
     const volumeSlider = document.getElementById('music-volume-slider');
     if (volumeSlider) {
@@ -346,12 +319,10 @@ function setupMusicPlayerUI() {
         });
     }
     
-        // Update initial UI state
-        if (musicPlayer) {
-            musicPlayer.updatePlayButton();
-            musicPlayer.updateVolumeDisplay();
-            musicPlayer.updateTrackInfo();
-        }
+    // Update initial UI state
+    if (musicPlayer) {
+        musicPlayer.updateVolumeDisplay();
+    }
 }
 
 // Save position before page unload

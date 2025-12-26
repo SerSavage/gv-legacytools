@@ -39,6 +39,7 @@
         height: 100vh;
         object-fit: contain;
         display: block;
+        image-rendering: auto;
     }
     
     .click-hint {
@@ -50,11 +51,128 @@
         font-size: 18px;
         opacity: 0.7;
         animation: pulse 2s infinite;
+        pointer-events: none;
     }
     
     @keyframes pulse {
         0%, 100% { opacity: 0.7; }
         50% { opacity: 1; }
+    }
+    
+    #menu-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s ease-in;
+    }
+    
+    #menu-screen.visible {
+        display: flex;
+        opacity: 1;
+    }
+    
+    /* Hide character builder content when menu is visible */
+    body:has(#menu-screen.visible) .topmenu,
+    body:has(#menu-screen.visible) .overlay,
+    body:has(#menu-screen.visible) #page {
+        display: none !important;
+    }
+    
+    /* Alternative method for browsers that don't support :has() */
+    .menu-visible .topmenu,
+    .menu-visible .overlay,
+    .menu-visible #page {
+        display: none !important;
+    }
+    
+    .menu-container {
+        text-align: center;
+        padding: 40px;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        max-width: 800px;
+        width: 90%;
+    }
+    
+    .menu-title {
+        font-size: 3em;
+        color: #fff;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .menu-subtitle {
+        font-size: 1.2em;
+        color: #ccc;
+        margin-bottom: 40px;
+    }
+    
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+    }
+    
+    .menu-item {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 30px 20px;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .menu-item:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .menu-item-icon {
+        font-size: 3em;
+        margin-bottom: 10px;
+    }
+    
+    .menu-item-title {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 5px;
+    }
+    
+    .menu-item-desc {
+        font-size: 0.9em;
+        color: #aaa;
+    }
+    
+    @media (max-width: 768px) {
+        .menu-title {
+            font-size: 2em;
+        }
+        
+        .menu-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .menu-container {
+            padding: 20px;
+        }
     }
 </style>
 <!-- End Wayback Rewrite JS Include -->
@@ -344,6 +462,34 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
     <div id="splash-screen">
         <img id="splash-gif" src="GVLegacyToolsHPLogo.gif" alt="Gloria Victis Legacy Tools">
         <div class="click-hint">Click anywhere to continue</div>
+    </div>
+    
+    <!-- Navigation Menu -->
+    <div id="menu-screen">
+        <div class="menu-container">
+            <h1 class="menu-title">Gloria Victis Legacy Tools</h1>
+            <p class="menu-subtitle">Choose a tool to get started</p>
+            
+            <div class="menu-grid">
+                <a href="/builder/" class="menu-item">
+                    <div class="menu-item-icon">⚔️</div>
+                    <div class="menu-item-title">Character Builder</div>
+                    <div class="menu-item-desc">Plan your character attributes and skills</div>
+                </a>
+                
+                <a href="/map/" class="menu-item">
+                    <div class="menu-item-icon">🗺️</div>
+                    <div class="menu-item-title">Interactive Map</div>
+                    <div class="menu-item-desc">Explore the world of Gloria Victis</div>
+                </a>
+                
+                <a href="/database/" class="menu-item">
+                    <div class="menu-item-icon">📦</div>
+                    <div class="menu-item-title">Item Database</div>
+                    <div class="menu-item-desc">Browse all game items and equipment</div>
+                </a>
+            </div>
+        </div>
     </div>
  <div class="placeholder"></div>
 
@@ -1156,11 +1302,6 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             <button id="music-player-toggle">−</button>
         </div>
         <div id="music-player-content">
-            <div id="music-controls">
-                <button class="music-button" id="music-prev" title="Previous">⏮</button>
-                <button class="music-button" id="music-play-pause" title="Play">▶</button>
-                <button class="music-button" id="music-next" title="Next">⏭</button>
-            </div>
             <div id="music-volume-control">
                 <span id="music-volume-label">Volume:</span>
                 <input type="range" id="music-volume-slider" min="0" max="100" value="50">
@@ -1171,54 +1312,78 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
     </div>
     <script src="music-player.js"></script>
     <script>
-        // Splash Screen Logic
+        // Splash Screen and Menu Logic
         const splashScreen = document.getElementById('splash-screen');
+        const menuScreen = document.getElementById('menu-screen');
         const splashGif = document.getElementById('splash-gif');
         
-        // Force GIF to reload/restart animation to ensure it plays
+        // Force GIF to loop continuously
         if (splashGif) {
+            // Ensure GIF loads and animates
             splashGif.onload = function() {
-                // Force animation restart
-                const src = this.src;
-                this.src = '';
-                setTimeout(() => {
-                    this.src = src;
-                }, 10);
+                // Force a reload to restart animation if it stopped
+                const img = this;
+                const originalSrc = img.src;
+                // Periodically check and restart animation
+                setInterval(() => {
+                    if (img.complete && img.naturalWidth > 0) {
+                        // GIF is loaded, ensure it's animating
+                        const currentSrc = img.src;
+                        img.src = '';
+                        setTimeout(() => {
+                            img.src = currentSrc;
+                        }, 1);
+                    }
+                }, 1000); // Check every second
             };
+            // Trigger load event if already loaded
+            if (splashGif.complete) {
+                splashGif.onload();
+            }
         }
         
-        // Check if user has seen splash screen before (only show on first visit per session)
-        const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
-        
-        function hideSplash() {
-            splashScreen.classList.add('hidden');
-            setTimeout(() => {
-                splashScreen.style.display = 'none';
-            }, 500);
+        function showMenu() {
+            if (splashScreen) {
+                splashScreen.classList.add('hidden');
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                    if (menuScreen) {
+                        menuScreen.style.display = 'flex';
+                        setTimeout(() => {
+                            menuScreen.classList.add('visible');
+                            document.body.classList.add('menu-visible');
+                        }, 50);
+                    }
+                }, 500);
+            } else if (menuScreen) {
+                menuScreen.style.display = 'flex';
+                setTimeout(() => {
+                    menuScreen.classList.add('visible');
+                    document.body.classList.add('menu-visible');
+                }, 50);
+            }
             sessionStorage.setItem('hasSeenSplash', 'true');
         }
         
+        // Check if user has seen splash screen before
+        const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
+        
         if (hasSeenSplash) {
-            // User has seen splash before, hide it immediately
-            splashScreen.style.display = 'none';
+            // User has seen splash before, show menu directly
+            if (splashScreen) splashScreen.style.display = 'none';
+            showMenu();
         } else {
-            // First visit - show splash screen
-            // Listen for clicks/touches on splash screen
-            splashScreen.addEventListener('click', hideSplash);
-            splashScreen.addEventListener('touchstart', hideSplash, { passive: false });
-            
-            // Also listen on the GIF itself
-            if (splashGif) {
-                splashGif.addEventListener('click', hideSplash);
-                splashGif.addEventListener('touchstart', hideSplash, { passive: false });
+            // Hide character builder content initially
+            document.body.classList.add('menu-visible');
+            // First visit - show splash screen, then menu on click
+            if (splashScreen) {
+                splashScreen.addEventListener('click', showMenu);
+                splashScreen.addEventListener('touchstart', showMenu, { passive: false });
             }
-            
-            // Auto-hide after 5 seconds if user doesn't click
-            setTimeout(() => {
-                if (!splashScreen.classList.contains('hidden')) {
-                    hideSplash();
-                }
-            }, 5000);
+            if (splashGif) {
+                splashGif.addEventListener('click', showMenu);
+                splashGif.addEventListener('touchstart', showMenu, { passive: false });
+            }
         }
         
         // Toggle player collapse
