@@ -1296,6 +1296,9 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 const splash = document.getElementById('splash-screen');
                 if (!splash) return;
                 
+                // Set flag to prevent redirect logic from running
+                window.splashClickedByUser = true;
+                
                 // Hide splash immediately
                 splash.style.display = 'none';
                 splash.classList.add('hidden');
@@ -3273,6 +3276,13 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         if (hasSeenSplash) {
             // User has seen splash before
             if (splashScreen) splashScreen.style.display = 'none';
+            
+            // If user clicked splash screen, always show menu (don't redirect)
+            if (window.splashClickedByUser) {
+                showMenu();
+                setupMenuNavigation();
+                return;
+            }
             
             if (showCreation) {
                 // Explicitly requested character creation
