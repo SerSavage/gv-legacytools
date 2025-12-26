@@ -3284,61 +3284,61 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             // User has seen splash before
             if (splashScreen) splashScreen.style.display = 'none';
             
-            // If user clicked splash screen, always show menu (don't redirect)
+            // If user clicked splash screen, ALWAYS show menu (don't redirect)
             if (window.splashClickedByUser) {
+                // Apply theme if character exists
+                if (hasCharacter && selectedNation) {
+                    const data = JSON.parse(charData);
+                    if (data.nation) {
+                        applyTheme(data.nation);
+                        loadThemeCSS(data.nation);
+                    }
+                }
                 showMenu();
                 setupMenuNavigation();
                 return;
             }
             
+            // For returning users (hasSeenSplash = true), always show menu, never auto-redirect
             if (showCreation) {
-                // Explicitly requested character creation
+                // Explicitly requested character creation via URL
                 showCharacterCreation();
-            } else if (hasCharacter && isHomepage) {
-                // Character exists and we're on homepage - redirect to builder or show builder directly
-                const data = JSON.parse(charData);
-                if (data.nation && data.gender) {
-                    // Character fully created - redirect to builder page
-                    window.location.href = '/builder/';
-                    return;
-                } else {
-                    // Character creation incomplete, show character creation
-                    showCharacterCreation();
-                }
-            } else if (hasCharacter) {
-                // Character exists, show menu and apply theme
-                const data = JSON.parse(charData);
-                if (data.nation && data.gender) {
-                    applyTheme(selectedNation);
-                    loadThemeCSS(selectedNation);
-                    showMenu();
-                    setTimeout(startMusicOnInteraction, 500);
-                    setupMenuNavigation();
-                } else {
-                    showCharacterCreation();
-                }
             } else {
-                // No character data, show menu (user can choose to create character)
+                // Always show menu for returning users - never auto-redirect to builder
+                if (hasCharacter && selectedNation) {
+                    try {
+                        const data = JSON.parse(charData);
+                        if (data && data.nation) {
+                            applyTheme(selectedNation);
+                            loadThemeCSS(selectedNation);
+                        }
+                    } catch(e) {
+                        console.error('Error parsing character data:', e);
+                    }
+                }
                 showMenu();
                 setupMenuNavigation();
             }
         } else {
-            // First visit
-            if (hasCharacter && isHomepage) {
-                // Character already exists and we're on homepage - redirect to builder
-                window.location.href = '/builder/';
-                return;
-            } else if (hasCharacter) {
-                // Character already exists, skip splash and show menu
-                if (splashScreen) splashScreen.style.display = 'none';
-                applyTheme(selectedNation);
-                loadThemeCSS(selectedNation);
-                showMenu();
-                setTimeout(startMusicOnInteraction, 500);
-                setupMenuNavigation();
+            // First visit - ALWAYS show splash screen, never auto-redirect
+            // User must click splash to proceed to menu
+            if (splashScreen) {
+                // Show splash screen - user will click to proceed
+                splashScreen.style.display = 'flex';
             } else {
-                // Hide character builder content initially
-                document.body.classList.add('menu-visible');
+                // If splash doesn't exist, show menu
+                if (hasCharacter && selectedNation) {
+                    const data = JSON.parse(charData);
+                    if (data.nation) {
+                        applyTheme(data.nation);
+                        loadThemeCSS(data.nation);
+                    }
+                }
+                showMenu();
+                setupMenuNavigation();
+            }
+            // Hide character builder content initially
+            document.body.classList.add('menu-visible');
                 // First visit - show splash screen, then character creation on click
                 // Music should already be playing from the immediate start above
                 setupSplashHandlers();
