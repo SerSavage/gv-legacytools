@@ -1,0 +1,65 @@
+/* Ismir Theme - Blue/Frozen/Viking */
+
+.theme-ismir {
+    --theme-primary: #2c5f8d;
+    --theme-secondary: #4a90c2;
+    --theme-accent: #6bb3e0;
+    --theme-dark: #1a3a5c;
+    --theme-light: #e8f4f8;
+    --theme-text: #ffffff;
+    --theme-bg-gradient: linear-gradient(135deg, #1a3a5c 0%, #2c5f8d 50%, #4a90c2 100%);
+}
+
+.theme-ismir #menu-screen {
+    background: linear-gradient(135deg, #1a3a5c 0%, #2c5f8d 50%, #4a90c2 100%);
+}
+
+.theme-ismir #character-creation-screen {
+    background: linear-gradient(135deg, #1a3a5c 0%, #2c5f8d 50%, #4a90c2 100%);
+}
+
+.theme-ismir .menu-container,
+.theme-ismir .character-creation-container {
+    background: rgba(26, 58, 92, 0.9);
+    border: 2px solid rgba(107, 179, 224, 0.3);
+}
+
+.theme-ismir .menu-item {
+    background: rgba(44, 95, 141, 0.3);
+    border: 2px solid rgba(107, 179, 224, 0.4);
+}
+
+.theme-ismir .menu-item:hover {
+    background: rgba(74, 144, 194, 0.4);
+    border-color: rgba(107, 179, 224, 0.6);
+    box-shadow: 0 5px 20px rgba(107, 179, 224, 0.3);
+}
+
+.theme-ismir .topmenu {
+    background: rgba(26, 58, 92, 0.95);
+    border-bottom: 2px solid rgba(107, 179, 224, 0.3);
+}
+
+.theme-ismir .topmenu a {
+    color: #e8f4f8;
+}
+
+.theme-ismir .topmenu a:hover {
+    color: #6bb3e0;
+}
+
+.theme-ismir body {
+    background: #1a3a5c;
+    color: #e8f4f8;
+}
+
+.theme-ismir .nation-option:hover {
+    border-color: rgba(107, 179, 224, 0.6);
+    box-shadow: 0 0 20px rgba(107, 179, 224, 0.4);
+}
+
+.theme-ismir .nation-option.selected {
+    border-color: #6bb3e0;
+    box-shadow: 0 0 30px rgba(107, 179, 224, 0.6);
+}
+

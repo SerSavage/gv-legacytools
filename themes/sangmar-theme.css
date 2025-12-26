@@ -1,0 +1,65 @@
+/* Sangmar Theme - Byzantine/Roman/Greek/Eastern */
+
+.theme-sangmar {
+    --theme-primary: #8b4513;
+    --theme-secondary: #cd853f;
+    --theme-accent: #daa520;
+    --theme-dark: #654321;
+    --theme-light: #f5deb3;
+    --theme-text: #ffffff;
+    --theme-bg-gradient: linear-gradient(135deg, #654321 0%, #8b4513 50%, #cd853f 100%);
+}
+
+.theme-sangmar #menu-screen {
+    background: linear-gradient(135deg, #654321 0%, #8b4513 50%, #cd853f 100%);
+}
+
+.theme-sangmar #character-creation-screen {
+    background: linear-gradient(135deg, #654321 0%, #8b4513 50%, #cd853f 100%);
+}
+
+.theme-sangmar .menu-container,
+.theme-sangmar .character-creation-container {
+    background: rgba(101, 67, 33, 0.9);
+    border: 2px solid rgba(218, 165, 32, 0.3);
+}
+
+.theme-sangmar .menu-item {
+    background: rgba(139, 69, 19, 0.3);
+    border: 2px solid rgba(218, 165, 32, 0.4);
+}
+
+.theme-sangmar .menu-item:hover {
+    background: rgba(205, 133, 63, 0.4);
+    border-color: rgba(218, 165, 32, 0.6);
+    box-shadow: 0 5px 20px rgba(218, 165, 32, 0.3);
+}
+
+.theme-sangmar .topmenu {
+    background: rgba(101, 67, 33, 0.95);
+    border-bottom: 2px solid rgba(218, 165, 32, 0.3);
+}
+
+.theme-sangmar .topmenu a {
+    color: #f5deb3;
+}
+
+.theme-sangmar .topmenu a:hover {
+    color: #daa520;
+}
+
+.theme-sangmar body {
+    background: #654321;
+    color: #f5deb3;
+}
+
+.theme-sangmar .nation-option:hover {
+    border-color: rgba(218, 165, 32, 0.6);
+    box-shadow: 0 0 20px rgba(218, 165, 32, 0.4);
+}
+
+.theme-sangmar .nation-option.selected {
+    border-color: #daa520;
+    box-shadow: 0 0 30px rgba(218, 165, 32, 0.6);
+}
+

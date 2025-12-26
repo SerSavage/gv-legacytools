@@ -1,0 +1,65 @@
+/* Midland Theme - Middle Ages Knights/Templar */
+
+.theme-midland {
+    --theme-primary: #8b6914;
+    --theme-secondary: #b8941f;
+    --theme-accent: #d4af37;
+    --theme-dark: #5a4a0d;
+    --theme-light: #f5e6d3;
+    --theme-text: #ffffff;
+    --theme-bg-gradient: linear-gradient(135deg, #5a4a0d 0%, #8b6914 50%, #b8941f 100%);
+}
+
+.theme-midland #menu-screen {
+    background: linear-gradient(135deg, #5a4a0d 0%, #8b6914 50%, #b8941f 100%);
+}
+
+.theme-midland #character-creation-screen {
+    background: linear-gradient(135deg, #5a4a0d 0%, #8b6914 50%, #b8941f 100%);
+}
+
+.theme-midland .menu-container,
+.theme-midland .character-creation-container {
+    background: rgba(90, 74, 13, 0.9);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.theme-midland .menu-item {
+    background: rgba(139, 105, 20, 0.3);
+    border: 2px solid rgba(212, 175, 55, 0.4);
+}
+
+.theme-midland .menu-item:hover {
+    background: rgba(184, 148, 31, 0.4);
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+}
+
+.theme-midland .topmenu {
+    background: rgba(90, 74, 13, 0.95);
+    border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.theme-midland .topmenu a {
+    color: #f5e6d3;
+}
+
+.theme-midland .topmenu a:hover {
+    color: #d4af37;
+}
+
+.theme-midland body {
+    background: #5a4a0d;
+    color: #f5e6d3;
+}
+
+.theme-midland .nation-option:hover {
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+.theme-midland .nation-option.selected {
+    border-color: #d4af37;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+}
+

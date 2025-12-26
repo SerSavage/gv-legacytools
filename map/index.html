@@ -1438,6 +1438,19 @@
     </div>
     <script src="../music-player.js"></script>
     <script>
+        // Load and apply theme
+        (function() {
+            const selectedNation = localStorage.getItem('gv_selected_nation');
+            if (selectedNation) {
+                document.body.classList.add('theme-' + selectedNation);
+                const themeLink = document.createElement('link');
+                themeLink.id = 'theme-css';
+                themeLink.rel = 'stylesheet';
+                themeLink.href = `../themes/${selectedNation}-theme.css`;
+                document.head.appendChild(themeLink);
+            }
+        })();
+        
         // Ensure we're in function mode and music is playing
         setTimeout(() => {
             if (window.musicPlayer) {
