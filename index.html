@@ -871,17 +871,124 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
     </style>
     
     <script>
-        // Loading Screen System with Random Images
+        // Loading Screen System with Random Images from resources folder
         (function() {
+            // Get all location images from resources folder
             const loadingImages = [
-                'GVLegacyToolsHPLogo.gif',
-                'homepage(front)/GVToolsHomePageeffects_1.gif',
                 'resources/location_CentralCastle.png',
                 'resources/location_Blacklion_Hold.png',
                 'resources/location_Ironwolf_Hold.png',
                 'resources/location_Fort_Serai.png',
                 'resources/location_Fort_Mereley.png',
-                'resources/location_Fort_Dunfen.png'
+                'resources/location_Fort_Dunfen.png',
+                'resources/location_Blackrock.png',
+                'resources/location_Blackrock_Farm.png',
+                'resources/location_Blackrock_Lumbermill.png',
+                'resources/location_Blacklion_Claypit.png',
+                'resources/location_Blacklion_Pass.png',
+                'resources/location_Griffinclaw_Outpost.png',
+                'resources/location_Griffinclaw_Outpost_Mirador.png',
+                'resources/location_Ironwolf_Pass.png',
+                'resources/location_Ironwolf_Claypit.png',
+                'resources/location_Ravenskull_Hold.png',
+                'resources/location_Ravenskull_Pass.png',
+                'resources/location_Ravenskull_Claypit.png',
+                'resources/location_Seaclaw.png',
+                'resources/location_Seaclaw_Mine.png',
+                'resources/location_Seaclaw_Farm.png',
+                'resources/location_Seaclaw_Lumbermill.png',
+                'resources/location_Seaclaw_Outpost_Mirador.png',
+                'resources/location_Ulfgard.png',
+                'resources/location_Ulfgard_Farm.png',
+                'resources/location_Ulfgard_Lumbermill.png',
+                'resources/location_Ulfgard_Mine.png',
+                'resources/location_Volkvar.png',
+                'resources/location_Volkvar_Farm.png',
+                'resources/location_Volkvar_Lumbermill.png',
+                'resources/location_Greenport.png',
+                'resources/location_Greenport_Farm.png',
+                'resources/location_Greenport_Lumbermill.png',
+                'resources/location_Greenport_Mine.png',
+                'resources/location_Ystad.png',
+                'resources/location_Ystad_Village.png',
+                'resources/location_Waterford.png',
+                'resources/location_Waterford_Farm.png',
+                'resources/location_Waterford_Lumbermill.png',
+                'resources/location_Baalhammon.png',
+                'resources/location_Baalhammon_Farm.png',
+                'resources/location_Baalhammon_Lumbermill.png',
+                'resources/location_Dimar.png',
+                'resources/location_Dimar_Farm.png',
+                'resources/location_Dimar_Lumbermill.png',
+                'resources/location_Tenebrok.png',
+                'resources/location_Tenebrok_Farm.png',
+                'resources/location_Tenebrok_Mine.png',
+                'resources/location_Tenebrok_Lumbermill.png',
+                'resources/location_Scarsdale.png',
+                'resources/location_Scarsdale_Farm.png',
+                'resources/location_Scarsdale_Mine.png',
+                'resources/location_Scarsdale_Lumbermill.png',
+                'resources/location_Skogar.png',
+                'resources/location_Skogar_Farm.png',
+                'resources/location_Skogar_Lumbermill.png',
+                'resources/location_Rodrock.png',
+                'resources/location_Rodrock_Village.png',
+                'resources/location_Rodrock_Farm.png',
+                'resources/location_Rodrock_Mine.png',
+                'resources/location_Rodrock_Lumbermill.png',
+                'resources/location_Mereley.png',
+                'resources/location_Mereley_Farm.png',
+                'resources/location_Mereley_Lumbermill.png',
+                'resources/location_Basilea_Farm.png',
+                'resources/location_Basilea_Lumbermill.png',
+                'resources/location_Basilea_Mine.png',
+                'resources/location_Haddah.png',
+                'resources/location_Haddah_Farm.png',
+                'resources/location_Haddah_Lumbermill.png',
+                'resources/location_Dunfen.png',
+                'resources/location_Dunfen_Farm.png',
+                'resources/location_Fort_Dunfen.png',
+                'resources/location_The_Mines_of_Dunfen.png',
+                'resources/location_Greatfall.png',
+                'resources/location_Greatfall_Village.png',
+                'resources/location_Twinfall.png',
+                'resources/location_Twinfall_Village.png',
+                'resources/location_Limetown.png',
+                'resources/location_Leaktown.png',
+                'resources/location_Leaktown_Village.png',
+                'resources/location_Lublin.png',
+                'resources/location_Lublin_Village.png',
+                'resources/location_Norfolk.png',
+                'resources/location_Norfolk_Village.png',
+                'resources/location_Skergard.png',
+                'resources/location_Skergard_Village.png',
+                'resources/location_Audunstede.png',
+                'resources/location_Audunstede_Village.png',
+                'resources/location_Aquitania.png',
+                'resources/location_Aquitania_Village.png',
+                'resources/location_Eaglenest.png',
+                'resources/location_Eaglenest_Village.png',
+                'resources/location_Lordly_Haven.png',
+                'resources/location_Lordly_Haven_Mirador.png',
+                'resources/location_Quilum_Outpost.png',
+                'resources/location_Quilium_Outpost_Mirador.png',
+                'resources/location_Saffa_Outpost.png',
+                'resources/location_Saffa_Outpost_Mirador.png',
+                'resources/location_Reksvald_Outpost.png',
+                'resources/location_Reksvald_Outpost_Mirador.png',
+                'resources/location_Elmridge_Outpost.png',
+                'resources/location_Elmridge_Outpost_Mirador.png',
+                'resources/location_Hogsten_Outpost.png',
+                'resources/location_Hogsten_Outpost_Mirador.png',
+                'resources/location_Hordun_Temple.png',
+                'resources/location_Hordun_Temple_Mirador.png',
+                'resources/location_The_Lord_s_Wrath_Abbey.png',
+                'resources/location_The_Lord_s_Wrath_Abbey_Mirador.png',
+                'resources/location_OriginalFaithOrder.png',
+                'resources/location_OriginalFaithOrder_Village.png',
+                'resources/location_Mudmine.png',
+                'resources/location_O_Nar_s_Farm.png',
+                'resources/location_L_Obart_s_Farm.png'
             ];
             
             // Shuffle array function
@@ -892,6 +999,37 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
                 }
                 return shuffled;
+            }
+            
+            // Show loading screen on page load
+            function showLoadingOnPageLoad() {
+                const loadingScreen = document.getElementById('loading-screen');
+                const loadingImage = document.getElementById('loading-image');
+                const progressBar = document.getElementById('progress-bar');
+                const progressText = document.getElementById('progress-text');
+                
+                if (!loadingScreen) return;
+                
+                // Pick random image
+                const shuffled = shuffleArray(loadingImages);
+                const randomImage = shuffled[0];
+                loadingImage.src = randomImage;
+                
+                // Show loading screen immediately
+                loadingScreen.style.display = 'flex';
+                
+                // Start progress animation
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 12 + 3; // Random increment between 3-15
+                    if (progress > 95) progress = 95; // Cap at 95% until page fully loads
+                    
+                    progressBar.style.width = progress + '%';
+                    progressText.textContent = Math.round(progress) + '%';
+                }, 150);
+                
+                // Store interval to clear later
+                window.loadingInterval = interval;
             }
             
             window.showLoadingScreen = function(targetUrl) {
@@ -927,7 +1065,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 if (targetUrl) {
                     setTimeout(() => {
                         window.location.href = targetUrl;
-                    }, 500);
+                    }, 300);
                 }
             };
             
@@ -938,6 +1076,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 
                 if (window.loadingInterval) {
                     clearInterval(window.loadingInterval);
+                    window.loadingInterval = null;
                 }
                 
                 // Complete progress bar
@@ -952,12 +1091,24 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 }, 500);
             };
             
+            // Show loading screen immediately on page load
+            if (document.readyState === 'loading') {
+                showLoadingOnPageLoad();
+            } else if (document.readyState === 'interactive') {
+                showLoadingOnPageLoad();
+            }
+            
             // Hide loading screen when page is fully loaded
             if (document.readyState === 'complete') {
-                window.hideLoadingScreen();
+                setTimeout(() => window.hideLoadingScreen(), 300);
             } else {
                 window.addEventListener('load', () => {
-                    window.hideLoadingScreen();
+                    setTimeout(() => window.hideLoadingScreen(), 300);
+                });
+                
+                // Also hide when DOM is ready
+                document.addEventListener('DOMContentLoaded', () => {
+                    // Keep showing until fully loaded
                 });
             }
             
@@ -968,7 +1119,8 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                     !link.href.startsWith('#') && link.target !== '_blank' &&
                     !link.hasAttribute('data-no-loading')) {
                     const href = link.getAttribute('href');
-                    if (href && !href.startsWith('http') || href.startsWith(window.location.origin)) {
+                    // Check if it's an internal link
+                    if (href && (href.startsWith('/') || href.startsWith(window.location.origin) || !href.startsWith('http'))) {
                         e.preventDefault();
                         window.showLoadingScreen(href);
                     }
