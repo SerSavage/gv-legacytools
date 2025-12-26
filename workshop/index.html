@@ -255,6 +255,15 @@
         <div class="workshop-header">
             <h1 class="workshop-title">Character Workshop</h1>
             <p class="workshop-subtitle">View and manage your character customizations (Max 5 characters)</p>
+            <div class="workshop-actions" style="margin-top: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button id="btn-export" class="workshop-action-btn" style="padding: 10px 20px; background: rgba(255, 255, 0, 0.2); border: 2px solid rgba(255, 255, 0, 0.5); border-radius: 8px; color: #ffff00; cursor: pointer; font-size: 0.9em; transition: all 0.3s ease;">
+                    📥 Export Characters
+                </button>
+                <label for="file-import" class="workshop-action-btn" style="padding: 10px 20px; background: rgba(255, 255, 0, 0.2); border: 2px solid rgba(255, 255, 0, 0.5); border-radius: 8px; color: #ffff00; cursor: pointer; font-size: 0.9em; transition: all 0.3s ease; display: inline-block;">
+                    📤 Import Characters
+                </label>
+                <input type="file" id="file-import" accept=".json" style="display: none;">
+            </div>
         </div>
         
         <div id="character-content">
@@ -509,6 +518,143 @@
                 console.error('Error deleting character:', e);
             }
         }
+        
+        // Export characters to JSON file
+        function exportCharacters() {
+            const charactersData = localStorage.getItem('gv_characters');
+            if (!charactersData) {
+                alert('No characters to export!');
+                return;
+            }
+            
+            try {
+                const characters = JSON.parse(charactersData);
+                const activeIndex = parseInt(localStorage.getItem('gv_active_character_index') || '0');
+                
+                const exportData = {
+                    version: '1.0',
+                    exportDate: new Date().toISOString(),
+                    activeCharacterIndex: activeIndex,
+                    characters: characters
+                };
+                
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `gv-characters-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                // Show success message
+                showMessage('Characters exported successfully!', 'success');
+            } catch(e) {
+                console.error('Error exporting characters:', e);
+                showMessage('Error exporting characters: ' + e.message, 'error');
+            }
+        }
+        
+        // Import characters from JSON file
+        function importCharacters(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importData = JSON.parse(e.target.result);
+                    
+                    // Validate data structure
+                    if (!importData.characters || !Array.isArray(importData.characters)) {
+                        throw new Error('Invalid file format: missing characters array');
+                    }
+                    
+                    // Check if importing would exceed limit
+                    const currentCharactersData = localStorage.getItem('gv_characters');
+                    let currentCount = 0;
+                    if (currentCharactersData) {
+                        try {
+                            const current = JSON.parse(currentCharactersData);
+                            currentCount = current.length;
+                        } catch(e) {}
+                    }
+                    
+                    const importCount = importData.characters.length;
+                    const totalCount = currentCount + importCount;
+                    
+                    if (totalCount > 5) {
+                        const confirmMsg = `Importing ${importCount} characters would exceed the limit of 5. ` +
+                                         `You currently have ${currentCount} characters. ` +
+                                         `Do you want to replace all existing characters with the imported ones?`;
+                        if (!confirm(confirmMsg)) {
+                            return;
+                        }
+                        // Replace all
+                        localStorage.setItem('gv_characters', JSON.stringify(importData.characters));
+                        if (importData.activeCharacterIndex !== undefined) {
+                            localStorage.setItem('gv_active_character_index', importData.activeCharacterIndex.toString());
+                        }
+                    } else {
+                        // Merge with existing
+                        let existing = [];
+                        if (currentCharactersData) {
+                            try {
+                                existing = JSON.parse(currentCharactersData);
+                            } catch(e) {}
+                        }
+                        const merged = [...existing, ...importData.characters].slice(0, 5);
+                        localStorage.setItem('gv_characters', JSON.stringify(merged));
+                        if (importData.activeCharacterIndex !== undefined && merged.length > importData.activeCharacterIndex) {
+                            localStorage.setItem('gv_active_character_index', (existing.length + importData.activeCharacterIndex).toString());
+                        }
+                    }
+                    
+                    // Reload display
+                    loadCharacterData();
+                    showMessage(`Successfully imported ${importCount} character(s)!`, 'success');
+                    
+                    // Reset file input
+                    document.getElementById('file-import').value = '';
+                } catch(e) {
+                    console.error('Error importing characters:', e);
+                    showMessage('Error importing characters: ' + e.message, 'error');
+                }
+            };
+            reader.onerror = function() {
+                showMessage('Error reading file', 'error');
+            };
+            reader.readAsText(file);
+        }
+        
+        // Show success/error message
+        function showMessage(message, type) {
+            const existingMsg = document.querySelector('.import-success, .import-error');
+            if (existingMsg) {
+                existingMsg.remove();
+            }
+            
+            const msgDiv = document.createElement('div');
+            msgDiv.className = type === 'success' ? 'import-success' : 'import-error';
+            msgDiv.textContent = message;
+            msgDiv.style.display = 'block';
+            
+            const header = document.querySelector('.workshop-header');
+            header.appendChild(msgDiv);
+            
+            setTimeout(() => {
+                msgDiv.style.opacity = '0';
+                msgDiv.style.transition = 'opacity 0.5s';
+                setTimeout(() => msgDiv.remove(), 500);
+            }, 3000);
+        }
+        
+        // Event listeners for export/import
+        document.getElementById('btn-export').addEventListener('click', exportCharacters);
+        document.getElementById('file-import').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                importCharacters(e.target.files[0]);
+            }
+        });
         
         // Load character data on page load
         loadCharacterData();

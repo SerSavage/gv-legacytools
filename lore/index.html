@@ -358,14 +358,20 @@
                 ? locations 
                 : locations.filter(loc => loc.type === filter);
             
-            grid.innerHTML = filtered.map(location => `
+            grid.innerHTML = filtered.map(location => {
+                // Fix path - resources folder is at root, so from lore/ we need ../resources/
+                const imagePath = location.image.startsWith('resources/') 
+                    ? `../${location.image}` 
+                    : `../resources/${location.image}`;
+                return `
                 <div class="location-card" data-location="${location.name}" data-type="${location.type}">
                     <div class="location-tag">${location.tag}</div>
-                    <img src="../${location.image}" alt="${location.name}" class="location-thumbnail" onerror="this.src='../resources/location_default.png'">
+                    <img src="${imagePath}" alt="${location.name}" class="location-thumbnail" onerror="this.onerror=null; this.src='../resources/location_default.png';">
                     <div class="location-name">${location.name}</div>
                     <div class="location-type">${location.type}</div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
         
         // Filter functionality
