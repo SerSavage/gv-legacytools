@@ -2548,6 +2548,30 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             document.body.classList.remove('splash-active');
             document.documentElement.classList.remove('splash-active');
             
+            // Hide splash and menu if visible
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.style.display = 'none';
+                splash.classList.add('hidden');
+            }
+            const menu = document.getElementById('menu-screen');
+            if (menu) {
+                menu.style.display = 'none';
+                menu.classList.remove('visible');
+                document.body.classList.remove('menu-visible');
+            }
+            
+            // Ensure music is in main menu mode and playing
+            if (window.musicPlayer) {
+                if (!window.musicPlayer.isMainMenuMode) {
+                    // Switch back to main menu mode for character creation
+                    window.musicPlayer.switchToMainMenuMode();
+                }
+                if (!window.musicPlayer.isPlaying) {
+                    window.musicPlayer.play();
+                }
+            }
+            
             const charCreationScreen = document.getElementById('character-creation-screen');
             
             // Initialize character creation BEFORE showing (so it's ready)
