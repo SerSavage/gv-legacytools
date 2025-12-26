@@ -2373,8 +2373,9 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             setTimeout(() => clearInterval(checkMusicPlayer), 5000);
         }
         
-        // Character Creation System
-        window.charCreation = {
+        // Character Creation System - Define early so splash handlers can use it
+        if (!window.charCreation) {
+            window.charCreation = {
             currentStep: 1,
             totalSteps: 5,
             characterData: {
@@ -2874,6 +2875,7 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 }
             }
         };
+        } // End of charCreation definition
         
         // Character Creation Logic
         const charCreationScreen = document.getElementById('character-creation-screen');
