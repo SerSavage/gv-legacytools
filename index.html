@@ -3014,8 +3014,10 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             setTimeout(() => clearInterval(checkMusicPlayer), 5000);
         }
         
-        // Character Creation System - Define early so splash handlers can use it
-        if (!window.charCreation) {
+        // Character Creation System - Already defined at the top of script section
+        // This duplicate definition is removed - charCreation is available globally from line 876
+        if (false) {
+            // This block never executes - charCreation already defined above
             window.charCreation = {
             currentStep: 1,
             totalSteps: 5,
