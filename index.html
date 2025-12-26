@@ -22,13 +22,14 @@
         width: 100vw;
         height: 100vh;
         background: #000;
-        z-index: 99999;
+        z-index: 999999 !important;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: opacity 0.5s ease-out;
         cursor: pointer;
         overflow: hidden;
+        touch-action: none;
     }
     
     body.splash-active {
@@ -791,7 +792,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
 //]]></script>
 <!-- END WAYBACK TOOLBAR INSERT -->
     <!-- Splash Screen with GIF -->
-    <div id="splash-screen">
+    <div id="splash-screen" onclick="window.handleSplashClick && window.handleSplashClick(event);" onmousedown="window.handleSplashClick && window.handleSplashClick(event);" ontouchstart="window.handleSplashClick && window.handleSplashClick(event);">
         <img id="splash-gif" src="GVLegacyToolsHPLogo.gif" alt="Gloria Victis Legacy Tools">
         <div class="click-hint">Click anywhere to continue</div>
     </div>
@@ -1819,6 +1820,30 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         // GIF should animate naturally - no need to force reload
         // The browser will handle GIF animation automatically
         
+        // Global click handler function (accessible from inline handlers)
+        window.handleSplashClick = function(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+            }
+            
+            const splash = document.getElementById('splash-screen');
+            if (!splash || splash.style.display === 'none' || splash.classList.contains('hidden')) {
+                return false;
+            }
+            
+            console.log('Splash clicked via handler!');
+            
+            // Remove scroll lock
+            document.body.classList.remove('splash-active');
+            document.documentElement.classList.remove('splash-active');
+            
+            startMusicOnInteraction();
+            showCharacterCreation();
+            return false;
+        };
+        
         // Setup splash screen click handlers (always, regardless of visit status)
         function setupSplashHandlers() {
             const splash = document.getElementById('splash-screen');
@@ -1833,25 +1858,14 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             document.body.classList.add('splash-active');
             document.documentElement.classList.add('splash-active');
             
-            // Click handler - use a simple, direct approach
+            // Click handler - use the global function
             const handleClick = (e) => {
-                console.log('Splash clicked!');
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-                
-                // Remove scroll lock
-                document.body.classList.remove('splash-active');
-                document.documentElement.classList.remove('splash-active');
-                
-                startMusicOnInteraction();
-                showCharacterCreation();
-                return false;
+                return window.handleSplashClick(e);
             };
             
-            // Remove any existing listeners by using once option or removing and re-adding
-            splash.onclick = null;
-            splash.onmousedown = null;
+            // Remove any existing listeners
+            splash.onclick = handleClick;
+            splash.onmousedown = handleClick;
             
             // Add click handlers with capture phase to catch early
             splash.addEventListener('click', handleClick, { capture: true, once: false });
@@ -1864,17 +1878,12 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             
             // Keyboard handler
             const handleKeyPress = (e) => {
-                if (splash.style.display !== 'none' && 
+                const splashEl = document.getElementById('splash-screen');
+                if (splashEl && splashEl.style.display !== 'none' && !splashEl.classList.contains('hidden') &&
                     (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32)) {
                     e.preventDefault();
                     e.stopPropagation();
-                    
-                    // Remove scroll lock
-                    document.body.classList.remove('splash-active');
-                    document.documentElement.classList.remove('splash-active');
-                    
-                    startMusicOnInteraction();
-                    showCharacterCreation();
+                    window.handleSplashClick(e);
                 }
             };
             
