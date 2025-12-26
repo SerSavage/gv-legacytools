@@ -795,7 +795,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
 <!-- END WAYBACK TOOLBAR INSERT -->
     <!-- Splash Screen with GIF -->
     <div id="splash-screen">
-        <img id="splash-gif" src="GVLegacyToolsHPLogo.gif" alt="Gloria Victis Legacy Tools">
+        <img id="splash-gif" src="GVLegacyToolsHPLogo.gif" alt="Gloria Victis Legacy Tools" loop>
         <div class="click-hint">Click anywhere to continue</div>
     </div>
     
@@ -1602,7 +1602,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
             <div class="menu-grid">
                 <a href="/?create=character" class="menu-item" id="menu-create-character">
                     <div class="menu-item-icon">👤</div>
-                    <div class="menu-item-title">Create Character</div>
+                    <div class="menu-item-title">Character Creation</div>
                     <div class="menu-item-desc">Create and customize your character</div>
                 </a>
                 <a href="/builder/" class="menu-item">
@@ -1629,10 +1629,10 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                     <div class="menu-item-desc">View and manage your character</div>
                 </a>
                 
-                <a href="/?create=character" class="menu-item">
-                    <div class="menu-item-icon">✨</div>
-                    <div class="menu-item-title">New Character</div>
-                    <div class="menu-item-desc">Create a new character</div>
+                <a href="/lore/" class="menu-item">
+                    <div class="menu-item-icon">📚</div>
+                    <div class="menu-item-title">Lore</div>
+                    <div class="menu-item-desc">Explore locations and game lore</div>
                 </a>
             </div>
         </div>
@@ -2678,7 +2678,13 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         function setupMenuNavigation() {
             const menuItems = document.querySelectorAll('.menu-item');
             menuItems.forEach(item => {
-                item.addEventListener('click', (e) => {
+                // Remove existing listeners to prevent duplicates
+                const oldClickListener = item._clickListener;
+                if (oldClickListener) {
+                    item.removeEventListener('click', oldClickListener);
+                }
+                
+                const newClickListener = (e) => {
                     // Don't switch to function mode for character creation - keep main menu music
                     if (item.href && item.href.includes('create=character')) {
                         // Keep main menu mode for character creation
@@ -2694,7 +2700,10 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                             window.musicPlayer.switchToFunctionMode();
                         }
                     }
-                });
+                };
+                
+                item.addEventListener('click', newClickListener);
+                item._clickListener = newClickListener; // Store reference to remove later
             });
         }
         
