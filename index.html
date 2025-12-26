@@ -950,6 +950,12 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                     <div class="menu-item-title">Workshop</div>
                     <div class="menu-item-desc">View and manage your character</div>
                 </a>
+                
+                <a href="/?create=character" class="menu-item">
+                    <div class="menu-item-icon">✨</div>
+                    <div class="menu-item-title">New Character</div>
+                    <div class="menu-item-desc">Create a new character</div>
+                </a>
             </div>
         </div>
     </div>
@@ -2255,13 +2261,24 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             themeLink.href = `themes/${nation}-theme.css`;
         }
         
+        // Check if we should show character creation or go directly to builder
+        const urlParams = new URLSearchParams(window.location.search);
+        const showCreation = urlParams.get('create') === 'character';
+        const isFirstVisit = !hasSeenSplash;
+        
+        // Check if character exists
+        const charData = localStorage.getItem('gv_character_data');
+        const hasCharacter = charData && selectedNation;
+        
         if (hasSeenSplash) {
             // User has seen splash before
             if (splashScreen) splashScreen.style.display = 'none';
             
-            // Check if character is fully created
-            const charData = localStorage.getItem('gv_character_data');
-            if (charData && selectedNation) {
+            if (showCreation) {
+                // Explicitly requested character creation
+                showCharacterCreation();
+            } else if (hasCharacter) {
+                // Character exists, show menu or builder directly
                 const data = JSON.parse(charData);
                 if (data.nation && data.gender) {
                     // Character fully created, show menu and apply theme
@@ -2275,33 +2292,45 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                     showCharacterCreation();
                 }
             } else {
-                // No character data, show character creation
-                showCharacterCreation();
+                // No character data, show menu (user can choose to create character)
+                showMenu();
+                setupMenuNavigation();
             }
         } else {
-            // Hide character builder content initially
-            document.body.classList.add('menu-visible');
-            // First visit - show splash screen, then character creation on click
-            // Music should already be playing from the immediate start above
-            if (splashScreen) {
-                splashScreen.addEventListener('click', () => {
-                    startMusicOnInteraction();
-                    showCharacterCreation();
-                });
-                splashScreen.addEventListener('touchstart', () => {
-                    startMusicOnInteraction();
-                    showCharacterCreation();
-                }, { passive: false });
-            }
-            if (splashGif) {
-                splashGif.addEventListener('click', () => {
-                    startMusicOnInteraction();
-                    showCharacterCreation();
-                });
-                splashGif.addEventListener('touchstart', () => {
-                    startMusicOnInteraction();
-                    showCharacterCreation();
-                }, { passive: false });
+            // First visit
+            if (hasCharacter) {
+                // Character already exists, skip splash and show menu
+                if (splashScreen) splashScreen.style.display = 'none';
+                applyTheme(selectedNation);
+                loadThemeCSS(selectedNation);
+                showMenu();
+                setTimeout(startMusicOnInteraction, 500);
+                setupMenuNavigation();
+            } else {
+                // Hide character builder content initially
+                document.body.classList.add('menu-visible');
+                // First visit - show splash screen, then character creation on click
+                // Music should already be playing from the immediate start above
+                if (splashScreen) {
+                    splashScreen.addEventListener('click', () => {
+                        startMusicOnInteraction();
+                        showCharacterCreation();
+                    });
+                    splashScreen.addEventListener('touchstart', () => {
+                        startMusicOnInteraction();
+                        showCharacterCreation();
+                    }, { passive: false });
+                }
+                if (splashGif) {
+                    splashGif.addEventListener('click', () => {
+                        startMusicOnInteraction();
+                        showCharacterCreation();
+                    });
+                    splashGif.addEventListener('touchstart', () => {
+                        startMusicOnInteraction();
+                        showCharacterCreation();
+                    }, { passive: false });
+                }
             }
         }
         

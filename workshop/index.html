@@ -245,7 +245,7 @@
                     <div class="no-character">
                         <div class="no-character-icon">⚒️</div>
                         <div class="no-character-text">No character created yet</div>
-                        <a href="/" class="btn-create-character">Create Your Character</a>
+                        <a href="/?create=character" class="btn-create-character">Create Your Character</a>
                     </div>
                 `;
                 return;
@@ -337,7 +337,10 @@
                 }
                 
                 html += '</div>';
-                html += '<a href="/" class="edit-button">Edit Character</a>';
+                html += '<div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">';
+                html += '<a href="/?create=character" class="edit-button">New Character</a>';
+                html += '<a href="/" class="edit-button">Character Builder</a>';
+                html += '</div>';
                 html += '</div>';
                 
                 content.innerHTML = html;
@@ -347,7 +350,7 @@
                     <div class="no-character">
                         <div class="no-character-icon">⚠️</div>
                         <div class="no-character-text">Error loading character data</div>
-                        <a href="/" class="btn-create-character">Create Your Character</a>
+                        <a href="/?create=character" class="btn-create-character">Create Your Character</a>
                     </div>
                 `;
             }
