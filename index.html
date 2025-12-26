@@ -1295,7 +1295,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
         // IMMEDIATE splash screen handler - runs before everything else
         (function() {
             function proceedFromSplash() {
-                console.log('SPLASH CLICKED - Proceeding!');
+                console.log('SPLASH CLICKED - Proceeding to Menu!');
                 const splash = document.getElementById('splash-screen');
                 if (!splash) return;
                 
@@ -1308,35 +1308,20 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 document.body.classList.remove('splash-active');
                 document.documentElement.classList.remove('splash-active');
                 
-                // Show character creation
-                const charCreationScreen = document.getElementById('character-creation-screen');
-                if (charCreationScreen) {
-                    charCreationScreen.style.display = 'flex';
-                    setTimeout(() => {
-                        charCreationScreen.classList.add('visible');
-                        // Initialize character creation system
-                        console.log('Initializing character creation from proceedFromSplash...');
-                        if (window.charCreation && typeof window.charCreation.init === 'function') {
-                            console.log('Calling charCreation.init()');
-                            window.charCreation.init();
-                        } else {
-                            console.error('charCreation object not found or init not a function');
-                            console.log('window.charCreation:', window.charCreation);
-                            // Retry after a delay
-                            setTimeout(() => {
-                                if (window.charCreation && typeof window.charCreation.init === 'function') {
-                                    console.log('Retry: Calling charCreation.init()');
-                                    window.charCreation.init();
-                                }
-                            }, 500);
-                        }
-                    }, 50);
+                // Show menu screen instead of character creation
+                if (typeof window.showMenu === 'function') {
+                    window.showMenu();
+                }
+                if (typeof window.setupMenuNavigation === 'function') {
+                    window.setupMenuNavigation();
                 }
                 
-                // Start music
+                // Ensure music is playing (main menu mode)
                 if (window.musicPlayer) {
                     try {
-                        window.musicPlayer.play();
+                        if (window.musicPlayer.isMainMenuMode && !window.musicPlayer.isPlaying) {
+                            window.musicPlayer.play();
+                        }
                     } catch(e) {
                         console.log('Music play error:', e);
                     }
@@ -1615,6 +1600,11 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
             <p class="menu-subtitle">Choose a tool to get started</p>
             
             <div class="menu-grid">
+                <a href="/?create=character" class="menu-item" id="menu-create-character">
+                    <div class="menu-item-icon">👤</div>
+                    <div class="menu-item-title">Create Character</div>
+                    <div class="menu-item-desc">Create and customize your character</div>
+                </a>
                 <a href="/builder/" class="menu-item">
                     <div class="menu-item-icon">⚔️</div>
                     <div class="menu-item-title">Character Builder</div>
@@ -2489,14 +2479,18 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 return false;
             }
             
-            console.log('Splash clicked via handler!');
+            console.log('Splash clicked via handler - going to menu!');
             
             // Remove scroll lock
             document.body.classList.remove('splash-active');
             document.documentElement.classList.remove('splash-active');
             
+            // Show menu instead of character creation
+            showMenu();
+            setupMenuNavigation();
+            
+            // Ensure music is playing (main menu mode)
             startMusicOnInteraction();
-            showCharacterCreation();
             return false;
         };
         
