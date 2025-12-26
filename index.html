@@ -1348,9 +1348,21 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         
         // Start music when user interacts (clicking splash screen)
         function startMusicOnInteraction() {
-            if (window.musicPlayer && !window.musicPlayer.isPlaying) {
+            if (window.musicPlayer) {
                 window.musicPlayer.play();
             }
+        }
+        
+        // Switch to function mode when user clicks a menu item
+        function setupMenuNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    if (window.musicPlayer) {
+                        window.musicPlayer.switchToFunctionMode();
+                    }
+                });
+            });
         }
         
         if (hasSeenSplash) {
@@ -1359,6 +1371,7 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             showMenu();
             // Try to start music
             setTimeout(startMusicOnInteraction, 500);
+            setupMenuNavigation();
         } else {
             // Hide character builder content initially
             document.body.classList.add('menu-visible');
@@ -1367,20 +1380,24 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 splashScreen.addEventListener('click', () => {
                     startMusicOnInteraction();
                     showMenu();
+                    setTimeout(setupMenuNavigation, 100);
                 });
                 splashScreen.addEventListener('touchstart', () => {
                     startMusicOnInteraction();
                     showMenu();
+                    setTimeout(setupMenuNavigation, 100);
                 }, { passive: false });
             }
             if (splashGif) {
                 splashGif.addEventListener('click', () => {
                     startMusicOnInteraction();
                     showMenu();
+                    setTimeout(setupMenuNavigation, 100);
                 });
                 splashGif.addEventListener('touchstart', () => {
                     startMusicOnInteraction();
                     showMenu();
+                    setTimeout(setupMenuNavigation, 100);
                 }, { passive: false });
             }
         }

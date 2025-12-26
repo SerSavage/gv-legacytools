@@ -1,15 +1,20 @@
 /**
  * Persistent Music Player for Gloria Victis
- * Plays music continuously across all pages without interruption
+ * Two modes:
+ * 1. Main Menu: Plays "Marcin Przybylowicz - Main Menu.ogg" on loop
+ * 2. Function Pages: Plays shuffled playlist (excluding main menu track) on loop
  */
 
 class PersistentMusicPlayer {
     constructor() {
         this.audio = null;
-        this.playlist = [];
+        this.mainMenuTrack = '_music/Marcin Przybylowicz - Main Menu.ogg';
+        this.functionPlaylist = [];
+        this.shuffledPlaylist = [];
         this.currentTrackIndex = 0;
         this.volume = 0.5; // Default 50%
         this.isPlaying = false;
+        this.isMainMenuMode = false;
         this.savedPosition = 0;
         
         // Storage keys
@@ -18,15 +23,19 @@ class PersistentMusicPlayer {
             POSITION: 'gv_music_position',
             VOLUME: 'gv_music_volume',
             IS_PLAYING: 'gv_music_playing',
-            PLAYLIST: 'gv_music_playlist'
+            PLAYLIST: 'gv_music_playlist',
+            MODE: 'gv_music_mode'
         };
         
         this.init();
     }
     
     init() {
-        // Load playlist
-        this.loadPlaylist();
+        // Detect which page we're on
+        this.detectPageMode();
+        
+        // Load playlists
+        this.loadPlaylists();
         
         // Restore state from localStorage
         this.restoreState();
@@ -37,86 +46,114 @@ class PersistentMusicPlayer {
         // Setup event listeners
         this.setupEventListeners();
         
-        // Always start playing automatically
-        if (this.playlist.length > 0) {
-            // Try to start playing immediately
-            this.loadTrack(this.currentTrackIndex, this.savedPosition);
-            
-            // Attempt to play - if autoplay is blocked, wait for user interaction
-            setTimeout(() => {
-                this.play();
-            }, 500);
-            
-            // Also try after page is fully loaded
-            if (document.readyState === 'complete') {
-                setTimeout(() => this.play(), 1500);
-            } else {
-                window.addEventListener('load', () => {
-                    setTimeout(() => this.play(), 500);
-                });
-            }
-            
-            // Try again after a longer delay (some browsers need more time)
-            setTimeout(() => {
-                if (!this.isPlaying) {
-                    this.play();
-                }
-            }, 2000);
-        }
+        // Start playing based on mode
+        this.startPlaying();
     }
     
-    loadPlaylist() {
-        // Try to load from localStorage first (for consistency)
-        const savedPlaylist = localStorage.getItem(this.STORAGE_KEYS.PLAYLIST);
-        if (savedPlaylist) {
-            this.playlist = JSON.parse(savedPlaylist);
-        } else {
-            // Build playlist from available tracks
-            this.playlist = [
-                '_music/Marcin Przybylowicz - Main Menu.ogg',
-                '_music/Jan Jog Grochowski - Main Menu.ogg',
-                '_music/Jan Jog Grochowski - Narodziny bohatera.ogg',
-                '_music/Jan Jog Grochowski - Absolucja.ogg',
-                '_music/Jan Jog Grochowski - Banita.ogg',
-                '_music/Jan Jog Grochowski - Bez odwrotu.ogg',
-                '_music/Jan Jog Grochowski - Bez odwrotu Short.ogg',
-                '_music/Jan Jog Grochowski - Dom mimo woli.ogg',
-                '_music/Jan Jog Grochowski - Ostatni bastion.ogg',
-                '_music/Jan Jog Grochowski - Ruiny przeszłości.ogg',
-                '_music/Jan Jog Grochowski - Uroczysko.ogg',
-                '_music/Jan Jog Grochowski - W popioł się obrócisz.ogg',
-                '_music/Jan Jog Grochowski - Wezwanie.ogg',
-                '_music/Jan Jog Grochwoski - Złap mnie.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Main Menu.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Logo.ogg',
-                '_music/skryptowa/Gloria Victis - Follow the stars.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 1.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 2.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 3.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 4.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 5.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 6.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 12.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 13.ogg',
-                '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 14.ogg',
-                '_music/skryptowa/gv_char_creation_azeb.ogg',
-                '_music/skryptowa/gv_char_creation_ismir.ogg',
-                '_music/skryptowa/gv_char_creation_midlands.ogg',
-                '_music/skryptowa/Sen o Daram do wyboru postaci.ogg',
-                '_music/ismirs/Vik_2_prev_3.ogg'
-            ];
-            // Save playlist for consistency
-            localStorage.setItem(this.STORAGE_KEYS.PLAYLIST, JSON.stringify(this.playlist));
+    detectPageMode() {
+        // Check if we're on the main menu page based on URL path
+        const path = window.location.pathname;
+        
+        // Main menu mode: root path (/) only, not /builder/, /map/, /database/, etc.
+        // Also check if menu screen exists and is visible
+        const hasMenuScreen = document.getElementById('menu-screen');
+        const hasSplashScreen = document.getElementById('splash-screen');
+        const isRootPath = path === '/' || path === '/index.html' || path === '';
+        
+        // Check if menu is actually visible (not hidden by character builder content)
+        let menuVisible = false;
+        if (hasMenuScreen) {
+            menuVisible = hasMenuScreen.classList.contains('visible') || 
+                        hasMenuScreen.style.display === 'flex' ||
+                        window.getComputedStyle(hasMenuScreen).display !== 'none';
+        }
+        
+        // Main menu mode: root path AND (menu/splash exists OR menu is visible)
+        this.isMainMenuMode = isRootPath && (hasMenuScreen || hasSplashScreen || menuVisible);
+        
+        // If we're on a function page path, definitely not main menu mode
+        if (path.startsWith('/builder/') || path.startsWith('/map/') || path.startsWith('/database/')) {
+            this.isMainMenuMode = false;
+        }
+        
+        // Save mode to localStorage
+        localStorage.setItem(this.STORAGE_KEYS.MODE, this.isMainMenuMode ? 'mainmenu' : 'function');
+    }
+    
+    loadPlaylists() {
+        // Main menu track
+        // Already set: this.mainMenuTrack
+        
+        // Function pages playlist (all tracks except main menu)
+        this.functionPlaylist = [
+            '_music/Jan Jog Grochowski - Main Menu.ogg',
+            '_music/Jan Jog Grochowski - Narodziny bohatera.ogg',
+            '_music/Jan Jog Grochowski - Absolucja.ogg',
+            '_music/Jan Jog Grochowski - Banita.ogg',
+            '_music/Jan Jog Grochowski - Bez odwrotu.ogg',
+            '_music/Jan Jog Grochowski - Bez odwrotu Short.ogg',
+            '_music/Jan Jog Grochowski - Dom mimo woli.ogg',
+            '_music/Jan Jog Grochowski - Ostatni bastion.ogg',
+            '_music/Jan Jog Grochowski - Ruiny przeszłości.ogg',
+            '_music/Jan Jog Grochowski - Uroczysko.ogg',
+            '_music/Jan Jog Grochowski - W popioł się obrócisz.ogg',
+            '_music/Jan Jog Grochowski - Wezwanie.ogg',
+            '_music/Jan Jog Grochwoski - Złap mnie.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Main Menu.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Logo.ogg',
+            '_music/skryptowa/Gloria Victis - Follow the stars.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 1.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 2.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 3.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 4.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 5.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 6.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 12.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 13.ogg',
+            '_music/skryptowa/Jan Jog Grochowski - Muzyka skryptowa 14.ogg',
+            '_music/skryptowa/gv_char_creation_azeb.ogg',
+            '_music/skryptowa/gv_char_creation_ismir.ogg',
+            '_music/skryptowa/gv_char_creation_midlands.ogg',
+            '_music/skryptowa/Sen o Daram do wyboru postaci.ogg',
+            '_music/ismirs/Vik_2_prev_3.ogg'
+        ];
+        
+        // Shuffle the function playlist
+        this.shufflePlaylist();
+    }
+    
+    shufflePlaylist() {
+        // Create a shuffled copy of the function playlist
+        this.shuffledPlaylist = [...this.functionPlaylist];
+        for (let i = this.shuffledPlaylist.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.shuffledPlaylist[i], this.shuffledPlaylist[j]] = [this.shuffledPlaylist[j], this.shuffledPlaylist[i]];
         }
     }
     
     restoreState() {
-        // Restore track index
-        const savedIndex = localStorage.getItem(this.STORAGE_KEYS.TRACK_INDEX);
-        if (savedIndex !== null) {
-            this.currentTrackIndex = parseInt(savedIndex, 10);
-            if (this.currentTrackIndex >= this.playlist.length) {
-                this.currentTrackIndex = 0;
+        // Restore volume
+        const savedVolume = localStorage.getItem(this.STORAGE_KEYS.VOLUME);
+        if (savedVolume !== null) {
+            this.volume = parseFloat(savedVolume);
+        }
+        
+        // Restore mode
+        const savedMode = localStorage.getItem(this.STORAGE_KEYS.MODE);
+        if (savedMode === 'mainmenu') {
+            this.isMainMenuMode = true;
+        } else if (savedMode === 'function') {
+            this.isMainMenuMode = false;
+        }
+        
+        // Restore track index for function mode
+        if (!this.isMainMenuMode) {
+            const savedIndex = localStorage.getItem(this.STORAGE_KEYS.TRACK_INDEX);
+            if (savedIndex !== null) {
+                this.currentTrackIndex = parseInt(savedIndex, 10);
+                if (this.currentTrackIndex >= this.shuffledPlaylist.length) {
+                    this.currentTrackIndex = 0;
+                }
             }
         }
         
@@ -126,19 +163,13 @@ class PersistentMusicPlayer {
             this.savedPosition = parseFloat(savedPos);
         }
         
-        // Restore volume
-        const savedVolume = localStorage.getItem(this.STORAGE_KEYS.VOLUME);
-        if (savedVolume !== null) {
-            this.volume = parseFloat(savedVolume);
-        }
-        
-        // Always set to playing (auto-play mode)
+        // Always set to playing
         this.isPlaying = true;
     }
     
     createAudioElement() {
         this.audio = new Audio();
-        this.audio.loop = false; // We'll handle looping manually
+        this.audio.loop = this.isMainMenuMode; // Loop only in main menu mode
         this.audio.volume = this.volume;
         
         // Update volume slider if it exists
@@ -152,9 +183,11 @@ class PersistentMusicPlayer {
     setupEventListeners() {
         if (!this.audio) return;
         
-        // When track ends, play next
+        // When track ends, play next (only in function mode)
         this.audio.addEventListener('ended', () => {
-            this.nextTrack();
+            if (!this.isMainMenuMode) {
+                this.nextTrack();
+            }
         });
         
         // Save position periodically while playing
@@ -166,49 +199,40 @@ class PersistentMusicPlayer {
         
         // Handle errors (file not found, etc.)
         this.audio.addEventListener('error', (e) => {
-            console.warn('Error loading track:', this.playlist[this.currentTrackIndex]);
-            // Skip to next track on error
-            setTimeout(() => this.nextTrack(), 1000);
+            console.warn('Error loading track:', this.isMainMenuMode ? this.mainMenuTrack : this.shuffledPlaylist[this.currentTrackIndex]);
+            if (!this.isMainMenuMode) {
+                // Skip to next track on error
+                setTimeout(() => this.nextTrack(), 1000);
+            }
         });
         
         // When track can play, restore position
         this.audio.addEventListener('canplay', () => {
-            if (this.savedPosition > 0 && this.isPlaying) {
+            if (this.savedPosition > 0 && this.isPlaying && !this.isMainMenuMode) {
                 this.audio.currentTime = this.savedPosition;
                 this.savedPosition = 0; // Reset after restoring
             }
         });
     }
     
-    loadTrack(index, position = 0) {
-        if (index < 0 || index >= this.playlist.length) {
-            index = 0;
-        }
-        
-        this.currentTrackIndex = index;
+    loadTrack(trackPath, position = 0) {
         this.savedPosition = position;
         
         if (this.audio) {
             // Handle path differences (root vs subdirectories)
-            let trackPath = this.playlist[index];
-            // If we're in a subdirectory and path doesn't start with ../
-            if (window.location.pathname !== '/' && !trackPath.startsWith('../') && !trackPath.startsWith('/')) {
-                trackPath = '../' + trackPath;
+            let path = trackPath;
+            if (window.location.pathname !== '/' && !path.startsWith('../') && !path.startsWith('/')) {
+                path = '../' + path;
             }
-            this.audio.src = trackPath;
+            this.audio.src = path;
+            this.audio.loop = this.isMainMenuMode; // Set loop based on mode
             this.audio.load();
             this.saveState();
-            this.updateTrackInfo();
         }
     }
     
     play() {
-        if (!this.audio || this.playlist.length === 0) return;
-        
-        // If no track is loaded, load current track
-        if (!this.audio.src || this.audio.src === window.location.href) {
-            this.loadTrack(this.currentTrackIndex, this.savedPosition);
-        }
+        if (!this.audio) return;
         
         const playPromise = this.audio.play();
         
@@ -216,7 +240,6 @@ class PersistentMusicPlayer {
             playPromise.then(() => {
                 this.isPlaying = true;
                 this.saveState();
-                this.updatePlayButton();
             }).catch((error) => {
                 console.warn('Autoplay prevented:', error);
                 // Autoplay was prevented - wait for user interaction
@@ -247,43 +270,14 @@ class PersistentMusicPlayer {
         document.addEventListener('keydown', startPlayback, { once: true });
     }
     
-    pause() {
-        if (this.audio) {
-            this.audio.pause();
-            this.isPlaying = false;
-            this.savePosition();
-            this.saveState();
-            this.updatePlayButton();
-        }
-    }
-    
-    togglePlayPause() {
-        if (this.isPlaying) {
-            this.pause();
-        } else {
-            this.play();
-        }
-    }
-    
     nextTrack() {
-        this.currentTrackIndex = (this.currentTrackIndex + 1) % this.playlist.length;
+        if (this.isMainMenuMode) return; // Don't change tracks in main menu mode
+        
+        this.currentTrackIndex = (this.currentTrackIndex + 1) % this.shuffledPlaylist.length;
         this.savedPosition = 0;
-        this.loadTrack(this.currentTrackIndex, 0);
+        this.loadTrack(this.shuffledPlaylist[this.currentTrackIndex], 0);
         if (this.isPlaying) {
             this.play();
-        } else {
-            this.updateTrackInfo();
-        }
-    }
-    
-    previousTrack() {
-        this.currentTrackIndex = (this.currentTrackIndex - 1 + this.playlist.length) % this.playlist.length;
-        this.savedPosition = 0;
-        this.loadTrack(this.currentTrackIndex, 0);
-        if (this.isPlaying) {
-            this.play();
-        } else {
-            this.updateTrackInfo();
         }
     }
     
@@ -304,39 +298,68 @@ class PersistentMusicPlayer {
         }
     }
     
-    updatePlayButton() {
-        const playButton = document.getElementById('music-play-pause');
-        if (playButton) {
-            playButton.textContent = this.isPlaying ? '⏸' : '▶';
-            playButton.title = this.isPlaying ? 'Pause' : 'Play';
-        }
-    }
-    
-    updateTrackInfo() {
-        const trackInfo = document.getElementById('music-track-info');
-        if (trackInfo) {
-            trackInfo.textContent = this.getCurrentTrackName();
-        }
-    }
-    
     saveState() {
-        localStorage.setItem(this.STORAGE_KEYS.TRACK_INDEX, this.currentTrackIndex.toString());
+        if (!this.isMainMenuMode) {
+            localStorage.setItem(this.STORAGE_KEYS.TRACK_INDEX, this.currentTrackIndex.toString());
+        }
         localStorage.setItem(this.STORAGE_KEYS.VOLUME, this.volume.toString());
         localStorage.setItem(this.STORAGE_KEYS.IS_PLAYING, this.isPlaying.toString());
+        localStorage.setItem(this.STORAGE_KEYS.MODE, this.isMainMenuMode ? 'mainmenu' : 'function');
     }
     
     savePosition() {
-        if (this.audio && this.audio.currentTime > 0) {
+        if (this.audio && this.audio.currentTime > 0 && !this.isMainMenuMode) {
             localStorage.setItem(this.STORAGE_KEYS.POSITION, this.audio.currentTime.toString());
         }
     }
     
-    getCurrentTrackName() {
-        if (this.currentTrackIndex >= 0 && this.currentTrackIndex < this.playlist.length) {
-            const path = this.playlist[this.currentTrackIndex];
-            return path.split('/').pop().replace('.ogg', '');
+    startPlaying() {
+        if (this.isMainMenuMode) {
+            // Main menu mode: play main menu track on loop
+            this.loadTrack(this.mainMenuTrack, 0);
+        } else {
+            // Function mode: play shuffled playlist
+            if (this.shuffledPlaylist.length > 0) {
+                this.loadTrack(this.shuffledPlaylist[this.currentTrackIndex], this.savedPosition);
+            }
         }
-        return 'No track';
+        
+        // Attempt to play
+        setTimeout(() => {
+            this.play();
+        }, 500);
+        
+        // Also try after page is fully loaded
+        if (document.readyState === 'complete') {
+            setTimeout(() => this.play(), 1500);
+        } else {
+            window.addEventListener('load', () => {
+                setTimeout(() => this.play(), 500);
+            });
+        }
+        
+        // Try again after a longer delay
+        setTimeout(() => {
+            if (!this.isPlaying) {
+                this.play();
+            }
+        }, 2000);
+    }
+    
+    switchToFunctionMode() {
+        // Called when user navigates from menu to function page
+        if (this.isMainMenuMode) {
+            this.isMainMenuMode = false;
+            this.audio.loop = false;
+            this.savedPosition = 0;
+            this.currentTrackIndex = 0;
+            this.shufflePlaylist(); // Reshuffle for new session
+            this.loadTrack(this.shuffledPlaylist[0], 0);
+            this.saveState();
+            if (this.isPlaying) {
+                this.play();
+            }
+        }
     }
 }
 
@@ -385,3 +408,10 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
+// Detect navigation to function pages and switch mode
+window.addEventListener('load', () => {
+    if (musicPlayer && !musicPlayer.isMainMenuMode) {
+        // We're on a function page, ensure we're in function mode
+        musicPlayer.switchToFunctionMode();
+    }
+});

@@ -1064,6 +1064,45 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
 
 
 
-
+    <!-- Music Player -->
+    <div id="music-player-container">
+        <div id="music-player-header">
+            <h3 id="music-player-title">🎵 Music</h3>
+            <button id="music-player-toggle">−</button>
+        </div>
+        <div id="music-player-content">
+            <div id="music-volume-control">
+                <span id="music-volume-label">Volume:</span>
+                <input type="range" id="music-volume-slider" min="0" max="100" value="50">
+                <span id="music-volume-display">50%</span>
+            </div>
+            <div id="music-track-info"></div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="../music-player.css">
+    <script src="../music-player.js"></script>
+    <script>
+        // Ensure we're in function mode and music is playing
+        setTimeout(() => {
+            if (window.musicPlayer) {
+                if (window.musicPlayer.isMainMenuMode) {
+                    window.musicPlayer.switchToFunctionMode();
+                }
+                if (!window.musicPlayer.isPlaying) {
+                    window.musicPlayer.play();
+                }
+            }
+        }, 1000);
+        
+        // Toggle player collapse
+        const toggleBtn = document.getElementById('music-player-toggle');
+        const container = document.getElementById('music-player-container');
+        if (toggleBtn && container) {
+            toggleBtn.addEventListener('click', () => {
+                container.classList.toggle('collapsed');
+                toggleBtn.textContent = container.classList.contains('collapsed') ? '+' : '−';
+            });
+        }
+    </script>
 
 </body></html>
