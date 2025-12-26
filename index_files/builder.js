@@ -24,7 +24,7 @@ function generate_url(){
 	} 
 	
 	// reload page with long url
-	window.location.href = 'https://web.archive.org/web/20230115141808/https://www.gloriavictisgame.info/builder?long_url=' + str.slice(0, -1); 
+	window.location.href = '/builder/?long_url=' + str.slice(0, -1); 
 	
 }
 
@@ -37,7 +37,7 @@ function Check_Top_Skills(){
 }
 
 function reset_all(){
-	window.location.href = 'https://web.archive.org/web/20230115141808/https://www.gloriavictisgame.info/builder'; 
+	window.location.href = '/builder/'; 
 }
 
 

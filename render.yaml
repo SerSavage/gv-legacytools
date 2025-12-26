@@ -14,5 +14,8 @@ services:
         source: /map/*
         destination: /map/index.html
       - type: rewrite
+        source: /builder/*
+        destination: /builder/index.html
+      - type: rewrite
         source: /*
         destination: /index.html
