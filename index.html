@@ -823,8 +823,20 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                     setTimeout(() => {
                         charCreationScreen.classList.add('visible');
                         // Initialize character creation system
+                        console.log('Initializing character creation from proceedFromSplash...');
                         if (window.charCreation && typeof window.charCreation.init === 'function') {
+                            console.log('Calling charCreation.init()');
                             window.charCreation.init();
+                        } else {
+                            console.error('charCreation object not found or init not a function');
+                            console.log('window.charCreation:', window.charCreation);
+                            // Retry after a delay
+                            setTimeout(() => {
+                                if (window.charCreation && typeof window.charCreation.init === 'function') {
+                                    console.log('Retry: Calling charCreation.init()');
+                                    window.charCreation.init();
+                                }
+                            }, 500);
                         }
                     }, 50);
                 }
@@ -2045,6 +2057,7 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         }
         
         function showCharacterCreation() {
+            console.log('showCharacterCreation called');
             // Remove scroll lock
             document.body.classList.remove('splash-active');
             document.documentElement.classList.remove('splash-active');
@@ -2058,6 +2071,15 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                         charCreationScreen.style.display = 'flex';
                         setTimeout(() => {
                             charCreationScreen.classList.add('visible');
+                            // Initialize character creation system
+                            console.log('Initializing character creation from showCharacterCreation...');
+                            if (window.charCreation && typeof window.charCreation.init === 'function') {
+                                console.log('Calling charCreation.init()');
+                                window.charCreation.init();
+                            } else {
+                                console.error('charCreation object not found or init not a function');
+                                console.log('window.charCreation:', window.charCreation);
+                            }
                         }, 50);
                     }
                 }, 500);
@@ -2065,6 +2087,15 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 charCreationScreen.style.display = 'flex';
                 setTimeout(() => {
                     charCreationScreen.classList.add('visible');
+                    // Initialize character creation system
+                    console.log('Initializing character creation from showCharacterCreation (no splash)...');
+                    if (window.charCreation && typeof window.charCreation.init === 'function') {
+                        console.log('Calling charCreation.init()');
+                        window.charCreation.init();
+                    } else {
+                        console.error('charCreation object not found or init not a function');
+                        console.log('window.charCreation:', window.charCreation);
+                    }
                 }, 50);
             }
             sessionStorage.setItem('hasSeenSplash', 'true');
