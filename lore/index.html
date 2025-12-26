@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lore - Locations | Gloria Victis Legacy Tools</title>
+    <link rel="stylesheet" href="../music-player.css">
+    <link rel="stylesheet" href="../themes/ismir-theme.css">
+    <link rel="stylesheet" href="../themes/midland-theme.css">
+    <link rel="stylesheet" href="../themes/sangmar-theme.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            min-height: 100vh;
+            padding-top: 50px;
+        }
+        
+        .topmenu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px;
+            text-align: center;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .topmenu a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+        
+        .topmenu a:hover {
+            color: #ffff00;
+        }
+        
+        .lore-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 30px;
+        }
+        
+        .lore-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .lore-title {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .lore-subtitle {
+            font-size: 1.2em;
+            color: #ccc;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            color: #ffff00;
+        }
+        
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .location-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .location-card:hover {
+            border-color: rgba(255, 255, 0, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(255, 255, 0, 0.3);
+        }
+        
+        .location-thumbnail {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .location-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffff00;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 0, 0.5);
+        }
+        
+        .location-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+            margin-top: 5px;
+            text-transform: capitalize;
+        }
+        
+        .location-type {
+            font-size: 0.85em;
+            color: #aaa;
+            text-align: center;
+            margin-top: 5px;
+            text-transform: capitalize;
+        }
+        
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(255, 255, 0, 0.2);
+            border-color: rgba(255, 255, 0, 0.5);
+            color: #ffff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="topmenu">
+        <a href="https://discord.gg/gloriavictis" target="_blank">Home</a>
+        <a href="/map/">Interactive Map</a>
+        <a href="/database/">Item Database</a>
+        <a href="/workshop/">Workshop</a>
+        <a href="/builder/">Character Builder</a>
+        <a href="/lore/">Lore</a>
+    </div>
+    
+    <div class="lore-container">
+        <div class="lore-header">
+            <h1 class="lore-title">Lore</h1>
+            <p class="lore-subtitle">Explore the locations and history of Gloria Victis</p>
+        </div>
+        
+        <div class="filter-controls">
+            <button class="filter-btn active" data-filter="all">All Locations</button>
+            <button class="filter-btn" data-filter="hold">Holds</button>
+            <button class="filter-btn" data-filter="village">Villages</button>
+            <button class="filter-btn" data-filter="outpost">Outposts</button>
+            <button class="filter-btn" data-filter="farm">Farms</button>
+            <button class="filter-btn" data-filter="mine">Mines</button>
+            <button class="filter-btn" data-filter="lumbermill">Lumbermills</button>
+            <button class="filter-btn" data-filter="temple">Temples</button>
+            <button class="filter-btn" data-filter="fort">Forts</button>
+        </div>
+        
+        <h2 class="section-title">Locations</h2>
+        <div class="locations-grid" id="locations-grid">
+            <!-- Location cards will be generated here -->
+        </div>
+    </div>
+    
+    <script src="../music-player.js"></script>
+    <script>
+        // Load and apply theme
+        (function() {
+            const selectedNation = localStorage.getItem('gv_selected_nation');
+            if (selectedNation) {
+                document.body.classList.add('theme-' + selectedNation);
+                const themeLink = document.createElement('link');
+                themeLink.id = 'theme-css';
+                themeLink.rel = 'stylesheet';
+                themeLink.href = `../themes/${selectedNation}-theme.css`;
+                document.head.appendChild(themeLink);
+            }
+        })();
+        
+        // Ensure we're in function mode and music is playing
+        setTimeout(() => {
+            if (window.musicPlayer) {
+                if (window.musicPlayer.isMainMenuMode) {
+                    window.musicPlayer.switchToFunctionMode();
+                }
+                if (!window.musicPlayer.isPlaying) {
+                    window.musicPlayer.play();
+                }
+            }
+        }, 1000);
+        
+        // Location images from resources folder
+        const locations = [
+            { name: 'Central Castle', image: 'resources/location_CentralCastle.png', type: 'castle', tag: 'Castle' },
+            { name: 'Blacklion Hold', image: 'resources/location_Blacklion_Hold.png', type: 'hold', tag: 'Hold' },
+            { name: 'Ironwolf Hold', image: 'resources/location_Ironwolf_Hold.png', type: 'hold', tag: 'Hold' },
+            { name: 'Ravenskull Hold', image: 'resources/location_Ravenskull_Hold.png', type: 'hold', tag: 'Hold' },
+            { name: 'Fort Serai', image: 'resources/location_Fort_Serai.png', type: 'fort', tag: 'Fort' },
+            { name: 'Fort Mereley', image: 'resources/location_Fort_Mereley.png', type: 'fort', tag: 'Fort' },
+            { name: 'Fort Dunfen', image: 'resources/location_Fort_Dunfen.png', type: 'fort', tag: 'Fort' },
+            { name: 'Blackrock', image: 'resources/location_Blackrock.png', type: 'village', tag: 'Village' },
+            { name: 'Ystad', image: 'resources/location_Ystad.png', type: 'village', tag: 'Village' },
+            { name: 'Ystad Village', image: 'resources/location_Ystad_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Waterford', image: 'resources/location_Waterford.png', type: 'village', tag: 'Village' },
+            { name: 'Baalhammon', image: 'resources/location_Baalhammon.png', type: 'village', tag: 'Village' },
+            { name: 'Dimar', image: 'resources/location_Dimar.png', type: 'village', tag: 'Village' },
+            { name: 'Tenebrok', image: 'resources/location_Tenebrok.png', type: 'village', tag: 'Village' },
+            { name: 'Scarsdale', image: 'resources/location_Scarsdale.png', type: 'village', tag: 'Village' },
+            { name: 'Skogar', image: 'resources/location_Skogar.png', type: 'village', tag: 'Village' },
+            { name: 'Rodrock', image: 'resources/location_Rodrock.png', type: 'village', tag: 'Village' },
+            { name: 'Rodrock Village', image: 'resources/location_Rodrock_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Mereley', image: 'resources/location_Mereley.png', type: 'village', tag: 'Village' },
+            { name: 'Haddah', image: 'resources/location_Haddah.png', type: 'village', tag: 'Village' },
+            { name: 'Dunfen', image: 'resources/location_Dunfen.png', type: 'village', tag: 'Village' },
+            { name: 'Greatfall', image: 'resources/location_Greatfall.png', type: 'village', tag: 'Village' },
+            { name: 'Greatfall Village', image: 'resources/location_Greatfall_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Twinfall', image: 'resources/location_Twinfall.png', type: 'village', tag: 'Village' },
+            { name: 'Twinfall Village', image: 'resources/location_Twinfall_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Limetown', image: 'resources/location_Limetown.png', type: 'village', tag: 'Village' },
+            { name: 'Leaktown', image: 'resources/location_Leaktown.png', type: 'village', tag: 'Village' },
+            { name: 'Leaktown Village', image: 'resources/location_Leaktown_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Lublin', image: 'resources/location_Lublin.png', type: 'village', tag: 'Village' },
+            { name: 'Lublin Village', image: 'resources/location_Lublin_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Norfolk', image: 'resources/location_Norfolk.png', type: 'village', tag: 'Village' },
+            { name: 'Norfolk Village', image: 'resources/location_Norfolk_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Skergard', image: 'resources/location_Skergard.png', type: 'village', tag: 'Village' },
+            { name: 'Skergard Village', image: 'resources/location_Skergard_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Audunstede', image: 'resources/location_Audunstede.png', type: 'village', tag: 'Village' },
+            { name: 'Audunstede Village', image: 'resources/location_Audunstede_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Aquitania', image: 'resources/location_Aquitania.png', type: 'village', tag: 'Village' },
+            { name: 'Aquitania Village', image: 'resources/location_Aquitania_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Eaglenest', image: 'resources/location_Eaglenest.png', type: 'village', tag: 'Village' },
+            { name: 'Eaglenest Village', image: 'resources/location_Eaglenest_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Dundrum', image: 'resources/location_Dundrum.png', type: 'village', tag: 'Village' },
+            { name: 'Dundrum Village', image: 'resources/location_Dundrum_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Griffinclaw Outpost', image: 'resources/location_Griffinclaw_Outpost.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Griffinclaw Outpost Mirador', image: 'resources/location_Griffinclaw_Outpost_Mirador.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Quilum Outpost', image: 'resources/location_Quilum_Outpost.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Quilium Outpost Mirador', image: 'resources/location_Quilium_Outpost_Mirador.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Saffa Outpost', image: 'resources/location_Saffa_Outpost.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Saffa Outpost Mirador', image: 'resources/location_Saffa_Outpost_Mirador.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Reksvald Outpost', image: 'resources/location_Reksvald_Outpost.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Reksvald Outpost Mirador', image: 'resources/location_Reksvald_Outpost_Mirador.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Elmridge Outpost', image: 'resources/location_Elmridge_Outpost.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Elmridge Outpost Mirador', image: 'resources/location_Elmridge_Outpost_Mirador.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Hogsten Outpost', image: 'resources/location_Hogsten_Outpost.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Hogsten Outpost Mirador', image: 'resources/location_Hogsten_Outpost_Mirador.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Seaclaw Outpost Mirador', image: 'resources/location_Seaclaw_Outpost_Mirador.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Lordly Haven', image: 'resources/location_Lordly_Haven.png', type: 'village', tag: 'Village' },
+            { name: 'Lordly Haven Mirador', image: 'resources/location_Lordly_Haven_Mirador.png', type: 'outpost', tag: 'Outpost' },
+            { name: 'Blackrock Farm', image: 'resources/location_Blackrock_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Blackrock Lumbermill', image: 'resources/location_Blackrock_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Blacklion Claypit', image: 'resources/location_Blacklion_Claypit.png', type: 'mine', tag: 'Mine' },
+            { name: 'Blacklion Pass', image: 'resources/location_Blacklion_Pass.png', type: 'village', tag: 'Village' },
+            { name: 'Ironwolf Pass', image: 'resources/location_Ironwolf_Pass.png', type: 'village', tag: 'Village' },
+            { name: 'Ironwolf Claypit', image: 'resources/location_Ironwolf_Claypit.png', type: 'mine', tag: 'Mine' },
+            { name: 'Ravenskull Pass', image: 'resources/location_Ravenskull_Pass.png', type: 'village', tag: 'Village' },
+            { name: 'Ravenskull Claypit', image: 'resources/location_Ravenskull_Claypit.png', type: 'mine', tag: 'Mine' },
+            { name: 'Seaclaw', image: 'resources/location_Seaclaw.png', type: 'village', tag: 'Village' },
+            { name: 'Seaclaw Mine', image: 'resources/location_Seaclaw_Mine.png', type: 'mine', tag: 'Mine' },
+            { name: 'Seaclaw Farm', image: 'resources/location_Seaclaw_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Seaclaw Lumbermill', image: 'resources/location_Seaclaw_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Ulfgard', image: 'resources/location_Ulfgard.png', type: 'village', tag: 'Village' },
+            { name: 'Ulfgard Farm', image: 'resources/location_Ulfgard_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Ulfgard Lumbermill', image: 'resources/location_Ulfgard_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Ulfgard Mine', image: 'resources/location_Ulfgard_Mine.png', type: 'mine', tag: 'Mine' },
+            { name: 'Volkvar', image: 'resources/location_Volkvar.png', type: 'village', tag: 'Village' },
+            { name: 'Volkvar Farm', image: 'resources/location_Volkvar_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Volkvar Lumbermill', image: 'resources/location_Volkvar_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Greenport', image: 'resources/location_Greenport.png', type: 'village', tag: 'Village' },
+            { name: 'Greenport Farm', image: 'resources/location_Greenport_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Greenport Lumbermill', image: 'resources/location_Greenport_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Greenport Mine', image: 'resources/location_Greenport_Mine.png', type: 'mine', tag: 'Mine' },
+            { name: 'Waterford Farm', image: 'resources/location_Waterford_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Waterford Lumbermill', image: 'resources/location_Waterford_Lumbermil.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Baalhammon Farm', image: 'resources/location_Baalhammon_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Baalhammon Lumbermill', image: 'resources/location_Baalhammon_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Dimar Farm', image: 'resources/location_Dimar_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Dimar Lumbermill', image: 'resources/location_Dimar_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Tenebrok Farm', image: 'resources/location_Tenebrok_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Tenebrok Mine', image: 'resources/location_Tenebrok_Mine.png', type: 'mine', tag: 'Mine' },
+            { name: 'Tenebrok Lumbermill', image: 'resources/location_Tenebrok_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Scarsdale Farm', image: 'resources/location_Scarsdale_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Scarsdale Mine', image: 'resources/location_Scarsdale_Mine.png', type: 'mine', tag: 'Mine' },
+            { name: 'Scarsdale Lumbermill', image: 'resources/location_Scarsdale_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Skogar Farm', image: 'resources/location_Skogar_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Skogar Lumbermill', image: 'resources/location_Skogar_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Rodrock Farm', image: 'resources/location_Rodrock_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Rodrock Mine', image: 'resources/location_Rodrock_Mine.png', type: 'mine', tag: 'Mine' },
+            { name: 'Rodrock Lumbermill', image: 'resources/location_Rodrock_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Mereley Farm', image: 'resources/location_Mereley_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Mereley Lumbermill', image: 'resources/location_Mereley_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Basilea Farm', image: 'resources/location_Basilea_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Basilea Lumbermill', image: 'resources/location_Basilea_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Basilea Mine', image: 'resources/location_Basilea_Mine.png', type: 'mine', tag: 'Mine' },
+            { name: 'Haddah Farm', image: 'resources/location_Haddah_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'Haddah Lumbermill', image: 'resources/location_Haddah_Lumbermill.png', type: 'lumbermill', tag: 'Lumbermill' },
+            { name: 'Dunfen Farm', image: 'resources/location_Dunfen_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'The Mines of Dunfen', image: 'resources/location_The_Mines_of_Dunfen.png', type: 'mine', tag: 'Mine' },
+            { name: 'Hordun Temple', image: 'resources/location_Hordun_Temple.png', type: 'temple', tag: 'Temple' },
+            { name: 'Hordun Temple Mirador', image: 'resources/location_Hordun_Temple_Mirador.png', type: 'temple', tag: 'Temple' },
+            { name: 'The Lord\'s Wrath Abbey', image: 'resources/location_The_Lord_s_Wrath_Abbey.png', type: 'temple', tag: 'Temple' },
+            { name: 'The Lord\'s Wrath Abbey Mirador', image: 'resources/location_The_Lord_s_Wrath_Abbey_Mirador.png', type: 'temple', tag: 'Temple' },
+            { name: 'Original Faith Order', image: 'resources/location_OriginalFaithOrder.png', type: 'temple', tag: 'Temple' },
+            { name: 'Original Faith Order Village', image: 'resources/location_OriginalFaithOrder_Village.png', type: 'village', tag: 'Village' },
+            { name: 'Mudmine', image: 'resources/location_Mudmine.png', type: 'mine', tag: 'Mine' },
+            { name: 'O\'Nar\'s Farm', image: 'resources/location_O_Nar_s_Farm.png', type: 'farm', tag: 'Farm' },
+            { name: 'L\'Obart\'s Farm', image: 'resources/location_L_Obart_s_Farm.png', type: 'farm', tag: 'Farm' }
+        ];
+        
+        function renderLocations(filter = 'all') {
+            const grid = document.getElementById('locations-grid');
+            const filtered = filter === 'all' 
+                ? locations 
+                : locations.filter(loc => loc.type === filter);
+            
+            grid.innerHTML = filtered.map(location => `
+                <div class="location-card" data-location="${location.name}" data-type="${location.type}">
+                    <div class="location-tag">${location.tag}</div>
+                    <img src="../${location.image}" alt="${location.name}" class="location-thumbnail" onerror="this.src='../resources/location_default.png'">
+                    <div class="location-name">${location.name}</div>
+                    <div class="location-type">${location.type}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                renderLocations(filter);
+            });
+        });
+        
+        // Initial render
+        renderLocations('all');
+    </script>
+</body>
+</html>
+
