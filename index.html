@@ -967,7 +967,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
     <span><a class="menu_title" href="/map/">Interactive Map</a></span>
     <span><a class="menu_title" href="/database/">Item Database</a></span>
     <span><a class="menu_title" href="/workshop/">Workshop</a></span>
-    <span><a class="menu_title" href="/">Character Builder</a></span>
+    <span><a class="menu_title" href="/builder/">Character Builder</a></span>
 </div>
 
 <div class="overlay">
@@ -979,7 +979,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                     <li><a href="/map/">Interactive Map</a></li>
                     <li><a href="/database/">Item Database</a></li>
                     <li><a href="/workshop/">Workshop</a></li>
-                    <li><a href="/">Character Builder</a></li>
+                    <li><a href="/builder/">Character Builder</a></li>
                     <li><a href="https://web.archive.org/web/20230128103648/https://www.gloriavictisgame.info/calendar/">Events Schedule</a></li>
                 </ul>
             </li>
@@ -2270,6 +2270,10 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         const charData = localStorage.getItem('gv_character_data');
         const hasCharacter = charData && selectedNation;
         
+        // Check if we're on the homepage (/) and should redirect to builder
+        const currentPath = window.location.pathname;
+        const isHomepage = currentPath === '/' || currentPath === '/index.html';
+        
         if (hasSeenSplash) {
             // User has seen splash before
             if (splashScreen) splashScreen.style.display = 'none';
@@ -2277,18 +2281,27 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             if (showCreation) {
                 // Explicitly requested character creation
                 showCharacterCreation();
-            } else if (hasCharacter) {
-                // Character exists, show menu or builder directly
+            } else if (hasCharacter && isHomepage) {
+                // Character exists and we're on homepage - redirect to builder or show builder directly
                 const data = JSON.parse(charData);
                 if (data.nation && data.gender) {
-                    // Character fully created, show menu and apply theme
+                    // Character fully created - redirect to builder page
+                    window.location.href = '/builder/';
+                    return;
+                } else {
+                    // Character creation incomplete, show character creation
+                    showCharacterCreation();
+                }
+            } else if (hasCharacter) {
+                // Character exists, show menu and apply theme
+                const data = JSON.parse(charData);
+                if (data.nation && data.gender) {
                     applyTheme(selectedNation);
                     loadThemeCSS(selectedNation);
                     showMenu();
                     setTimeout(startMusicOnInteraction, 500);
                     setupMenuNavigation();
                 } else {
-                    // Character creation incomplete, show character creation
                     showCharacterCreation();
                 }
             } else {
@@ -2298,7 +2311,11 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             }
         } else {
             // First visit
-            if (hasCharacter) {
+            if (hasCharacter && isHomepage) {
+                // Character already exists and we're on homepage - redirect to builder
+                window.location.href = '/builder/';
+                return;
+            } else if (hasCharacter) {
                 // Character already exists, skip splash and show menu
                 if (splashScreen) splashScreen.style.display = 'none';
                 applyTheme(selectedNation);
