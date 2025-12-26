@@ -2063,39 +2063,58 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             document.documentElement.classList.remove('splash-active');
             
             const charCreationScreen = document.getElementById('character-creation-screen');
-            if (splashScreen) {
+            
+            // Initialize character creation BEFORE showing (so it's ready)
+            const initCharCreation = () => {
+                console.log('Initializing character creation system...');
+                if (window.charCreation && typeof window.charCreation.init === 'function') {
+                    // Reset character data if starting fresh (from ?create=character means new)
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const isNewCharacter = urlParams.get('create') === 'character';
+                    if (isNewCharacter) {
+                        console.log('Starting new character creation - resetting data');
+                        window.charCreation.characterData = {
+                            playerName: null,
+                            nation: null,
+                            gender: null,
+                            archetype: null,
+                            head: null,
+                            hair: null,
+                            beard: null,
+                            bodyDetail: null,
+                            headDetail: null
+                        };
+                        // Clear saved data
+                        localStorage.removeItem('gv_character_data');
+                        localStorage.removeItem('gv_selected_nation');
+                    }
+                    console.log('Calling charCreation.init()');
+                    window.charCreation.init();
+                } else {
+                    console.error('charCreation object not found or init not a function');
+                    console.log('window.charCreation:', window.charCreation);
+                    // Retry after delay
+                    setTimeout(initCharCreation, 200);
+                }
+            };
+            
+            if (splashScreen && splashScreen.style.display !== 'none') {
                 splashScreen.classList.add('hidden');
                 setTimeout(() => {
                     splashScreen.style.display = 'none';
                     if (charCreationScreen) {
                         charCreationScreen.style.display = 'flex';
+                        initCharCreation(); // Initialize immediately
                         setTimeout(() => {
                             charCreationScreen.classList.add('visible');
-                            // Initialize character creation system
-                            console.log('Initializing character creation from showCharacterCreation...');
-                            if (window.charCreation && typeof window.charCreation.init === 'function') {
-                                console.log('Calling charCreation.init()');
-                                window.charCreation.init();
-                            } else {
-                                console.error('charCreation object not found or init not a function');
-                                console.log('window.charCreation:', window.charCreation);
-                            }
                         }, 50);
                     }
-                }, 500);
+                }, 300);
             } else if (charCreationScreen) {
                 charCreationScreen.style.display = 'flex';
+                initCharCreation(); // Initialize immediately
                 setTimeout(() => {
                     charCreationScreen.classList.add('visible');
-                    // Initialize character creation system
-                    console.log('Initializing character creation from showCharacterCreation (no splash)...');
-                    if (window.charCreation && typeof window.charCreation.init === 'function') {
-                        console.log('Calling charCreation.init()');
-                        window.charCreation.init();
-                    } else {
-                        console.error('charCreation object not found or init not a function');
-                        console.log('window.charCreation:', window.charCreation);
-                    }
                 }, 50);
             }
             sessionStorage.setItem('hasSeenSplash', 'true');
