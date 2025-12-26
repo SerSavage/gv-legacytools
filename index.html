@@ -2195,11 +2195,13 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             },
             
             init: function() {
+                console.log('charCreation.init() called');
                 // Load saved character data
                 const saved = localStorage.getItem('gv_character_data');
                 if (saved) {
                     try {
                         this.characterData = JSON.parse(saved);
+                        console.log('Loaded saved character data:', this.characterData);
                     } catch(e) {
                         console.error('Error loading character data:', e);
                     }
@@ -2209,8 +2211,10 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 const savedNation = localStorage.getItem('gv_selected_nation');
                 if (savedNation) {
                     this.characterData.nation = savedNation;
+                    console.log('Loaded saved nation:', savedNation);
                 }
                 
+                console.log('Setting up nation selection...');
                 this.setupNationSelection();
                 this.setupGenderSelection();
                 this.setupArchetypeSelection();
