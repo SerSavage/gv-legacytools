@@ -2674,13 +2674,25 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             }
         }
         
-        // Switch to function mode when user clicks a menu item
+        // Switch to function mode when user clicks a menu item (except character creation)
         function setupMenuNavigation() {
             const menuItems = document.querySelectorAll('.menu-item');
             menuItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    if (window.musicPlayer) {
-                        window.musicPlayer.switchToFunctionMode();
+                item.addEventListener('click', (e) => {
+                    // Don't switch to function mode for character creation - keep main menu music
+                    if (item.href && item.href.includes('create=character')) {
+                        // Keep main menu mode for character creation
+                        if (window.musicPlayer && !window.musicPlayer.isMainMenuMode) {
+                            window.musicPlayer.switchToMainMenuMode();
+                        }
+                        // Show character creation instead of navigating
+                        e.preventDefault();
+                        showCharacterCreation();
+                    } else {
+                        // Switch to function mode for other menu items
+                        if (window.musicPlayer) {
+                            window.musicPlayer.switchToFunctionMode();
+                        }
                     }
                 });
             });
