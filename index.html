@@ -801,18 +801,20 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
         // IMMEDIATE splash screen handler - runs before everything else
         (function() {
             function proceedFromSplash() {
-                console.log('Proceeding from splash screen');
+                console.log('SPLASH CLICKED - Proceeding!');
                 const splash = document.getElementById('splash-screen');
-                if (splash) {
-                    splash.style.display = 'none';
-                    splash.classList.add('hidden');
-                }
+                if (!splash) return;
+                
+                // Hide splash immediately
+                splash.style.display = 'none';
+                splash.classList.add('hidden');
+                splash.style.pointerEvents = 'none';
                 
                 // Remove scroll lock
                 document.body.classList.remove('splash-active');
                 document.documentElement.classList.remove('splash-active');
                 
-                // Show character creation or menu
+                // Show character creation
                 const charCreationScreen = document.getElementById('character-creation-screen');
                 if (charCreationScreen) {
                     charCreationScreen.style.display = 'flex';
@@ -823,17 +825,26 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 
                 // Start music
                 if (window.musicPlayer) {
-                    window.musicPlayer.play();
+                    try {
+                        window.musicPlayer.play();
+                    } catch(e) {
+                        console.log('Music play error:', e);
+                    }
                 }
                 
                 sessionStorage.setItem('hasSeenSplash', 'true');
             }
             
-            // Set up handlers immediately
+            // Set up handlers immediately - multiple attempts
             function setupImmediateHandlers() {
                 const splash = document.getElementById('splash-screen');
                 if (!splash) {
                     setTimeout(setupImmediateHandlers, 50);
+                    return;
+                }
+                
+                // Check if already hidden
+                if (splash.style.display === 'none' || splash.classList.contains('hidden')) {
                     return;
                 }
                 
@@ -843,43 +854,73 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 document.body.classList.add('splash-active');
                 document.documentElement.classList.add('splash-active');
                 
-                // Direct onclick assignment
-                splash.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                // Make absolutely sure it's clickable
+                splash.style.pointerEvents = 'auto';
+                splash.style.cursor = 'pointer';
+                
+                // Remove ALL existing handlers first
+                const newSplash = splash.cloneNode(true);
+                splash.parentNode.replaceChild(newSplash, splash);
+                const newSplashEl = document.getElementById('splash-screen');
+                
+                // Direct onclick - highest priority
+                newSplashEl.onclick = function(e) {
+                    console.log('ONCLICK FIRED');
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                    }
                     proceedFromSplash();
                     return false;
                 };
                 
-                splash.onmousedown = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                newSplashEl.onmousedown = function(e) {
+                    console.log('MOUSEDOWN FIRED');
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                    }
                     proceedFromSplash();
                     return false;
                 };
                 
-                // Also add event listeners
-                splash.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                // Event listeners with capture
+                newSplashEl.addEventListener('click', function(e) {
+                    console.log('CLICK LISTENER FIRED');
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                    }
                     proceedFromSplash();
-                }, true);
+                }, { capture: true, once: false });
                 
-                splash.addEventListener('mousedown', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                newSplashEl.addEventListener('mousedown', function(e) {
+                    console.log('MOUSEDOWN LISTENER FIRED');
+                    if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                    }
                     proceedFromSplash();
-                }, true);
+                }, { capture: true, once: false });
                 
-                // Keyboard
-                document.addEventListener('keydown', function(e) {
-                    if (splash.style.display !== 'none' && !splash.classList.contains('hidden')) {
+                // Keyboard - check splash visibility
+                const keyHandler = function(e) {
+                    const splashCheck = document.getElementById('splash-screen');
+                    if (splashCheck && splashCheck.style.display !== 'none' && !splashCheck.classList.contains('hidden')) {
                         if (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32) {
+                            console.log('KEYBOARD FIRED');
                             e.preventDefault();
+                            e.stopPropagation();
                             proceedFromSplash();
                         }
                     }
-                }, true);
+                };
+                
+                document.addEventListener('keydown', keyHandler, true);
                 
                 // Make GIF non-interactive
                 const gif = document.getElementById('splash-gif');
@@ -888,15 +929,17 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 }
             }
             
-            // Run immediately
+            // Run immediately - multiple times to ensure it works
+            setupImmediateHandlers();
+            
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', setupImmediateHandlers);
-            } else {
-                setupImmediateHandlers();
             }
             
-            // Also try after a short delay
+            // Also try after delays
             setTimeout(setupImmediateHandlers, 100);
+            setTimeout(setupImmediateHandlers, 500);
+            setTimeout(setupImmediateHandlers, 1000);
         })();
     </script>
     
