@@ -1600,7 +1600,7 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
             <p class="menu-subtitle">Choose a tool to get started</p>
             
             <div class="menu-grid">
-                <a href="/?create=character" class="menu-item" id="menu-create-character">
+                <a href="/charactercreation/" class="menu-item" id="menu-create-character">
                     <div class="menu-item-icon">👤</div>
                     <div class="menu-item-title">Character Creation</div>
                     <div class="menu-item-desc">Create and customize your character</div>
@@ -2686,14 +2686,12 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                 
                 const newClickListener = (e) => {
                     // Don't switch to function mode for character creation - keep main menu music
-                    if (item.href && item.href.includes('create=character')) {
+                    if (item.href && item.href.includes('charactercreation')) {
                         // Keep main menu mode for character creation
                         if (window.musicPlayer && !window.musicPlayer.isMainMenuMode) {
                             window.musicPlayer.switchToMainMenuMode();
                         }
-                        // Show character creation instead of navigating
-                        e.preventDefault();
-                        showCharacterCreation();
+                        // Navigate to character creation page (no preventDefault - let it navigate)
                     } else {
                         // Switch to function mode for other menu items
                         if (window.musicPlayer) {
