@@ -147,6 +147,54 @@
         color: #fff;
     }
     
+    .nation-option {
+        position: relative;
+    }
+    
+    .nation-description {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 320px;
+        max-width: 90vw;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.95);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        font-size: 0.9em;
+        line-height: 1.6;
+        color: #fff;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        z-index: 10001;
+        text-align: left;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        white-space: normal;
+    }
+    
+    .nation-option:hover .nation-description {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    
+    @media (max-width: 768px) {
+        .nation-description {
+            width: 280px;
+            font-size: 0.85em;
+            padding: 12px;
+        }
+        
+        .nation-selection {
+            gap: 20px;
+        }
+        
+        .nation-image {
+            width: 150px;
+        }
+    }
+    
     #menu-screen {
         position: fixed;
         top: 0;
@@ -566,6 +614,9 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                          class="nation-image" 
                          alt="Midland">
                     <div class="nation-name">Midland</div>
+                    <div class="nation-description">
+                        The Midlanders are a proud nation from the North. Their history can be tracked back to the days of Geliand of Hillead. Even though their realm is divided into two kingdoms, they unite in the face of a common enemy – The Empire of Azebia. The Midlanders worship the Forefather and his son, and they value honour above all else.
+                    </div>
                 </div>
                 
                 <div class="nation-option" data-nation="ismir">
@@ -575,6 +626,9 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                          class="nation-image" 
                          alt="Ismir">
                     <div class="nation-name">Ismir</div>
+                    <div class="nation-description">
+                        The Ismirs are tough but honourable clan warriors hailing from the frozen wastes of Nordheim. They are truly intimidating in their height and the ease with which they swing heavy axes. They have been raiding Midlandic lands for centuries, but they unite with Midland in the fight against Azebia.
+                    </div>
                 </div>
                 
                 <div class="nation-option" data-nation="sangmar">
@@ -583,7 +637,10 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                          data-hover="charactercreation/resources/create_nacja3b.png"
                          class="nation-image" 
                          alt="Sangmar">
-                    <div class="nation-name">Sangmar</div>
+                    <div class="nation-name">Sangmar Empire</div>
+                    <div class="nation-description">
+                        Sangmar was once the greatest power in the South. However, the Empire fell when the Azebs freed themselves from its yoke and began their conquest. Today Sangmar, still full of splendour and riches, is an oasis of cultural and scientific development. The Sangarians have everything – be it wonderful weapons, armour or gilded robes – except for freedom.
+                    </div>
                 </div>
             </div>
         </div>
