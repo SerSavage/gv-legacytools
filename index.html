@@ -2282,22 +2282,47 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             },
             
             setupNationSelection: function() {
+                const self = this; // Store reference to charCreation object
                 const nationOptions = document.querySelectorAll('.nation-option');
                 
-                nationOptions.forEach(option => {
+                console.log('setupNationSelection called, found', nationOptions.length, 'nation options');
+                
+                if (nationOptions.length === 0) {
+                    console.error('No nation options found! Retrying in 100ms...');
+                    setTimeout(() => this.setupNationSelection(), 100);
+                    return;
+                }
+                
+                nationOptions.forEach((option, index) => {
                     const img = option.querySelector('.nation-image');
+                    const nation = option.dataset.nation;
+                    
+                    console.log('Setting up nation option:', nation, 'index:', index);
+                    
+                    // Make sure option is clickable
+                    option.style.cursor = 'pointer';
+                    option.style.pointerEvents = 'auto';
+                    option.style.zIndex = '10';
+                    
                     option.addEventListener('mouseenter', () => {
                         if (img && img.dataset.hover && !option.classList.contains('selected')) {
                             img.src = img.dataset.hover;
                         }
                     });
+                    
                     option.addEventListener('mouseleave', () => {
                         if (img && img.dataset.default && !option.classList.contains('selected')) {
                             img.src = img.dataset.default;
                         }
                     });
                     
-                    option.addEventListener('click', () => {
+                    // Click handler - use self instead of this
+                    const clickHandler = function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Nation clicked:', nation);
+                        
+                        // Deselect all
                         nationOptions.forEach(opt => {
                             opt.classList.remove('selected');
                             const optImg = opt.querySelector('.nation-image');
@@ -2306,22 +2331,39 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
                             }
                         });
                         
+                        // Select clicked option
                         option.classList.add('selected');
                         const selectedImg = option.querySelector('.nation-image');
                         if (selectedImg && selectedImg.dataset.hover) {
                             selectedImg.src = selectedImg.dataset.hover;
                         }
                         
-                        this.characterData.nation = option.dataset.nation;
-                        localStorage.setItem('gv_selected_nation', this.characterData.nation);
-                        applyTheme(this.characterData.nation);
+                        // Save nation
+                        self.characterData.nation = nation;
+                        localStorage.setItem('gv_selected_nation', nation);
+                        
+                        // Apply theme
+                        if (typeof applyTheme === 'function') {
+                            applyTheme(nation);
+                        }
+                        
+                        console.log('Nation selected:', nation, 'Proceeding to next step...');
                         
                         // Proceed to player name step
                         setTimeout(() => {
-                            this.nextStep();
+                            self.nextStep();
                         }, 500);
-                    });
+                    };
+                    
+                    // Add multiple event listeners for reliability
+                    option.addEventListener('click', clickHandler, true);
+                    option.addEventListener('mousedown', clickHandler, true);
+                    
+                    // Also set onclick as fallback
+                    option.onclick = clickHandler;
                 });
+                
+                console.log('Nation selection setup complete');
             },
             
             setupGenderSelection: function() {
