@@ -404,14 +404,16 @@
         display: none;
         align-items: center;
         justify-content: center;
-        z-index: 1000;
+        z-index: 10000 !important;
         opacity: 0;
         transition: opacity 0.5s ease-in;
+        pointer-events: auto;
     }
     
     #menu-screen.visible {
-        display: flex;
+        display: flex !important;
         opacity: 1;
+        visibility: visible;
     }
     
     /* Hide character builder content when menu is visible */
@@ -515,8 +517,28 @@
     
 	<meta charset="UTF-8">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
-	<title>Character Builder – Gloria Victis Game Informations</title>
-<meta name="robots" content="max-image-preview:large">
+	<title>Gloria Victis Legacy Tools</title>
+	<meta name="description" content="Gloria Victis Legacy Tools - Character Builder, Interactive Map, Item Database, Workshop, and Lore for Gloria Victis">
+	<meta name="robots" content="max-image-preview:large">
+	
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://gv-legacytools.onrender.com/">
+	<meta property="og:title" content="Gloria Victis Legacy Tools">
+	<meta property="og:description" content="Character Builder, Interactive Map, Item Database, Workshop, and Lore for Gloria Victis">
+	<meta property="og:image" content="https://gv-legacytools.onrender.com/LegacyTools.jpg">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="https://gv-legacytools.onrender.com/">
+	<meta name="twitter:title" content="Gloria Victis Legacy Tools">
+	<meta name="twitter:description" content="Character Builder, Interactive Map, Item Database, Workshop, and Lore for Gloria Victis">
+	<meta name="twitter:image" content="https://gv-legacytools.onrender.com/LegacyTools.jpg">
+	
+	<!-- Favicon -->
+	<link rel="icon" type="image/jpeg" href="/LegacyTools.jpg">
 <link rel="dns-prefetch" href="https://web.archive.org/web/20230128103648/https://fonts.googleapis.com/">
 <link rel="dns-prefetch" href="https://web.archive.org/web/20230128103648/https://s.w.org/">
 <link href="https://web.archive.org/web/20230128103648/https://fonts.gstatic.com/" crossorigin="" rel="preconnect">
@@ -1307,6 +1329,16 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
                 // Remove scroll lock
                 document.body.classList.remove('splash-active');
                 document.documentElement.classList.remove('splash-active');
+                
+                // Get menu screen element directly
+                const menuScreenEl = document.getElementById('menu-screen');
+                if (menuScreenEl) {
+                    menuScreenEl.style.display = 'flex';
+                    setTimeout(() => {
+                        menuScreenEl.classList.add('visible');
+                        document.body.classList.add('menu-visible');
+                    }, 50);
+                }
                 
                 // Show menu screen instead of character creation
                 if (typeof window.showMenu === 'function') {
