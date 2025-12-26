@@ -1810,54 +1810,44 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         
         // Setup splash screen click handlers (always, regardless of visit status)
         function setupSplashHandlers() {
-            if (splashScreen) {
-                // Remove any existing listeners by cloning
-                const newSplash = splashScreen.cloneNode(true);
-                splashScreen.parentNode.replaceChild(newSplash, splashScreen);
-                
-                // Get the new reference
-                const splash = document.getElementById('splash-screen');
-                const gif = document.getElementById('splash-gif');
-                
-                // Click handler
-                const handleClick = (e) => {
+            const splash = document.getElementById('splash-screen');
+            const gif = document.getElementById('splash-gif');
+            
+            if (!splash) return;
+            
+            // Click handler
+            const handleClick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                startMusicOnInteraction();
+                showCharacterCreation();
+            };
+            
+            // Remove old listeners and add new ones
+            const newSplash = splash.cloneNode(true);
+            splash.parentNode.replaceChild(newSplash, splash);
+            const newSplashEl = document.getElementById('splash-screen');
+            const newGif = document.getElementById('splash-gif');
+            
+            // Add click handlers to the new element
+            newSplashEl.addEventListener('click', handleClick, true);
+            newSplashEl.addEventListener('mousedown', handleClick, true);
+            if (newGif) {
+                newGif.style.pointerEvents = 'none';
+            }
+            
+            // Keyboard handler
+            const handleKeyPress = (e) => {
+                const splashEl = document.getElementById('splash-screen');
+                if (splashEl && splashEl.style.display !== 'none' && 
+                    (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32)) {
                     e.preventDefault();
-                    e.stopPropagation();
                     startMusicOnInteraction();
                     showCharacterCreation();
-                };
-                
-                // Add click handlers
-                splash.addEventListener('click', handleClick);
-                splash.addEventListener('mousedown', handleClick);
-                if (gif) {
-                    gif.addEventListener('click', handleClick);
                 }
-                
-                // Keyboard handler
-                const handleKeyPress = (e) => {
-                    if (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32) {
-                        e.preventDefault();
-                        startMusicOnInteraction();
-                        showCharacterCreation();
-                    }
-                };
-                
-                document.addEventListener('keydown', handleKeyPress);
-                
-                // Clean up keyboard listener when splash is hidden
-                const observer = new MutationObserver((mutations) => {
-                    mutations.forEach((mutation) => {
-                        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                            if (splash.style.display === 'none') {
-                                document.removeEventListener('keydown', handleKeyPress);
-                                observer.disconnect();
-                            }
-                        }
-                    });
-                });
-                observer.observe(splash, { attributes: true });
-            }
+            };
+            
+            document.addEventListener('keydown', handleKeyPress);
         }
         
         function showCharacterCreation() {
