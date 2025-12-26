@@ -14,6 +14,49 @@
 <link rel="stylesheet" type="text/css" href="index_files/banner-styles.css">
 <link rel="stylesheet" type="text/css" href="index_files/iconochive.css">
 <link rel="stylesheet" type="text/css" href="music-player.css">
+<style>
+    #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #000;
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease-out;
+    }
+    
+    #splash-screen.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    #splash-gif {
+        width: 100vw;
+        height: 100vh;
+        object-fit: contain;
+        display: block;
+    }
+    
+    .click-hint {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+        font-size: 18px;
+        opacity: 0.7;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+    }
+</style>
 <!-- End Wayback Rewrite JS Include -->
 
     
@@ -297,6 +340,11 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
   __wm.rw(1);
 //]]></script>
 <!-- END WAYBACK TOOLBAR INSERT -->
+    <!-- Splash Screen with GIF -->
+    <div id="splash-screen">
+        <img id="splash-gif" src="GVLegacyToolsHPLogo.gif" alt="Gloria Victis Legacy Tools">
+        <div class="click-hint">Click anywhere to continue</div>
+    </div>
  <div class="placeholder"></div>
 
 <div class="topmenu">
@@ -1123,6 +1171,56 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
     </div>
     <script src="music-player.js"></script>
     <script>
+        // Splash Screen Logic
+        const splashScreen = document.getElementById('splash-screen');
+        const splashGif = document.getElementById('splash-gif');
+        
+        // Force GIF to reload/restart animation to ensure it plays
+        if (splashGif) {
+            splashGif.onload = function() {
+                // Force animation restart
+                const src = this.src;
+                this.src = '';
+                setTimeout(() => {
+                    this.src = src;
+                }, 10);
+            };
+        }
+        
+        // Check if user has seen splash screen before (only show on first visit per session)
+        const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
+        
+        function hideSplash() {
+            splashScreen.classList.add('hidden');
+            setTimeout(() => {
+                splashScreen.style.display = 'none';
+            }, 500);
+            sessionStorage.setItem('hasSeenSplash', 'true');
+        }
+        
+        if (hasSeenSplash) {
+            // User has seen splash before, hide it immediately
+            splashScreen.style.display = 'none';
+        } else {
+            // First visit - show splash screen
+            // Listen for clicks/touches on splash screen
+            splashScreen.addEventListener('click', hideSplash);
+            splashScreen.addEventListener('touchstart', hideSplash, { passive: false });
+            
+            // Also listen on the GIF itself
+            if (splashGif) {
+                splashGif.addEventListener('click', hideSplash);
+                splashGif.addEventListener('touchstart', hideSplash, { passive: false });
+            }
+            
+            // Auto-hide after 5 seconds if user doesn't click
+            setTimeout(() => {
+                if (!splashScreen.classList.contains('hidden')) {
+                    hideSplash();
+                }
+            }, 5000);
+        }
+        
         // Toggle player collapse
         const toggleBtn = document.getElementById('music-player-toggle');
         const container = document.getElementById('music-player-container');
