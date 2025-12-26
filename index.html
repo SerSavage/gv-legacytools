@@ -792,10 +792,113 @@ __wm.bt(750,27,25,2,"web","https://www.gloriavictisgame.info/builder/","20230128
 //]]></script>
 <!-- END WAYBACK TOOLBAR INSERT -->
     <!-- Splash Screen with GIF -->
-    <div id="splash-screen" onclick="window.handleSplashClick && window.handleSplashClick(event);" onmousedown="window.handleSplashClick && window.handleSplashClick(event);" ontouchstart="window.handleSplashClick && window.handleSplashClick(event);">
+    <div id="splash-screen">
         <img id="splash-gif" src="GVLegacyToolsHPLogo.gif" alt="Gloria Victis Legacy Tools">
         <div class="click-hint">Click anywhere to continue</div>
     </div>
+    
+    <script>
+        // IMMEDIATE splash screen handler - runs before everything else
+        (function() {
+            function proceedFromSplash() {
+                console.log('Proceeding from splash screen');
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.style.display = 'none';
+                    splash.classList.add('hidden');
+                }
+                
+                // Remove scroll lock
+                document.body.classList.remove('splash-active');
+                document.documentElement.classList.remove('splash-active');
+                
+                // Show character creation or menu
+                const charCreationScreen = document.getElementById('character-creation-screen');
+                if (charCreationScreen) {
+                    charCreationScreen.style.display = 'flex';
+                    setTimeout(() => {
+                        charCreationScreen.classList.add('visible');
+                    }, 50);
+                }
+                
+                // Start music
+                if (window.musicPlayer) {
+                    window.musicPlayer.play();
+                }
+                
+                sessionStorage.setItem('hasSeenSplash', 'true');
+            }
+            
+            // Set up handlers immediately
+            function setupImmediateHandlers() {
+                const splash = document.getElementById('splash-screen');
+                if (!splash) {
+                    setTimeout(setupImmediateHandlers, 50);
+                    return;
+                }
+                
+                console.log('Setting up immediate splash handlers');
+                
+                // Disable scrolling
+                document.body.classList.add('splash-active');
+                document.documentElement.classList.add('splash-active');
+                
+                // Direct onclick assignment
+                splash.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    proceedFromSplash();
+                    return false;
+                };
+                
+                splash.onmousedown = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    proceedFromSplash();
+                    return false;
+                };
+                
+                // Also add event listeners
+                splash.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    proceedFromSplash();
+                }, true);
+                
+                splash.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    proceedFromSplash();
+                }, true);
+                
+                // Keyboard
+                document.addEventListener('keydown', function(e) {
+                    if (splash.style.display !== 'none' && !splash.classList.contains('hidden')) {
+                        if (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13 || e.keyCode === 32) {
+                            e.preventDefault();
+                            proceedFromSplash();
+                        }
+                    }
+                }, true);
+                
+                // Make GIF non-interactive
+                const gif = document.getElementById('splash-gif');
+                if (gif) {
+                    gif.style.pointerEvents = 'none';
+                }
+            }
+            
+            // Run immediately
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setupImmediateHandlers);
+            } else {
+                setupImmediateHandlers();
+            }
+            
+            // Also try after a short delay
+            setTimeout(setupImmediateHandlers, 100);
+        })();
+    </script>
     
     <!-- Character Creation Screen -->
     <div id="character-creation-screen">
