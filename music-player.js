@@ -171,6 +171,7 @@ class PersistentMusicPlayer {
         this.audio = new Audio();
         this.audio.loop = this.isMainMenuMode; // Loop only in main menu mode
         this.audio.volume = this.volume;
+        this.audio.preload = 'auto'; // Preload the audio
         
         // Update volume slider if it exists
         const volumeSlider = document.getElementById('music-volume-slider');
@@ -226,7 +227,17 @@ class PersistentMusicPlayer {
             }
             this.audio.src = path;
             this.audio.loop = this.isMainMenuMode; // Set loop based on mode
+            this.audio.preload = 'auto'; // Ensure preloading
             this.audio.load();
+            
+            // Try to start loading immediately
+            this.audio.addEventListener('canplaythrough', () => {
+                // Audio is ready to play, try playing if not already playing
+                if (!this.isPlaying && this.isMainMenuMode) {
+                    this.play();
+                }
+            }, { once: true });
+            
             this.saveState();
         }
     }
@@ -317,24 +328,53 @@ class PersistentMusicPlayer {
         if (this.isMainMenuMode) {
             // Main menu mode: play main menu track on loop
             this.loadTrack(this.mainMenuTrack, 0);
+            
+            // Try to play immediately - browsers may block autoplay, but we try
+            // The audio will start when user interacts if autoplay is blocked
+            setTimeout(() => {
+                this.play();
+            }, 100);
+            
+            // Also try when audio is ready
+            if (this.audio) {
+                this.audio.addEventListener('canplay', () => {
+                    if (!this.isPlaying) {
+                        this.play();
+                    }
+                }, { once: true });
+                
+                this.audio.addEventListener('loadeddata', () => {
+                    if (!this.isPlaying) {
+                        this.play();
+                    }
+                }, { once: true });
+            }
         } else {
             // Function mode: play shuffled playlist
             if (this.shuffledPlaylist.length > 0) {
                 this.loadTrack(this.shuffledPlaylist[this.currentTrackIndex], this.savedPosition);
             }
+            
+            // Attempt to play
+            setTimeout(() => {
+                this.play();
+            }, 500);
         }
-        
-        // Attempt to play
-        setTimeout(() => {
-            this.play();
-        }, 500);
         
         // Also try after page is fully loaded
         if (document.readyState === 'complete') {
-            setTimeout(() => this.play(), 1500);
+            setTimeout(() => {
+                if (!this.isPlaying) {
+                    this.play();
+                }
+            }, 1000);
         } else {
             window.addEventListener('load', () => {
-                setTimeout(() => this.play(), 500);
+                setTimeout(() => {
+                    if (!this.isPlaying) {
+                        this.play();
+                    }
+                }, 500);
             });
         }
         
@@ -363,19 +403,29 @@ class PersistentMusicPlayer {
     }
 }
 
-// Initialize player when DOM is ready
+// Initialize player immediately (don't wait for DOM)
 let musicPlayer;
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
+// Start initialization as early as possible
+function initializeMusicPlayer() {
+    if (!musicPlayer) {
         musicPlayer = new PersistentMusicPlayer();
         window.musicPlayer = musicPlayer; // Make globally accessible
         setupMusicPlayerUI();
+    }
+}
+
+// Initialize immediately if possible
+if (document.readyState === 'loading') {
+    // Start initializing immediately, don't wait for DOMContentLoaded
+    initializeMusicPlayer();
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!musicPlayer) {
+            initializeMusicPlayer();
+        }
     });
 } else {
-    musicPlayer = new PersistentMusicPlayer();
-    window.musicPlayer = musicPlayer; // Make globally accessible
-    setupMusicPlayerUI();
+    initializeMusicPlayer();
 }
 
 // Setup UI controls (only volume control)

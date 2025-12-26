@@ -1349,6 +1349,17 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
         // Start music when user interacts (clicking splash screen)
         function startMusicOnInteraction() {
             if (window.musicPlayer) {
+                // Ensure we're in main menu mode and playing
+                if (window.musicPlayer.isMainMenuMode && !window.musicPlayer.isPlaying) {
+                    window.musicPlayer.play();
+                }
+            }
+        }
+        
+        // Start music immediately on page load (for splash screen)
+        function startMusicImmediately() {
+            if (window.musicPlayer && window.musicPlayer.isMainMenuMode) {
+                // Try to play immediately
                 window.musicPlayer.play();
             }
         }
@@ -1365,6 +1376,27 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             });
         }
         
+        // Start music immediately when page loads (for splash screen)
+        // Try multiple times to ensure it starts
+        setTimeout(startMusicImmediately, 100);
+        setTimeout(startMusicImmediately, 500);
+        setTimeout(startMusicImmediately, 1000);
+        
+        // Also try when music player is ready
+        if (window.musicPlayer) {
+            startMusicImmediately();
+        } else {
+            // Wait for music player to initialize
+            const checkMusicPlayer = setInterval(() => {
+                if (window.musicPlayer) {
+                    startMusicImmediately();
+                    clearInterval(checkMusicPlayer);
+                }
+            }, 100);
+            // Stop checking after 5 seconds
+            setTimeout(() => clearInterval(checkMusicPlayer), 5000);
+        }
+        
         if (hasSeenSplash) {
             // User has seen splash before, show menu directly
             if (splashScreen) splashScreen.style.display = 'none';
@@ -1376,6 +1408,7 @@ var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false
             // Hide character builder content initially
             document.body.classList.add('menu-visible');
             // First visit - show splash screen, then menu on click
+            // Music should already be playing from the immediate start above
             if (splashScreen) {
                 splashScreen.addEventListener('click', () => {
                     startMusicOnInteraction();
