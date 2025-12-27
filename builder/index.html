@@ -481,6 +481,206 @@ function Update_Statistics(){
 
 
 
+// Character Build Data Management
+var currentCharacterIndex = -1;
+
+// Load all characters into the selector
+function loadCharacterSelector() {
+	const selector = document.getElementById('character-selector');
+	if (!selector) return;
+	
+	// Clear existing options except the first one
+	while (selector.options.length > 1) {
+		selector.remove(1);
+	}
+	
+	// Load characters from localStorage
+	let characters = [];
+	const charactersData = localStorage.getItem('gv_characters');
+	if (charactersData) {
+		try {
+			characters = JSON.parse(charactersData);
+		} catch(e) {
+			console.error('Error loading characters:', e);
+		}
+	}
+	
+	// Add characters to selector
+	characters.forEach((char, index) => {
+		const option = document.createElement('option');
+		option.value = index;
+		option.textContent = char.playerName || `Character ${index + 1}`;
+		selector.appendChild(option);
+	});
+	
+	// Try to load the active character
+	const activeIndex = parseInt(localStorage.getItem('gv_active_character_index') || '-1');
+	if (activeIndex >= 0 && activeIndex < characters.length) {
+		selector.value = activeIndex;
+		loadCharacterBuild(activeIndex);
+	} else if (characters.length > 0) {
+		// If no active character but characters exist, select first one
+		selector.value = 0;
+		loadCharacterBuild(0);
+	}
+}
+
+// Load build data for a character
+function loadCharacterBuild(index) {
+	const charactersData = localStorage.getItem('gv_characters');
+	if (!charactersData) return;
+	
+	try {
+		const characters = JSON.parse(charactersData);
+		if (index < 0 || index >= characters.length) return;
+		
+		const character = characters[index];
+		currentCharacterIndex = index;
+		
+		// Update character info display
+		const infoDiv = document.getElementById('selected-character-info');
+		const nameDisplay = document.getElementById('char-name-display');
+		const nationDisplay = document.getElementById('char-nation-display');
+		const archetypeDisplay = document.getElementById('char-archetype-display');
+		
+		if (infoDiv && nameDisplay && nationDisplay && archetypeDisplay) {
+			nameDisplay.textContent = character.playerName || 'Unnamed';
+			nationDisplay.textContent = character.nation ? character.nation.charAt(0).toUpperCase() + character.nation.slice(1) : 'No Nation';
+			archetypeDisplay.textContent = character.archetype ? character.archetype.charAt(0).toUpperCase() + character.archetype.slice(1) : 'No Archetype';
+			infoDiv.style.display = 'block';
+		}
+		
+		// Load build data if it exists
+		if (character.buildData) {
+			// Load attributes
+			if (character.buildData.attributes) {
+				document.getElementById('strength').value = character.buildData.attributes.strength || 80;
+				document.getElementById('constitution').value = character.buildData.attributes.constitution || 80;
+				document.getElementById('dexterity').value = character.buildData.attributes.dexterity || 80;
+			}
+			
+			// Load skills
+			if (character.buildData.skills) {
+				const skillButtons = document.querySelectorAll("input[class=skill_button]");
+				skillButtons.forEach(function(button) {
+					const skillId = button.id;
+					if (character.buildData.skills[skillId] !== undefined) {
+						button.value = character.buildData.skills[skillId];
+						const countText = document.getElementById('count_text__' + skillId);
+						if (countText) {
+							countText.innerHTML = character.buildData.skills[skillId] + '/' + button.max;
+						}
+					}
+				});
+			}
+			
+			// Update UI
+			CheckAll();
+			Update_Statistics();
+			Check_Top_Skills();
+			CountPoints();
+			SetColors();
+			
+			// Update attribute points display
+			var totalPoints = CalculateAttributePoints();
+			document.getElementById("attribute_points").innerHTML = totalPoints;
+			document.getElementById("attribute_points_remaining").innerHTML = 535 - totalPoints;
+		} else {
+			// No build data, reset to defaults
+			reset_attributes();
+			reset_passives();
+		}
+	} catch(e) {
+		console.error('Error loading character build:', e);
+	}
+}
+
+// Save build data to current character
+function saveCharacterBuild() {
+	if (currentCharacterIndex < 0) return;
+	
+	const charactersData = localStorage.getItem('gv_characters');
+	if (!charactersData) return;
+	
+	try {
+		const characters = JSON.parse(charactersData);
+		if (currentCharacterIndex >= characters.length) return;
+		
+		// Get current attribute values
+		const attributes = {
+			strength: parseFloat(document.getElementById('strength').value) || 80,
+			constitution: parseFloat(document.getElementById('constitution').value) || 80,
+			dexterity: parseFloat(document.getElementById('dexterity').value) || 80
+		};
+		
+		// Get current skill values
+		const skills = {};
+		const skillButtons = document.querySelectorAll("input[class=skill_button]");
+		skillButtons.forEach(function(button) {
+			skills[button.id] = parseInt(button.value) || 0;
+		});
+		
+		// Get current statistics
+		const stats = {
+			health: document.getElementById('health') ? document.getElementById('health').innerHTML : '0',
+			health_regen: document.getElementById('health_regen') ? document.getElementById('health_regen').innerHTML : '0 /s',
+			stamina: document.getElementById('stamina') ? document.getElementById('stamina').innerHTML : '0',
+			stam_regen: document.getElementById('stam_regen') ? document.getElementById('stam_regen').innerHTML : '0 /s'
+		};
+		
+		// Save build data to character
+		if (!characters[currentCharacterIndex].buildData) {
+			characters[currentCharacterIndex].buildData = {};
+		}
+		
+		characters[currentCharacterIndex].buildData.attributes = attributes;
+		characters[currentCharacterIndex].buildData.skills = skills;
+		characters[currentCharacterIndex].buildData.stats = stats;
+		characters[currentCharacterIndex].buildData.lastUpdated = new Date().toISOString();
+		
+		// Save back to localStorage
+		localStorage.setItem('gv_characters', JSON.stringify(characters));
+		
+		// Update active character index to keep in sync
+		localStorage.setItem('gv_active_character_index', currentCharacterIndex.toString());
+		localStorage.setItem('gv_character_data', JSON.stringify(characters[currentCharacterIndex]));
+		
+		// Show save confirmation
+		const saveStatus = document.getElementById('build-save-status');
+		if (saveStatus) {
+			saveStatus.style.display = 'inline';
+			setTimeout(function() {
+				saveStatus.style.display = 'none';
+			}, 2000);
+		}
+	} catch(e) {
+		console.error('Error saving character build:', e);
+	}
+}
+
+// Handle character selection change
+function onCharacterSelectChange() {
+	const selector = document.getElementById('character-selector');
+	if (!selector) return;
+	
+	const selectedIndex = parseInt(selector.value);
+	if (selectedIndex >= 0) {
+		// Save current build before switching
+		if (currentCharacterIndex >= 0 && currentCharacterIndex !== selectedIndex) {
+			saveCharacterBuild();
+		}
+		loadCharacterBuild(selectedIndex);
+		// Update active character index
+		localStorage.setItem('gv_active_character_index', selectedIndex.toString());
+	} else {
+		currentCharacterIndex = -1;
+		const infoDiv = document.getElementById('selected-character-info');
+		if (infoDiv) {
+			infoDiv.style.display = 'none';
+		}
+	}
+}
+
 $(document).ready(function() {
 	// Load character selector
 	loadCharacterSelector();
@@ -491,7 +691,11 @@ $(document).ready(function() {
 		selector.addEventListener('change', onCharacterSelectChange);
 	}
 	
-	reset_attributes();reset_passives();
+	// Only reset if no character is selected
+	if (currentCharacterIndex < 0) {
+		reset_attributes();
+		reset_passives();
+	}
 	
 	// Initialize attribute points display
 	var initialPoints = CalculateAttributePoints();
