@@ -505,16 +505,18 @@ $(document).ready(function() {
 		var max = document.getElementById(this.id).max;
 		var newvalue = this.value;		
 		
-		switch(e.button) { // checking which button was clicked
-			case 1: // console.log('Middle click');		
+		var button = e.which || e.button; // jQuery normalizes to e.which
+		switch(button) { // checking which button was clicked
+			case 2: // Middle click
 			break;
 		  
-			case 2:  //	console.log('Right click');
+			case 3:  // Right click
 			if (+this.value > 0 && $(this).data('parents') !== ''){var newvalue = +this.value -1;}
 			if (+this.value > 0 && $(this).data('parents') === ''){var newvalue = +this.value -5;}
 			break;
 		  
-			default: //	console.log('Default click');
+			case 1:
+			default: // Left click
 			if (+this.value < max && CountPoints() < 100 && $(this).data('parents') !== ''){var newvalue = +this.value +1;}
 			if (+this.value < max && CountPoints() < 100 && $(this).data('parents') === '' && HasTopSkill(topskills) === false){var newvalue = +this.value +5;}
 			break;
