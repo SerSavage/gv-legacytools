@@ -97,21 +97,60 @@
             background-image: url('resources/create_etapytlo2.png'), url('resources/create_etapytlo.png');
             background-position: center center;
             background-repeat: no-repeat;
-            background-size: 100% 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 0 20px;
+            background-size: contain;
+            min-height: 80px;
         }
         
         .step-number {
+            position: absolute;
             width: 50px;
             height: 50px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             transition: all 0.3s ease;
-            flex-shrink: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: 0;
+        }
+        
+        /* Position each step number evenly spaced to overlay on the background */
+        .step-number.step-1 {
+            left: 5%;
+        }
+        
+        .step-number.step-2 {
+            left: 21%;
+        }
+        
+        .step-number.step-3 {
+            left: 37%;
+        }
+        
+        .step-number.step-4 {
+            left: 53%;
+        }
+        
+        .step-number.step-5 {
+            left: 69%;
+        }
+        
+        .step-number.step-6 {
+            left: 85%;
+        }
+        
+        @media (max-width: 1200px) {
+            .step-number {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .step-number.step-1 { left: 4%; }
+            .step-number.step-2 { left: 20%; }
+            .step-number.step-3 { left: 36%; }
+            .step-number.step-4 { left: 52%; }
+            .step-number.step-5 { left: 68%; }
+            .step-number.step-6 { left: 84%; }
         }
         
         .step-number.step-1 { background-image: url('resources/create_etap1.png'); }
@@ -131,7 +170,7 @@
         /* Content Boxes */
         .content-box {
             background: url('resources/wybor_zakladkitlo.png') center center no-repeat;
-            background-size: 100% 100%;
+            background-size: cover;
             background-position: center;
             padding: 30px;
             margin-bottom: 20px;
