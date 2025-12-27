@@ -68,6 +68,9 @@
             width: 100vw;
             height: 100vh;
             background: url('resources/create_tlo.png') center center / cover no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -91,7 +94,8 @@
             width: 100%;
             height: 80px;
             margin-bottom: 20px;
-            background: url('resources/create_etapytlo.png') center center / contain no-repeat;
+            background: url('resources/create_etapytlo.png') center center no-repeat;
+            background-size: 100% 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -104,33 +108,59 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .step-number.active {
+            opacity: 1;
         }
         
         .step-number.step-1 { background-image: url('resources/create_etap1.png'); }
         .step-number.step-2 { background-image: url('resources/create_etap2.png'); }
         .step-number.step-3 { background-image: url('resources/create_etap3.png'); }
         .step-number.step-4 { background-image: url('resources/create_etap4.png'); }
+        .step-number.step-5 { background-image: url('resources/create_etap5.png'); }
+        .step-number.step-6 { background-image: url('resources/create_etap6.png'); }
         
         /* Content Boxes */
         .content-box {
-            background: url('resources/create_tlo1.png') center center / cover no-repeat;
+            background: url('resources/create_tlo1.png') center center no-repeat;
+            background-size: cover;
+            background-position: center;
             padding: 30px;
             margin-bottom: 20px;
             min-height: 400px;
             position: relative;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
         
         .content-box.step-nation {
-            background: url('resources/origion_selection.png') center center / cover no-repeat;
+            background: url('resources/origion_selection.png') center center no-repeat;
+            background-size: cover;
+            background-position: center;
             min-height: 500px;
         }
         
         .content-box.step-customization {
-            background: url('resources/create_tlo3.png') center center / cover no-repeat;
+            background: url('resources/create_tlo3.png') center center no-repeat;
+            background-size: cover;
+            background-position: center;
         }
         
         .content-box.step-craft {
-            background: url('resources/create_tlo4.png') center center / cover no-repeat;
+            background: url('resources/create_tlo4.png') center center no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .content-box.step-name,
+        .content-box.step-gender,
+        .content-box.step-archetype {
+            background: url('resources/create_tlo1.png') center center no-repeat;
+            background-size: cover;
+            background-position: center;
         }
         
         .char-creation-step {
@@ -601,7 +631,7 @@
             
             <!-- Step 2: Player Name -->
             <div class="char-creation-step" id="step-name">
-                <div class="content-box">
+                <div class="content-box step-name">
                     <h1 class="character-creation-title">Enter Your Player Name</h1>
                     <p class="character-creation-subtitle">Choose a name for your character</p>
                     
@@ -623,7 +653,7 @@
             
             <!-- Step 3: Gender Selection -->
             <div class="char-creation-step" id="step-gender">
-                <div class="content-box">
+                <div class="content-box step-gender">
                     <h1 class="character-creation-title">Choose Your Gender</h1>
                     <p class="character-creation-subtitle">Select your character's gender</p>
                     
@@ -711,7 +741,7 @@
             
             <!-- Step 5: Archetype Selection (Optional) -->
             <div class="char-creation-step" id="step-archetype">
-                <div class="content-box">
+                <div class="content-box step-archetype">
                     <h1 class="character-creation-title">Choose Your Archetype</h1>
                     <p class="character-creation-subtitle">Select your starting archetype (optional - can skip)</p>
                     
@@ -843,7 +873,10 @@
             updateStepIndicator: function() {
                 const indicator = document.getElementById('step-indicator-number');
                 if (indicator) {
-                    indicator.className = 'step-number step-' + this.currentStep;
+                    // Remove all step classes and active class
+                    indicator.className = 'step-number';
+                    // Add active class to current step
+                    indicator.classList.add('step-' + this.currentStep, 'active');
                 }
             },
             
