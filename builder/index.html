@@ -500,6 +500,8 @@ $(document).ready(function() {
 	
 	var handler = function(e) { // on image click
 		e.preventDefault();
+		e.stopPropagation();
+		if (!this || !this.id) return; // Safety check
 		var max = document.getElementById(this.id).max;
 		var newvalue = this.value;		
 		
@@ -543,13 +545,13 @@ $(document).ready(function() {
 		$('#'+array[i].id).mousedown(function(e){ e.preventDefault(); });
 	} 	  
 	
-	// Attributes
-	$(function attribute_click() {
-		$(".attribute_button").on("click", function attribute_click() {
-			var $button = $(this);
-			var $input = $button.parent().find("input");
-			var attributeId = $input.attr('id'); // Get which attribute (strength, constitution, dexterity)
-			var oldValue = parseFloat($input.val()) || 80;
+	// Attributes - use event delegation to ensure handlers work
+	$(document).on("click", ".attribute_button", function() {
+		var $button = $(this);
+		var $input = $button.parent().find("input");
+		if (!$input.length) return; // Safety check
+		var attributeId = $input.attr('id'); // Get which attribute (strength, constitution, dexterity)
+		var oldValue = parseFloat($input.val()) || 80;
 			
 			// Determine the change amount
 			var change = 0;
@@ -604,7 +606,7 @@ $(document).ready(function() {
 			// Auto-save build data
 			saveCharacterBuild();
 		});
-	});
+	
 	CheckAll();
 	Update_Statistics();		
 	Check_Top_Skills();
