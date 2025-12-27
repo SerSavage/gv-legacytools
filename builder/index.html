@@ -270,13 +270,13 @@ body{background-color:#000000;color:#ffffff;}a{color:#a39964;}a:visited{color:#a
 
 <div class="topmenu">
     <div class="menu-button"></div>
-    <span><a class="menu_title" style="left: 20px;" href="https://discord.gg/gloriavictis" target="_blank">Home</a></span>
+    <span><a class="menu_title" style="left: 20px;" href="/">Home</a></span>
+    <span><a class="menu_title" href="/charactercreation/">Character Creation</a></span>
+    <span><a class="menu_title" href="/builder/">Character Builder</a></span>
     <span><a class="menu_title" href="/map/">Interactive Map</a></span>
     <span><a class="menu_title" href="/database/">Item Database</a></span>
     <span><a class="menu_title" href="/workshop/">Workshop</a></span>
-    <span><a class="menu_title" href="/builder/">Character Builder</a></span>
     <span><a class="menu_title" href="/lore/">Lore</a></span>
-    <span><a class="menu_title" href="/workshop/">Workshop</a></span>
 </div>
 
 <div class="overlay">
@@ -482,6 +482,15 @@ function Update_Statistics(){
 
 
 $(document).ready(function() {
+	// Load character selector
+	loadCharacterSelector();
+	
+	// Set up character selector change handler
+	const selector = document.getElementById('character-selector');
+	if (selector) {
+		selector.addEventListener('change', onCharacterSelectChange);
+	}
+	
 	reset_attributes();reset_passives();
 	
 	// Initialize attribute points display
@@ -520,6 +529,9 @@ $(document).ready(function() {
 		CountPoints();	
 		SetColors();
 		Update_Statistics();
+		
+		// Auto-save build data
+		saveCharacterBuild();
 		
 	};
   
@@ -587,7 +599,10 @@ $(document).ready(function() {
 			document.getElementById("attribute_points").innerHTML = finalTotalPoints;
 			document.getElementById("attribute_points_remaining").innerHTML = 535 - finalTotalPoints;
 			
-			Update_Statistics();			
+			Update_Statistics();
+			
+			// Auto-save build data
+			saveCharacterBuild();
 		});
 	});
 	CheckAll();

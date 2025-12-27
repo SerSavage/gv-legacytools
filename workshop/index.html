@@ -282,11 +282,12 @@
 </head>
 <body>
     <div class="topmenu">
-        <a href="https://discord.gg/gloriavictis" target="_blank">Home</a>
+        <a href="/">Home</a>
+        <a href="/charactercreation/">Character Creation</a>
+        <a href="/builder/">Character Builder</a>
         <a href="/map/">Interactive Map</a>
         <a href="/database/">Item Database</a>
         <a href="/workshop/">Workshop</a>
-        <a href="/builder/">Character Builder</a>
         <a href="/lore/">Lore</a>
     </div>
     
@@ -310,6 +311,21 @@
         </div>
     </div>
     
+    <!-- Music Player -->
+    <div id="music-player-container">
+        <div id="music-player-header">
+            <h3 id="music-player-title">🎵 Music</h3>
+            <button id="music-player-toggle">−</button>
+        </div>
+        <div id="music-player-content">
+            <div id="music-volume-control">
+                <span id="music-volume-label">Volume:</span>
+                <input type="range" id="music-volume-slider" min="0" max="100" value="50">
+                <span id="music-volume-display">50%</span>
+            </div>
+            <div id="music-track-info"></div>
+        </div>
+    </div>
     <script src="../music-player.js"></script>
     <script>
         // Load and apply theme
@@ -336,6 +352,22 @@
                 }
             }
         }, 1000);
+        
+        // Setup music player UI (ensure it's initialized)
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.setupMusicPlayerUI) {
+                window.setupMusicPlayerUI();
+            }
+            // Toggle player collapse
+            const toggleBtn = document.getElementById('music-player-toggle');
+            const container = document.getElementById('music-player-container');
+            if (toggleBtn && container) {
+                toggleBtn.addEventListener('click', () => {
+                    container.classList.toggle('collapsed');
+                    toggleBtn.textContent = container.classList.contains('collapsed') ? '+' : '−';
+                });
+            }
+        });
         
         // Load and display character data
         function loadCharacterData() {
@@ -411,10 +443,86 @@
                     <div class="info-value">${data.gender ? data.gender.charAt(0).toUpperCase() + data.gender.slice(1) : 'Not selected'}</div>
                 </div>`;
                 html += `<div class="info-item">
+                    <div class="info-label">Craft Profession</div>
+                    <div class="info-value">${data.craft ? data.craft.charAt(0).toUpperCase() + data.craft.slice(1) : 'None'}</div>
+                </div>`;
+                html += `<div class="info-item">
                     <div class="info-label">Archetype</div>
                     <div class="info-value">${data.archetype ? data.archetype.charAt(0).toUpperCase() + data.archetype.slice(1) : 'None'}</div>
                 </div>`;
                 html += '</div>';
+                
+                // Build Data Section
+                if (data.buildData) {
+                    html += '<div class="character-build-section" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.2);">';
+                    html += '<div style="color: #a39964; font-weight: bold; margin-bottom: 10px; font-size: 14px;">Build Data</div>';
+                    
+                    // Attributes
+                    if (data.buildData.attributes) {
+                        html += '<div style="margin-bottom: 10px;">';
+                        html += '<div style="color: #ccc; font-size: 12px; margin-bottom: 5px;">Attributes:</div>';
+                        html += `<div style="display: flex; gap: 15px; flex-wrap: wrap; font-size: 13px;">`;
+                        html += `<span>STR: <span style="color: #4a9eff;">${data.buildData.attributes.strength || 80}</span></span>`;
+                        html += `<span>CON: <span style="color: #4a9eff;">${data.buildData.attributes.constitution || 80}</span></span>`;
+                        html += `<span>DEX: <span style="color: #4a9eff;">${data.buildData.attributes.dexterity || 80}</span></span>`;
+                        html += `</div>`;
+                        html += '</div>';
+                    }
+                    
+                    // Statistics
+                    if (data.buildData.stats) {
+                        html += '<div style="margin-bottom: 10px;">';
+                        html += '<div style="color: #ccc; font-size: 12px; margin-bottom: 5px;">Statistics:</div>';
+                        html += `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 12px;">`;
+                        if (data.buildData.stats.health) {
+                            html += `<div>Health: <span style="color: #40ec06;">${data.buildData.stats.health}</span></div>`;
+                        }
+                        if (data.buildData.stats.health_regen) {
+                            html += `<div>Health Regen: <span style="color: #40ec06;">${data.buildData.stats.health_regen}</span></div>`;
+                        }
+                        if (data.buildData.stats.stamina) {
+                            html += `<div>Stamina: <span style="color: #40ec06;">${data.buildData.stats.stamina}</span></div>`;
+                        }
+                        if (data.buildData.stats.stam_regen) {
+                            html += `<div>Stamina Regen: <span style="color: #40ec06;">${data.buildData.stats.stam_regen}</span></div>`;
+                        }
+                        html += `</div>`;
+                        html += '</div>';
+                    }
+                    
+                    // Skills Summary
+                    if (data.buildData.skills) {
+                        const skills = data.buildData.skills;
+                        const skillCount = Object.keys(skills).filter(skillId => skills[skillId] > 0).length;
+                        const totalSkillPoints = Object.values(skills).reduce((sum, val) => sum + (parseInt(val) || 0), 0);
+                        html += '<div>';
+                        html += '<div style="color: #ccc; font-size: 12px; margin-bottom: 5px;">Skills:</div>';
+                        html += `<div style="font-size: 12px;">`;
+                        html += `<span>Active Skills: <span style="color: #ebb514;">${skillCount}</span></span> | `;
+                        html += `<span>Total Points: <span style="color: #ebb514;">${totalSkillPoints}/100</span></span>`;
+                        html += `</div>`;
+                        html += '</div>';
+                    }
+                    
+                    // Last Updated
+                    if (data.buildData.lastUpdated) {
+                        const lastUpdated = new Date(data.buildData.lastUpdated);
+                        html += `<div style="margin-top: 10px; font-size: 11px; color: #888;">Last Updated: ${lastUpdated.toLocaleString()}</div>`;
+                    }
+                    
+                    html += '</div>';
+                    
+                    // Link to Builder
+                    html += '<div style="margin-top: 10px;">';
+                    html += `<a href="/builder/" onclick="localStorage.setItem('gv_active_character_index', '${index}'); return true;" class="btn-action" style="display: inline-block; padding: 8px 15px; background: rgba(74, 158, 255, 0.2); border: 2px solid rgba(74, 158, 255, 0.5); border-radius: 5px; color: #4a9eff; text-decoration: none; font-size: 13px; transition: all 0.3s;" onmouseover="this.style.background='rgba(74, 158, 255, 0.3)';" onmouseout="this.style.background='rgba(74, 158, 255, 0.2)';">Edit Build</a>`;
+                    html += '</div>';
+                } else {
+                    // No build data - show link to create build
+                    html += '<div class="character-build-section" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.2);">';
+                    html += '<div style="color: #888; font-size: 13px; margin-bottom: 10px;">No build data yet</div>';
+                    html += `<a href="/builder/" onclick="localStorage.setItem('gv_active_character_index', '${index}'); return true;" class="btn-action" style="display: inline-block; padding: 8px 15px; background: rgba(74, 158, 255, 0.2); border: 2px solid rgba(74, 158, 255, 0.5); border-radius: 5px; color: #4a9eff; text-decoration: none; font-size: 13px; transition: all 0.3s;" onmouseover="this.style.background='rgba(74, 158, 255, 0.3)';" onmouseout="this.style.background='rgba(74, 158, 255, 0.2)';">Create Build</a>`;
+                    html += '</div>';
+                }
                 
                 // Customization Preview
                 html += '<div class="character-preview">';
