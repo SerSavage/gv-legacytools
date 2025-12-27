@@ -67,7 +67,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: url('resources/create_tlo.png') center center / cover no-repeat;
+            background: url('resources/origion_selection.png') center center no-repeat;
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -94,26 +94,24 @@
             width: 100%;
             height: 80px;
             margin-bottom: 20px;
-            background: url('resources/create_etapytlo.png') center center no-repeat;
+            background-image: url('resources/create_etapytlo2.png'), url('resources/create_etapytlo.png');
+            background-position: center center;
+            background-repeat: no-repeat;
             background-size: 100% 100%;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-around;
+            padding: 0 20px;
         }
         
         .step-number {
-            position: absolute;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .step-number.active {
-            opacity: 1;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
         }
         
         .step-number.step-1 { background-image: url('resources/create_etap1.png'); }
@@ -123,10 +121,17 @@
         .step-number.step-5 { background-image: url('resources/create_etap5.png'); }
         .step-number.step-6 { background-image: url('resources/create_etap6.png'); }
         
+        .step-number.step-1.active { background-image: url('resources/create_etap1b.png'); }
+        .step-number.step-2.active { background-image: url('resources/create_etap2b.png'); }
+        .step-number.step-3.active { background-image: url('resources/create_etap3b.png'); }
+        .step-number.step-4.active { background-image: url('resources/create_etap4b.png'); }
+        .step-number.step-5.active { background-image: url('resources/create_etap5b.png'); }
+        .step-number.step-6.active { background-image: url('resources/create_etap6b.png'); }
+        
         /* Content Boxes */
         .content-box {
-            background: url('resources/create_tlo1.png') center center no-repeat;
-            background-size: cover;
+            background: url('resources/wybor_zakladkitlo.png') center center no-repeat;
+            background-size: 100% 100%;
             background-position: center;
             padding: 30px;
             margin-bottom: 20px;
@@ -137,30 +142,21 @@
         }
         
         .content-box.step-nation {
-            background: url('resources/origion_selection.png') center center no-repeat;
-            background-size: cover;
-            background-position: center;
             min-height: 500px;
         }
         
         .content-box.step-customization {
-            background: url('resources/create_tlo3.png') center center no-repeat;
-            background-size: cover;
-            background-position: center;
+            min-height: 600px;
         }
         
         .content-box.step-craft {
-            background: url('resources/create_tlo4.png') center center no-repeat;
-            background-size: cover;
-            background-position: center;
+            min-height: 450px;
         }
         
         .content-box.step-name,
         .content-box.step-gender,
         .content-box.step-archetype {
-            background: url('resources/create_tlo1.png') center center no-repeat;
-            background-size: cover;
-            background-position: center;
+            min-height: 400px;
         }
         
         .char-creation-step {
@@ -575,7 +571,12 @@
         <div class="character-creation-container">
             <!-- Step Indicator -->
             <div class="step-indicator">
-                <div class="step-number" id="step-indicator-number"></div>
+                <div class="step-number step-1" id="step-1-indicator"></div>
+                <div class="step-number step-2" id="step-2-indicator"></div>
+                <div class="step-number step-3" id="step-3-indicator"></div>
+                <div class="step-number step-4" id="step-4-indicator"></div>
+                <div class="step-number step-5" id="step-5-indicator"></div>
+                <div class="step-number step-6" id="step-6-indicator"></div>
             </div>
             
             <!-- Step 1: Nation Selection -->
@@ -871,12 +872,17 @@
             },
             
             updateStepIndicator: function() {
-                const indicator = document.getElementById('step-indicator-number');
-                if (indicator) {
-                    // Remove all step classes and active class
-                    indicator.className = 'step-number';
-                    // Add active class to current step
-                    indicator.classList.add('step-' + this.currentStep, 'active');
+                // Remove active class from all steps
+                for (let i = 1; i <= 6; i++) {
+                    const stepIndicator = document.getElementById(`step-${i}-indicator`);
+                    if (stepIndicator) {
+                        stepIndicator.classList.remove('active');
+                    }
+                }
+                // Add active class to current step
+                const currentStepIndicator = document.getElementById(`step-${this.currentStep}-indicator`);
+                if (currentStepIndicator) {
+                    currentStepIndicator.classList.add('active');
                 }
             },
             
