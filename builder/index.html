@@ -620,8 +620,24 @@ $(document).ready(function() {
 
 <div class="spacer"></div>
 
-
-
+<!-- Character Selector -->
+<div style="max-width: 1200px; margin: 20px auto; padding: 20px; background: rgba(0, 0, 0, 0.6); border-radius: 10px; border: 2px solid rgba(255, 255, 255, 0.2);">
+	<div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+		<label for="character-selector" style="color: #a39964; font-size: 16px; font-weight: bold;">Select Character:</label>
+		<select id="character-selector" style="flex: 1; min-width: 250px; padding: 10px; background: rgba(0, 0, 0, 0.8); color: #fff; border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 5px; font-size: 14px;">
+			<option value="">-- Select a Character --</option>
+		</select>
+		<span id="build-save-status" style="color: #40ec06; font-size: 14px; display: none;">✓ Saved</span>
+		<a href="/charactercreation/" style="padding: 10px 20px; background: rgba(255, 255, 0, 0.2); border: 2px solid rgba(255, 255, 0, 0.5); border-radius: 5px; color: #ffff00; text-decoration: none; font-size: 14px; transition: all 0.3s;">Create New Character</a>
+	</div>
+	<div id="selected-character-info" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.2); display: none;">
+		<div style="color: #ccc; font-size: 14px;">
+			<span id="char-name-display"></span> | 
+			<span id="char-nation-display"></span> | 
+			<span id="char-archetype-display"></span>
+		</div>
+	</div>
+</div>
 
 <div class="GV_container" style="display: table;">
 
