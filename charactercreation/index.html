@@ -17,10 +17,10 @@
         
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             color: #fff;
             min-height: 100vh;
             padding-top: 50px;
+            overflow: hidden;
         }
         
         .topmenu {
@@ -67,7 +67,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: url('resources/create_tlo.png') center center / cover no-repeat;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -76,32 +76,61 @@
         }
         
         .character-creation-container {
-            text-align: center;
-            padding: 35px;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            max-width: 1000px;
-            width: 92%;
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
             max-height: calc(100vh - 100px);
             overflow-y: auto;
-            overflow-x: visible;
+            overflow-x: hidden;
             margin: auto;
+        }
+        
+        /* Step Indicator */
+        .step-indicator {
+            position: relative;
+            width: 100%;
+            height: 80px;
+            margin-bottom: 20px;
+            background: url('resources/create_etapytlo.png') center center / contain no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .step-number {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .step-number.step-1 { background-image: url('resources/create_etap1.png'); }
+        .step-number.step-2 { background-image: url('resources/create_etap2.png'); }
+        .step-number.step-3 { background-image: url('resources/create_etap3.png'); }
+        .step-number.step-4 { background-image: url('resources/create_etap4.png'); }
+        
+        /* Content Boxes */
+        .content-box {
+            background: url('resources/create_tlo1.png') center center / cover no-repeat;
+            padding: 30px;
+            margin-bottom: 20px;
+            min-height: 400px;
             position: relative;
         }
         
-        .character-creation-title {
-            font-size: 2.5em;
-            color: #fff;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        .content-box.step-nation {
+            background: url('resources/origion_selection.png') center center / cover no-repeat;
+            min-height: 500px;
         }
         
-        .character-creation-subtitle {
-            font-size: 1.15em;
-            color: #ccc;
-            margin-bottom: 30px;
+        .content-box.step-customization {
+            background: url('resources/create_tlo3.png') center center / cover no-repeat;
+        }
+        
+        .content-box.step-craft {
+            background: url('resources/create_tlo4.png') center center / cover no-repeat;
         }
         
         .char-creation-step {
@@ -112,50 +141,87 @@
             display: block;
         }
         
+        .character-creation-title {
+            font-size: 2em;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            text-align: center;
+        }
+        
+        .character-creation-subtitle {
+            font-size: 1.1em;
+            color: #ccc;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        /* Navigation Buttons */
         .char-creation-nav {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
             gap: 20px;
+            align-items: center;
         }
         
-        .char-creation-btn {
-            padding: 12px 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1.05em;
+        .nav-button {
+            background: none;
+            border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 0;
+            transition: opacity 0.3s ease;
+            image-rendering: pixelated;
         }
         
-        .char-creation-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
+        .nav-button:hover {
+            opacity: 0.8;
         }
         
-        .char-creation-btn:disabled {
+        .nav-button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
         
-        .char-creation-btn.skip {
-            background: rgba(255, 255, 0, 0.2);
-            border-color: rgba(255, 255, 0, 0.4);
+        .nav-button.back {
+            width: 120px;
+            height: 40px;
+            background-image: url('resources/create_etapcofnij_a.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
         
-        .gender-selection,
-        .archetype-selection {
+        .nav-button.next {
+            width: 120px;
+            height: 40px;
+            background-image: url('resources/create_etapdalej_a.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .nav-button.random {
+            width: 60px;
+            height: 60px;
+            background-image: url('resources/random.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        /* Nation Selection */
+        .nation-selection {
             display: flex;
             justify-content: center;
-            gap: 35px;
+            gap: 40px;
             flex-wrap: wrap;
-            margin-top: 25px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            position: relative;
         }
         
-        .gender-option,
-        .archetype-option {
+        .nation-option {
             cursor: pointer;
             position: relative;
             transition: transform 0.3s ease;
@@ -163,46 +229,241 @@
             border-radius: 10px;
             padding: 10px;
             background: rgba(255, 255, 255, 0.1);
+            z-index: 10;
         }
         
-        .gender-option:hover,
+        .nation-option:hover {
+            transform: translateY(-8px) scale(1.05);
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .nation-option.selected {
+            border-color: #ffff00;
+            background: rgba(255, 255, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+        }
+        
+        .nation-image {
+            display: block;
+            width: 220px;
+            height: auto;
+            border-radius: 5px;
+        }
+        
+        .nation-name {
+            margin-top: 10px;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+        
+        .nation-description {
+            position: absolute;
+            top: calc(100% + 15px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 360px;
+            max-width: calc(100vw - 40px);
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #fff;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 10002;
+            text-align: left;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nation-option:hover .nation-description {
+            opacity: 1;
+        }
+        
+        /* Name Input */
+        .name-input-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .name-input {
+            padding: 15px 25px;
+            font-size: 1.3em;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+        }
+        
+        .name-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 0, 0.6);
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+        }
+        
+        /* Gender Selection */
+        .gender-selection {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        
+        .gender-option {
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .gender-option:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .gender-option.selected {
+            border-color: #ffff00;
+            background: rgba(255, 255, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+        }
+        
+        .gender-image {
+            display: block;
+            width: 180px;
+            height: auto;
+            border-radius: 5px;
+        }
+        
+        .gender-name {
+            margin-top: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+        
+        /* Craft Profession Selection */
+        .craft-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+            padding: 20px;
+        }
+        
+        .craft-option {
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .craft-option:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .craft-option.selected {
+            border-color: #ffff00;
+            background: rgba(255, 255, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+        }
+        
+        .craft-image {
+            width: 100%;
+            max-width: 120px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .craft-name {
+            margin-top: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .craft-description {
+            margin-top: 5px;
+            font-size: 0.85em;
+            color: #ccc;
+        }
+        
+        /* Archetype Selection */
+        .archetype-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+            padding: 20px;
+        }
+        
+        .archetype-option {
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
         .archetype-option:hover {
             transform: translateY(-5px) scale(1.05);
             border-color: rgba(255, 255, 255, 0.5);
             background: rgba(255, 255, 255, 0.2);
         }
         
-        .gender-option.selected,
         .archetype-option.selected {
             border-color: #ffff00;
             background: rgba(255, 255, 0, 0.2);
             box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
         }
         
-        .gender-image,
         .archetype-image {
-            display: block;
-            width: 160px;
+            width: 100%;
+            max-width: 120px;
             height: auto;
-            border-radius: 5px;
+            margin: 0 auto;
+            display: block;
         }
         
-        .gender-name,
         .archetype-name {
             margin-top: 10px;
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: bold;
             color: #fff;
         }
         
+        /* Customization */
         .customization-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
             gap: 15px;
-            margin-top: 18px;
-            max-height: 380px;
+            margin-top: 20px;
+            max-height: 400px;
             overflow-y: auto;
-            padding: 12px;
+            padding: 15px;
         }
         
         .customization-item {
@@ -235,121 +496,34 @@
         }
         
         .customization-category {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         
         .customization-category-title {
-            font-size: 1.3em;
+            font-size: 1.4em;
             color: #fff;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             text-align: left;
             padding-left: 10px;
-        }
-        
-        .nation-selection {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-top: 25px;
-            margin-bottom: 220px;
-            position: relative;
-        }
-        
-        .nation-option {
-            cursor: pointer;
-            position: relative;
-            transition: transform 0.3s ease;
-            border: 3px solid transparent;
-            border-radius: 10px;
-            padding: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            z-index: 10;
-            pointer-events: auto;
-            user-select: none;
-        }
-        
-        .nation-option:hover {
-            transform: translateY(-8px) scale(1.05);
-            border-color: rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .nation-option.selected {
-            border-color: #ffff00;
-            background: rgba(255, 255, 0, 0.2);
-            box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
-        }
-        
-        .nation-image {
-            display: block;
-            width: 200px;
-            height: auto;
-            border-radius: 5px;
-        }
-        
-        .nation-name {
-            margin-top: 10px;
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #fff;
-        }
-        
-        .nation-description {
-            position: absolute;
-            top: calc(100% + 15px);
-            left: 50%;
-            transform: translateX(-50%);
-            width: 340px;
-            max-width: calc(100vw - 40px);
-            padding: 18px;
-            background: rgba(0, 0, 0, 0.95);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            font-size: 0.95em;
-            line-height: 1.6;
-            color: #fff;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 10002;
-            text-align: left;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-            white-space: normal;
-        }
-        
-        .nation-option:hover .nation-description {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        
-        #character-creation-screen {
-            overflow: visible;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
         }
         
         @media (max-width: 768px) {
             .character-creation-container {
                 width: 98%;
-                padding: 20px;
-                max-width: 100%;
             }
             
             .nation-selection {
-                margin-bottom: 150px;
+                gap: 20px;
+            }
+            
+            .nation-image {
+                width: 150px;
             }
             
             .nation-description {
                 width: 280px;
                 font-size: 0.85em;
-                padding: 12px;
-            }
-            
-            .nation-selection {
-                gap: 15px;
-            }
-            
-            .nation-image {
-                width: 150px;
             }
         }
     </style>
@@ -357,10 +531,11 @@
 <body>
     <div class="topmenu">
         <a href="/">Home</a>
+        <a href="/charactercreation/">Character Creation</a>
+        <a href="/builder/">Character Builder</a>
         <a href="/map/">Interactive Map</a>
         <a href="/database/">Item Database</a>
         <a href="/workshop/">Workshop</a>
-        <a href="/builder/">Character Builder</a>
         <a href="/lore/">Lore</a>
         <button class="new-character-btn" onclick="resetCharacterCreation()">Create New Character</button>
     </div>
@@ -368,168 +543,259 @@
     <!-- Character Creation Screen -->
     <div id="character-creation-screen">
         <div class="character-creation-container">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step-number" id="step-indicator-number"></div>
+            </div>
+            
             <!-- Step 1: Nation Selection -->
             <div class="char-creation-step active" id="step-nation">
-                <h1 class="character-creation-title">Choose Your Nation</h1>
-                <p class="character-creation-subtitle">Select your allegiance to begin</p>
-                
-                <div class="nation-selection">
-                    <div class="nation-option" data-nation="midland">
-                        <img src="resources/create_nacja1a.png" 
-                             data-default="resources/create_nacja1a.png"
-                             data-hover="resources/create_nacja1b.png"
-                             class="nation-image" 
-                             alt="Midland">
-                        <div class="nation-name">Midland</div>
-                        <div class="nation-description">
-                            The Midlanders are a proud nation from the North. Their history can be tracked back to the days of Geliand of Hillead. Even though their realm is divided into two kingdoms, they unite in the face of a common enemy – The Empire of Azebia. The Midlanders worship the Forefather and his son, and they value honour above all else.
+                <div class="content-box step-nation">
+                    <h1 class="character-creation-title">Choose Your Nation</h1>
+                    <p class="character-creation-subtitle">Select your allegiance to begin</p>
+                    
+                    <div class="nation-selection">
+                        <div class="nation-option" data-nation="midland">
+                            <img src="resources/create_nacja1a.png" 
+                                 data-default="resources/create_nacja1a.png"
+                                 data-hover="resources/create_nacja1b.png"
+                                 class="nation-image" 
+                                 alt="Midland">
+                            <div class="nation-name">Midland</div>
+                            <div class="nation-description">
+                                The Midlanders are a proud nation from the North. Their history can be tracked back to the days of Geliand of Hillead. Even though their realm is divided into two kingdoms, they unite in the face of a common enemy – The Empire of Azebia. The Midlanders worship the Forefather and his son, and they value honour above all else.
+                            </div>
+                        </div>
+                        
+                        <div class="nation-option" data-nation="ismir">
+                            <img src="resources/create_nacja2a.png"
+                                 data-default="resources/create_nacja2a.png"
+                                 data-hover="resources/create_nacja2b.png"
+                                 class="nation-image" 
+                                 alt="Ismir">
+                            <div class="nation-name">Ismir</div>
+                            <div class="nation-description">
+                                The Ismirs are tough but honourable clan warriors hailing from the frozen wastes of Nordheim. They are truly intimidating in their height and the ease with which they swing heavy axes. They have been raiding Midlandic lands for centuries, but they unite with Midland in the fight against Azebia.
+                            </div>
+                        </div>
+                        
+                        <div class="nation-option" data-nation="sangmar">
+                            <img src="resources/create_nacja3a.png"
+                                 data-default="resources/create_nacja3a.png"
+                                 data-hover="resources/create_nacja3b.png"
+                                 class="nation-image" 
+                                 alt="Sangmar">
+                            <div class="nation-name">Sangmar Empire</div>
+                            <div class="nation-description">
+                                Sangmar was once the greatest power in the South. However, the Empire fell when the Azebs freed themselves from its yoke and began their conquest. Today Sangmar, still full of splendour and riches, is an oasis of cultural and scientific development. The Sangarians have everything – be it wonderful weapons, armour or gilded robes – except for freedom.
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="nation-option" data-nation="ismir">
-                        <img src="resources/create_nacja2a.png"
-                             data-default="resources/create_nacja2a.png"
-                             data-hover="resources/create_nacja2b.png"
-                             class="nation-image" 
-                             alt="Ismir">
-                        <div class="nation-name">Ismir</div>
-                        <div class="nation-description">
-                            The Ismirs are tough but honourable clan warriors hailing from the frozen wastes of Nordheim. They are truly intimidating in their height and the ease with which they swing heavy axes. They have been raiding Midlandic lands for centuries, but they unite with Midland in the fight against Azebia.
-                        </div>
-                    </div>
-                    
-                    <div class="nation-option" data-nation="sangmar">
-                        <img src="resources/create_nacja3a.png"
-                             data-default="resources/create_nacja3a.png"
-                             data-hover="resources/create_nacja3b.png"
-                             class="nation-image" 
-                             alt="Sangmar">
-                        <div class="nation-name">Sangmar Empire</div>
-                        <div class="nation-description">
-                            Sangmar was once the greatest power in the South. However, the Empire fell when the Azebs freed themselves from its yoke and began their conquest. Today Sangmar, still full of splendour and riches, is an oasis of cultural and scientific development. The Sangarians have everything – be it wonderful weapons, armour or gilded robes – except for freedom.
-                        </div>
+                    <div class="char-creation-nav">
+                        <div></div>
+                        <button class="nav-button random" onclick="charCreation.randomizeNation();" title="Randomize Nation"></button>
                     </div>
                 </div>
             </div>
             
             <!-- Step 2: Player Name -->
             <div class="char-creation-step" id="step-name">
-                <h1 class="character-creation-title">Enter Your Player Name</h1>
-                <p class="character-creation-subtitle">Choose a name for your character</p>
-                
-                <div style="margin-top: 30px;">
-                    <input type="text" 
-                           id="player-name-input" 
-                           placeholder="Enter player name..." 
-                           style="padding: 15px 20px; font-size: 1.2em; width: 100%; max-width: 400px; border-radius: 8px; border: 2px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); color: #fff; text-align: center;">
-                    <p style="margin-top: 15px; color: #aaa; font-size: 0.9em;">This name will be saved with your character</p>
-                </div>
-                
-                <div class="char-creation-nav">
-                    <button class="char-creation-btn" onclick="charCreation.prevStep();">← Back</button>
-                    <button class="char-creation-btn" onclick="charCreation.nextStep();" id="btn-next-name" disabled>Next →</button>
+                <div class="content-box">
+                    <h1 class="character-creation-title">Enter Your Player Name</h1>
+                    <p class="character-creation-subtitle">Choose a name for your character</p>
+                    
+                    <div class="name-input-container">
+                        <input type="text" 
+                               id="player-name-input" 
+                               class="name-input"
+                               placeholder="Enter player name..." 
+                               maxlength="20">
+                        <p style="margin-top: 15px; color: #aaa; font-size: 0.9em;">This name will be saved with your character</p>
+                    </div>
+                    
+                    <div class="char-creation-nav">
+                        <button class="nav-button back" onclick="charCreation.prevStep();"></button>
+                        <button class="nav-button next" onclick="charCreation.nextStep();" id="btn-next-name" disabled></button>
+                    </div>
                 </div>
             </div>
             
             <!-- Step 3: Gender Selection -->
             <div class="char-creation-step" id="step-gender">
-                <h1 class="character-creation-title">Choose Your Gender</h1>
-                <p class="character-creation-subtitle">Select your character's gender</p>
-                
-                <div class="gender-selection">
-                    <div class="gender-option" data-gender="male">
-                        <img src="resources/create_plecM_a.png"
-                             data-default="resources/create_plecM_a.png"
-                             data-hover="resources/create_plecM_b.png"
-                             data-selected="resources/create_plecM_c.png"
-                             class="gender-image" 
-                             alt="Male">
-                        <div class="gender-name">Male</div>
+                <div class="content-box">
+                    <h1 class="character-creation-title">Choose Your Gender</h1>
+                    <p class="character-creation-subtitle">Select your character's gender</p>
+                    
+                    <div class="gender-selection">
+                        <div class="gender-option" data-gender="male">
+                            <img src="resources/create_plecM_a.png"
+                                 data-default="resources/create_plecM_a.png"
+                                 data-hover="resources/create_plecM_b.png"
+                                 data-selected="resources/create_plecM_c.png"
+                                 class="gender-image" 
+                                 alt="Male">
+                            <div class="gender-name">Male</div>
+                        </div>
+                        
+                        <div class="gender-option" data-gender="female">
+                            <img src="resources/create_plecK_a.png"
+                                 data-default="resources/create_plecK_a.png"
+                                 data-hover="resources/create_plecK_b.png"
+                                 data-selected="resources/create_plecK_c.png"
+                                 class="gender-image" 
+                                 alt="Female">
+                            <div class="gender-name">Female</div>
+                        </div>
                     </div>
                     
-                    <div class="gender-option" data-gender="female">
-                        <img src="resources/create_plecK_a.png"
-                             data-default="resources/create_plecK_a.png"
-                             data-hover="resources/create_plecK_b.png"
-                             data-selected="resources/create_plecK_c.png"
-                             class="gender-image" 
-                             alt="Female">
-                        <div class="gender-name">Female</div>
+                    <div class="char-creation-nav">
+                        <button class="nav-button back" onclick="charCreation.prevStep();"></button>
+                        <div></div>
+                        <button class="nav-button next" onclick="charCreation.nextStep();" id="btn-next-gender" disabled></button>
                     </div>
-                </div>
-                
-                <div class="char-creation-nav">
-                    <button class="char-creation-btn" onclick="charCreation.prevStep();">← Back</button>
-                    <button class="char-creation-btn" onclick="charCreation.nextStep();" id="btn-next-gender" disabled>Next →</button>
                 </div>
             </div>
             
-            <!-- Step 4: Archetype Selection (Optional) -->
+            <!-- Step 4: Craft Profession Selection -->
+            <div class="char-creation-step" id="step-craft">
+                <div class="content-box step-craft">
+                    <h1 class="character-creation-title">Choose Your Craft Profession</h1>
+                    <p class="character-creation-subtitle">Select a starting craft (optional - boosts skill level, max 100)</p>
+                    
+                    <div class="craft-selection">
+                        <div class="craft-option" data-craft="armoursmith">
+                            <img src="resources/tworzenie_craft_zbrojmistrzostwo.png" class="craft-image" alt="Armoursmith">
+                            <div class="craft-name">Armoursmith</div>
+                            <div class="craft-description">Craft heavy armor</div>
+                        </div>
+                        <div class="craft-option" data-craft="mining">
+                            <img src="resources/tworzenie_craft_gornictwo.png" class="craft-image" alt="Mining">
+                            <div class="craft-name">Mining</div>
+                            <div class="craft-description">Extract ores and minerals</div>
+                        </div>
+                        <div class="craft-option" data-craft="cooking">
+                            <img src="resources/tworzenie_craft_gotowanie.png" class="craft-image" alt="Cooking">
+                            <div class="craft-name">Cooking</div>
+                            <div class="craft-description">Prepare food and meals</div>
+                        </div>
+                        <div class="craft-option" data-craft="engineering">
+                            <img src="resources/tworzenie_craft_inzynieria.png" class="craft-image" alt="Engineering">
+                            <div class="craft-name">Engineering</div>
+                            <div class="craft-description">Build structures and devices</div>
+                        </div>
+                        <div class="craft-option" data-craft="leatherworking">
+                            <img src="resources/tworzenie_craft_kusnierstwo.png" class="craft-image" alt="Leatherworking">
+                            <div class="craft-name">Leatherworking</div>
+                            <div class="craft-description">Craft leather armor</div>
+                        </div>
+                        <div class="craft-option" data-craft="hunting">
+                            <img src="resources/tworzenie_craft_lowiectwo.png" class="craft-image" alt="Hunting">
+                            <div class="craft-name">Hunting</div>
+                            <div class="craft-description">Track and hunt game</div>
+                        </div>
+                        <div class="craft-option" data-craft="blacksmithing">
+                            <img src="resources/tworzenie_craft_platnerstwo.png" class="craft-image" alt="Blacksmithing">
+                            <div class="craft-name">Blacksmithing</div>
+                            <div class="craft-description">Forge weapons and tools</div>
+                        </div>
+                    </div>
+                    
+                    <div class="char-creation-nav">
+                        <button class="nav-button back" onclick="charCreation.prevStep();"></button>
+                        <button class="nav-button skip" onclick="charCreation.skipCraft();" style="width: 100px; height: 40px; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3); border-radius: 5px; color: #fff; cursor: pointer;">Skip</button>
+                        <button class="nav-button next" onclick="charCreation.nextStep();" id="btn-next-craft"></button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 5: Archetype Selection (Optional) -->
             <div class="char-creation-step" id="step-archetype">
-                <h1 class="character-creation-title">Choose Your Archetype</h1>
-                <p class="character-creation-subtitle">Select your starting archetype (optional - can skip)</p>
-                
-                <div class="archetype-selection">
-                    <div class="archetype-option" data-archetype="light">
-                        <img src="resources/create_archetype_light.png" class="archetype-image" alt="Light">
-                        <div class="archetype-name">Light</div>
+                <div class="content-box">
+                    <h1 class="character-creation-title">Choose Your Archetype</h1>
+                    <p class="character-creation-subtitle">Select your starting archetype (optional - can skip)</p>
+                    
+                    <div class="archetype-selection">
+                        <div class="archetype-option" data-archetype="light">
+                            <img src="resources/create_archetype_light.png" class="archetype-image" alt="Light">
+                            <div class="archetype-name">Light</div>
+                        </div>
+                        <div class="archetype-option" data-archetype="medium">
+                            <img src="resources/create_archetype_medium.png" class="archetype-image" alt="Medium">
+                            <div class="archetype-name">Medium</div>
+                        </div>
+                        <div class="archetype-option" data-archetype="heavy">
+                            <img src="resources/create_archetype_heavy.png" class="archetype-image" alt="Heavy">
+                            <div class="archetype-name">Heavy</div>
+                        </div>
+                        <div class="archetype-option" data-archetype="armoursmith">
+                            <img src="resources/create_archetype_armoursmith.png" class="archetype-image" alt="Armoursmith">
+                            <div class="archetype-name">Armoursmith</div>
+                        </div>
+                        <div class="archetype-option" data-archetype="weaponsmith">
+                            <img src="resources/create_archetype_weaponsmith.png" class="archetype-image" alt="Weaponsmith">
+                            <div class="archetype-name">Weaponsmith</div>
+                        </div>
+                        <div class="archetype-option" data-archetype="tailor">
+                            <img src="resources/create_archetype_tailor.png" class="archetype-image" alt="Tailor">
+                            <div class="archetype-name">Tailor</div>
+                        </div>
                     </div>
-                    <div class="archetype-option" data-archetype="medium">
-                        <img src="resources/create_archetype_medium.png" class="archetype-image" alt="Medium">
-                        <div class="archetype-name">Medium</div>
+                    
+                    <div class="char-creation-nav">
+                        <button class="nav-button back" onclick="charCreation.prevStep();"></button>
+                        <button class="nav-button skip" onclick="charCreation.skipArchetype();" style="width: 100px; height: 40px; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3); border-radius: 5px; color: #fff; cursor: pointer;">Skip</button>
+                        <button class="nav-button next" onclick="charCreation.nextStep();" id="btn-next-archetype"></button>
                     </div>
-                    <div class="archetype-option" data-archetype="heavy">
-                        <img src="resources/create_archetype_heavy.png" class="archetype-image" alt="Heavy">
-                        <div class="archetype-name">Heavy</div>
-                    </div>
-                    <div class="archetype-option" data-archetype="armoursmith">
-                        <img src="resources/create_archetype_armoursmith.png" class="archetype-image" alt="Armoursmith">
-                        <div class="archetype-name">Armoursmith</div>
-                    </div>
-                    <div class="archetype-option" data-archetype="weaponsmith">
-                        <img src="resources/create_archetype_weaponsmith.png" class="archetype-image" alt="Weaponsmith">
-                        <div class="archetype-name">Weaponsmith</div>
-                    </div>
-                    <div class="archetype-option" data-archetype="tailor">
-                        <img src="resources/create_archetype_tailor.png" class="archetype-image" alt="Tailor">
-                        <div class="archetype-name">Tailor</div>
-                    </div>
-                </div>
-                
-                <div class="char-creation-nav">
-                    <button class="char-creation-btn" onclick="charCreation.prevStep();">← Back</button>
-                    <button class="char-creation-btn skip" onclick="charCreation.skipArchetype();">Skip</button>
-                    <button class="char-creation-btn" onclick="charCreation.nextStep();" id="btn-next-archetype">Next →</button>
                 </div>
             </div>
             
-            <!-- Step 5: Character Customization -->
+            <!-- Step 6: Character Customization -->
             <div class="char-creation-step" id="step-customization">
-                <h1 class="character-creation-title">Customize Your Character</h1>
-                <p class="character-creation-subtitle">Customize your appearance</p>
-                
-                <div id="customization-content">
-                    <!-- Will be populated by JavaScript based on gender -->
-                </div>
-                
-                <div class="char-creation-nav">
-                    <button class="char-creation-btn" onclick="charCreation.prevStep();">← Back</button>
-                    <button class="char-creation-btn" onclick="charCreation.finishCreation();" id="btn-finish">Finish →</button>
+                <div class="content-box step-customization">
+                    <h1 class="character-creation-title">Customize Your Character</h1>
+                    <p class="character-creation-subtitle">Customize your appearance</p>
+                    
+                    <div id="customization-content">
+                        <!-- Will be populated by JavaScript based on gender -->
+                    </div>
+                    
+                    <div class="char-creation-nav">
+                        <button class="nav-button back" onclick="charCreation.prevStep();"></button>
+                        <button class="nav-button random" onclick="charCreation.randomizeAppearance();" title="Randomize Appearance"></button>
+                        <button class="nav-button next" onclick="charCreation.finishCreation();" id="btn-finish" style="width: 120px; height: 40px; background: rgba(0,255,0,0.3); border: 2px solid rgba(0,255,0,0.5); border-radius: 5px; color: #fff; cursor: pointer; font-size: 1.1em;">Finish</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
+    <!-- Music Player -->
+    <div id="music-player-container" style="display: block !important; visibility: visible !important; opacity: 1 !important;">
+        <div id="music-player-header">
+            <h3 id="music-player-title">🎵 Music</h3>
+            <button id="music-player-toggle">−</button>
+        </div>
+        <div id="music-player-content">
+            <div id="music-volume-control">
+                <span id="music-volume-label">Volume:</span>
+                <input type="range" id="music-volume-slider" min="0" max="100" value="50">
+                <span id="music-volume-display">50%</span>
+            </div>
+            <div id="music-track-info"></div>
+        </div>
+    </div>
     <script src="../music-player.js"></script>
     <script>
         // Character Creation System
         const charCreation = {
             currentStep: 1,
-            totalSteps: 5,
+            totalSteps: 6,
             characterData: {
                 playerName: null,
                 nation: null,
                 gender: null,
+                craft: null,
                 archetype: null,
                 head: null,
                 hair: null,
@@ -542,7 +808,9 @@
                 console.log('charCreation.init() called');
                 this.setupNationSelection();
                 this.setupGenderSelection();
+                this.setupCraftSelection();
                 this.setupArchetypeSelection();
+                this.updateStepIndicator();
                 
                 // Setup player name input
                 const nameInput = document.getElementById('player-name-input');
@@ -572,12 +840,20 @@
                 this.showStep(1);
             },
             
+            updateStepIndicator: function() {
+                const indicator = document.getElementById('step-indicator-number');
+                if (indicator) {
+                    indicator.className = 'step-number step-' + this.currentStep;
+                }
+            },
+            
             reset: function() {
                 console.log('Resetting character creation');
                 this.characterData = {
                     playerName: null,
                     nation: null,
                     gender: null,
+                    craft: null,
                     archetype: null,
                     head: null,
                     hair: null,
@@ -591,12 +867,12 @@
                 if (nameInput) nameInput.value = '';
                 
                 // Clear selections
-                document.querySelectorAll('.nation-option, .gender-option, .archetype-option, .customization-item').forEach(el => {
+                document.querySelectorAll('.nation-option, .gender-option, .craft-option, .archetype-option, .customization-item').forEach(el => {
                     el.classList.remove('selected');
                 });
                 
                 // Reset images
-                document.querySelectorAll('.nation-image').forEach(img => {
+                document.querySelectorAll('.nation-image, .gender-image').forEach(img => {
                     if (img.dataset.default) img.src = img.dataset.default;
                 });
                 
@@ -610,15 +886,16 @@
                     s.classList.remove('active');
                 });
                 
-                const stepNames = ['nation', 'name', 'gender', 'archetype', 'customization'];
+                const stepNames = ['nation', 'name', 'gender', 'craft', 'archetype', 'customization'];
                 const stepElement = document.getElementById(`step-${stepNames[step - 1]}`);
                 if (stepElement) {
                     stepElement.classList.add('active');
                 }
                 
                 this.currentStep = step;
+                this.updateStepIndicator();
                 
-                if (step === 5) {
+                if (step === 6) {
                     this.loadCustomization();
                 }
                 
@@ -641,6 +918,57 @@
             prevStep: function() {
                 if (this.currentStep > 1) {
                     this.showStep(this.currentStep - 1);
+                }
+            },
+            
+            randomizeNation: function() {
+                const nations = ['midland', 'ismir', 'sangmar'];
+                const randomNation = nations[Math.floor(Math.random() * nations.length)];
+                const nationOption = document.querySelector(`.nation-option[data-nation="${randomNation}"]`);
+                if (nationOption) {
+                    nationOption.click();
+                }
+            },
+            
+            randomizeAppearance: function() {
+                const content = document.getElementById('customization-content');
+                if (!content) return;
+                
+                // Randomize head
+                const headItems = content.querySelectorAll('.customization-item[data-type="head"]');
+                if (headItems.length > 0) {
+                    const randomHead = headItems[Math.floor(Math.random() * headItems.length)];
+                    randomHead.click();
+                }
+                
+                // Randomize hair
+                const hairItems = content.querySelectorAll('.customization-item[data-type="hair"]');
+                if (hairItems.length > 0) {
+                    const randomHair = hairItems[Math.floor(Math.random() * hairItems.length)];
+                    randomHair.click();
+                }
+                
+                // Randomize beard (if male)
+                if (this.characterData.gender === 'male') {
+                    const beardItems = content.querySelectorAll('.customization-item[data-type="beard"]');
+                    if (beardItems.length > 0) {
+                        const randomBeard = beardItems[Math.floor(Math.random() * beardItems.length)];
+                        randomBeard.click();
+                    }
+                }
+                
+                // Randomize body detail
+                const bodyItems = content.querySelectorAll('.customization-item[data-type="bodyDetail"]');
+                if (bodyItems.length > 0) {
+                    const randomBody = bodyItems[Math.floor(Math.random() * bodyItems.length)];
+                    randomBody.click();
+                }
+                
+                // Randomize head detail
+                const headDetailItems = content.querySelectorAll('.customization-item[data-type="headDetail"]');
+                if (headDetailItems.length > 0) {
+                    const randomHeadDetail = headDetailItems[Math.floor(Math.random() * headDetailItems.length)];
+                    randomHeadDetail.click();
                 }
             },
             
@@ -728,11 +1056,33 @@
                         this.characterData.gender = option.dataset.gender;
                         if (nextBtn) nextBtn.disabled = false;
                         
+                        const selectedImg = option.querySelector('.gender-image');
+                        if (selectedImg && selectedImg.dataset.selected) {
+                            selectedImg.src = selectedImg.dataset.selected;
+                        }
+                        
                         setTimeout(() => {
                             this.nextStep();
                         }, 500);
                     });
                 });
+            },
+            
+            setupCraftSelection: function() {
+                const craftOptions = document.querySelectorAll('.craft-option');
+                
+                craftOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        craftOptions.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        this.characterData.craft = option.dataset.craft;
+                    });
+                });
+            },
+            
+            skipCraft: function() {
+                this.characterData.craft = null;
+                this.nextStep();
             },
             
             setupArchetypeSelection: function() {
@@ -879,6 +1229,7 @@
                     playerName: this.characterData.playerName,
                     nation: this.characterData.nation,
                     gender: this.characterData.gender,
+                    craft: this.characterData.craft || null,
                     archetype: this.characterData.archetype || null,
                     head: this.characterData.head || null,
                     hair: this.characterData.hair || null,
@@ -953,6 +1304,22 @@
             }
         }
         
+        // Setup music player UI function
+        function setupMusicPlayerUIOnPage() {
+            if (window.setupMusicPlayerUI) {
+                window.setupMusicPlayerUI();
+            }
+            // Toggle player collapse
+            const toggleBtn = document.getElementById('music-player-toggle');
+            const container = document.getElementById('music-player-container');
+            if (toggleBtn && container) {
+                toggleBtn.addEventListener('click', () => {
+                    container.classList.toggle('collapsed');
+                    toggleBtn.textContent = container.classList.contains('collapsed') ? '+' : '−';
+                });
+            }
+        }
+        
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
             charCreation.init();
@@ -964,8 +1331,16 @@
                     window.musicPlayer.play();
                 }
             }
+            
+            // Setup music player UI
+            setupMusicPlayerUIOnPage();
         });
+        
+        // Also try immediately if DOM is ready, and after a delay
+        if (document.readyState !== 'loading') {
+            setupMusicPlayerUIOnPage();
+        }
+        setTimeout(setupMusicPlayerUIOnPage, 500);
     </script>
 </body>
 </html>
-
